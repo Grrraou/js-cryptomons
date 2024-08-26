@@ -1,23 +1,26 @@
 # Use the official Node.js image as the base image
-FROM node:18-alpine
+FROM node:16-alpine
 
-# Set the working directory in the container
+# Set the working directory inside the container
 WORKDIR /app
 
-# Copy package.json and package-lock.json files to the working directory
-COPY package*.json ./
+# Copy the package.json and yarn.lock to the working directory
+COPY package.json yarn.lock ./
 
-# Install dependencies
-RUN npm install
+# Install project dependencies using Yarn
+RUN yarn install
 
-# Copy the rest of the application code to the working directory
+# Copy the entire project to the working directory
 COPY . .
 
-# Build the Vue.js application
-RUN npm run build
+# Build the Vue.js app for production
+RUN yarn run build
 
-# Expose port 8080 (default port for Vue.js)
+# Expose port 8080 to access the app
 EXPOSE 8080
 
-# Start the application
-CMD ["npm", "run", "serve"]
+# Serve the built app with a lightweight HTTP server (http-server)
+RUN yarn global add http-server
+
+# Set the default command to serve the built app
+CMD ["http-server", "dist"]

@@ -1,4 +1,4 @@
-# waifuclicker
+# cryptomons
 
 ## Project setup
 ```
@@ -19,6 +19,14 @@ yarn build
 ```
 yarn lint
 ```
+
+
+
+### Docker
+```
+bash ./run.sh
+```
+
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).

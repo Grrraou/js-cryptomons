@@ -1,13 +1,15 @@
 <template>
   <div class="clicker-game">
-    <h1>Clicker Game with Heroes and Clicker Areas</h1>
+    
 
-    <!-- MenuWindow Component -->
-    <MenuWindow @reset-stats="resetStoredStats" />
+    
 
     <div class="game-container">
       <!-- Left side: Clicker Areas -->
       <div class="areas-container">
+        <h1>Clicker Game with Heroes and Clicker Areas</h1>
+        <!-- MenuWindow Component -->
+        <MenuWindow @reset-stats="resetStoredStats" />
         <div class="row" v-for="rowIndex in rowCount" :key="rowIndex">
           <div class="area-wrapper" v-for="index in getAreasForRow(rowIndex)" :key="index">
             <ClickerArea
@@ -87,12 +89,7 @@ export default {
       return areaIndices;
     },
     resetStoredStats() {
-      for (let i = 0; i < this.areaCount; i++) {
-        localStorage.removeItem(`clicks_area_${i}`);
-        localStorage.removeItem(`level_area_${i}`);
-        localStorage.removeItem(`clickPower_area_${i}`);
-        localStorage.removeItem(`autoClickerLevel_area_${i}`);
-      }
+      localStorage.clear();
 
       this.heroes.forEach(hero => {
         hero.assignedArea = null;

@@ -1,21 +1,23 @@
 <template>
     <div class="side-menu">
-      <nav>
-        <ul>
-          <li>
-            <router-link to="/">Home</router-link>
-          </li>
-          <li>
-            <router-link to="/mines">Mines</router-link>
-          </li>
-          <li>
-            <router-link to="/achievements">Achievements</router-link>
-          </li>
-          <li>
-            <router-link to="/stats">Stats</router-link>
-          </li>
-        </ul>
-      </nav>
+      <div class="side-menu-container">
+        <nav>
+          <ul>
+            <li>
+              <router-link to="/">Home</router-link>
+            </li>
+            <li>
+              <router-link to="/mines">Mines</router-link>
+            </li>
+            <li>
+              <router-link to="/achievements">Achievements</router-link>
+            </li>
+            <li>
+              <router-link to="/stats">Stats</router-link>
+            </li>
+          </ul>
+        </nav>
+      </div>
     </div>
   </template>
   
@@ -28,9 +30,12 @@
   <style scoped>
   .side-menu {
     width: 250px;
-  background-color: #f4f4f4;
-  padding: 20px;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+  }
+
+  .side-menu-container {
+    position: fixed;
+    height: 100vh;
   }
   
   nav ul {

@@ -1,19 +1,21 @@
 <template>
     <div class="hero-list" @dragover.prevent @drop="handleHeroDrop">
-      <h2>Heroes</h2>
-      <div v-if="availableHeroes.length > 0">
-        <div
-          class="hero"
-          v-for="(hero, index) in availableHeroes"
-          :key="index"
-          draggable="true"
-          @dragstart="dragStart(hero)"
-        >
-          <img :src="hero.image" :alt="hero.name" class="hero-image" />
-          <p>{{ hero.name }}</p>
+      <div class="hero-list-container">
+        <h2>Heroes</h2>
+        <div v-if="availableHeroes.length > 0">
+          <div
+            class="hero"
+            v-for="(hero, index) in availableHeroes"
+            :key="index"
+            draggable="true"
+            @dragstart="dragStart(hero)"
+          >
+            <img :src="hero.image" :alt="hero.name" class="hero-image" />
+            <p>{{ hero.name }}</p>
+          </div>
         </div>
+        <p v-else>No heroes available</p>
       </div>
-      <p v-else>No heroes available</p>
     </div>
   </template>
   
@@ -49,11 +51,13 @@
   <style scoped>
   .hero-list {
     text-align: center;
-    border: 1px solid #ddd;
     padding: 10px;
-    background-color: #f8f8f8;
-    max-height: 80vh;
     overflow-y: auto;
+  }
+
+  .hero-list-container {
+    position: fixed;
+    height: 100vh;
   }
   
   .hero {

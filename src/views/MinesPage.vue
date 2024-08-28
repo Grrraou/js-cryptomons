@@ -31,9 +31,9 @@
 </template>
 
 <script>
-import ClickerArea from './ClickerArea.vue';
-import HeroList from './HeroList.vue';
-import MenuWindow from './MenuWindow.vue';
+import ClickerArea from '@/components/ClickerArea.vue';
+import HeroList from '@/components/HeroList.vue';
+import MenuWindow from '@/components/MenuWindow.vue';
 
 export default {
   components: {

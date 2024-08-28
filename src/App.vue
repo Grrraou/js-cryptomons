@@ -1,23 +1,33 @@
 <template>
-  <div id="app">
-    <CryptoMons />
+  <div class="layout">
+    <!-- Use the SideMenu component here -->
+    <SideMenu />
+
+    <!-- Main content area -->
+    <div class="page-content">
+      <router-view></router-view>
+    </div>
   </div>
 </template>
-
 <script>
-import CryptoMons from './components/CryptoMons.vue';
+import SideMenu from './components/SideMenu.vue';
 
 export default {
   components: {
-    CryptoMons,
+    SideMenu,
   },
 };
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  text-align: center;
-  margin-top: 60px;
+<style scoped>
+.layout {
+  display: flex;
+  height: 100vh; /* Full viewport height */
+}
+
+.page-content {
+  flex: 1; /* Fills the remaining space */
+  padding: 20px;
+  background-color: #fff;
 }
 </style>

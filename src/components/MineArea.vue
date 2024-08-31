@@ -49,6 +49,9 @@
         this.saveState();
         this.mineTokens(event);
       },
+      mineAutomatically(event) {
+        this.mineTokens(event);
+      },
       upgradeClickPower() {
         const cost = this.upgradeCost(this.level);
         if (this.clicks >= cost) {
@@ -82,8 +85,7 @@
         
         if (heroCount > 0) {
           this.autoClickerInterval = setInterval(() => {
-            this.clicks += heroCount;
-            this.saveState();
+            this.mineAutomatically(heroCount);
           }, 1000);
         } else {
           clearInterval(this.autoClickerInterval);

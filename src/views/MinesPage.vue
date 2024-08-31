@@ -68,32 +68,33 @@ export default {
       return this.heroes.filter(hero => hero.assignedArea === areaIndex);
     },
     assignHero(hero, areaIndex) {
-    const heroIndex = this.heroes.findIndex(h => h.name === hero.name);
-    if (heroIndex !== -1) {
-      this.heroes[heroIndex].assignedArea = areaIndex;
+      this.removeHero(hero);
+      const heroIndex = this.heroes.findIndex(h => h.name === hero.name);
+      if (heroIndex !== -1) {
+        this.heroes[heroIndex].assignedArea = areaIndex;
 
-      // Calculate the updated number of assigned heroes
-      const updatedHeroCount = this.getHeroesForArea(areaIndex).length;
-
-      // Emit the event with the updated hero count
-      eventBus.emit('trigger-start-auto-clicker', { areaIndex, heroCount: updatedHeroCount });
-    }
-  },
-  removeHero(hero) {
-    const heroIndex = this.heroes.findIndex(h => h.name === hero.name);
-    if (heroIndex !== -1) {
-      const areaIndex = this.heroes[heroIndex].assignedArea;
-      this.heroes[heroIndex].assignedArea = null;
-
-      if (areaIndex !== null) {
-        // Calculate the updated number of assigned heroes after removal
+        // Calculate the updated number of assigned heroes
         const updatedHeroCount = this.getHeroesForArea(areaIndex).length;
 
         // Emit the event with the updated hero count
         eventBus.emit('trigger-start-auto-clicker', { areaIndex, heroCount: updatedHeroCount });
       }
-    }
-  },
+    },
+    removeHero(hero) {
+      const heroIndex = this.heroes.findIndex(h => h.name === hero.name);
+      if (heroIndex !== -1) {
+        const areaIndex = this.heroes[heroIndex].assignedArea;
+        this.heroes[heroIndex].assignedArea = null;
+
+        if (areaIndex !== null) {
+          // Calculate the updated number of assigned heroes after removal
+          const updatedHeroCount = this.getHeroesForArea(areaIndex).length;
+
+          // Emit the event with the updated hero count
+          eventBus.emit('trigger-start-auto-clicker', { areaIndex, heroCount: updatedHeroCount });
+        }
+      }
+    },
   },
 };
 </script>

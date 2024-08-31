@@ -10,6 +10,9 @@
               <router-link to="/mines">Mines</router-link>
             </li>
             <li>
+              <router-link to="/staking">Staking</router-link>
+            </li>
+            <li>
               <router-link to="/vault">Vault</router-link>
             </li>
             <li>

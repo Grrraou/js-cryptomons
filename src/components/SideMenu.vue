@@ -24,6 +24,9 @@
             <li>
               <router-link to="/stats">Stats</router-link>
             </li>
+            <li>
+              <router-link to="/settings">Settings</router-link>
+            </li>
           </ul>
         </nav>
       </div>

@@ -7,6 +7,7 @@ import VaultPage from '@/views/VaultPage.vue';
 import SwapPage from '@/views/SwapPage.vue';
 import AchievementsPage from '@/views/AchievementsPage.vue';
 import StatsPage from '@/views/StatsPage.vue';
+import SettingsPage from '@/views/SettingsPage.vue';
 
 const routes = [
   { path: '/', name: 'Home', component: HomePage },
@@ -16,6 +17,7 @@ const routes = [
   { path: '/swap', name: 'Swap', component: SwapPage },
   { path: '/achievements', name: 'Achievements', component: AchievementsPage },
   { path: '/stats', name: 'Stats', component: StatsPage },
+  { path: '/settings', name: 'Settings', component: SettingsPage },
 ];
 
 const router = createRouter({

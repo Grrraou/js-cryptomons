@@ -14,6 +14,7 @@
             <MineArea
               :areaIndex="area.index"
               :areaName="area.name"
+              :token="area.token"
               :initialClicks="getStoredValue(`clicks_area_${area.index}`, 0)"
               :initialLevel="getStoredValue(`level_area_${area.index}`, 1)"
               :initialClickPower="getStoredValue(`clickPower_area_${area.index}`, 1)"

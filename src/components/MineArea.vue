@@ -1,6 +1,6 @@
 <template>
     <div class="clicker-area" @dragover.prevent @drop="handleDrop">
-      <h2>{{ areaName }}</h2>
+      <h2>{{ areaName }} ({{ token }})</h2>
       <p>Clicks: {{ clicks }}</p>
       <p>Level: {{ level }}</p>
       <p>Click Power: {{ clickPower }}</p>
@@ -15,7 +15,7 @@
       <p>Autoclicker Level: {{ autoClickerLevel }}</p>
       <p>Upgrade Click Power Cost: {{ upgradeCost(level) }} Clicks</p>
       <p>Upgrade Autoclicker Cost: {{ autoClickerCost(autoClickerLevel) }} Clicks</p>
-      <button @click="increaseClicks">Mine !</button>
+      <button @click="mineManually">Mine !</button>
       <button @click="upgradeClickPower" :disabled="!canUpgradeClickPower">
         Upgrade Click Power (Cost: {{ upgradeCost(level) }} Clicks)
       </button>
@@ -30,6 +30,7 @@
     props: {
       areaIndex: String,
       areaName: String,
+      token: String,
       initialClicks: Number,
       initialLevel: Number,
       initialClickPower: Number,
@@ -45,9 +46,10 @@
       };
     },
     methods: {
-      increaseClicks() {
-        this.clicks += this.clickPower;
+      mineManually() {
+        this.clicks += 1;
         this.saveState();
+        this.mineTokens();
       },
       upgradeClickPower() {
         const cost = this.upgradeCost(this.level);
@@ -102,6 +104,16 @@
         localStorage.setItem(`level_area_${this.areaIndex}`, this.level.toString());
         localStorage.setItem(`clickPower_area_${this.areaIndex}`, this.clickPower.toString());
         localStorage.setItem(`autoClickerLevel_area_${this.areaIndex}`, this.autoClickerLevel.toString());
+      },
+      mineTokens() {
+        let tokenIndex = `token_${this.token}`;
+        let currentAmount = parseFloat(localStorage.getItem(tokenIndex)) || 0;
+        let minedAmount = Math.random() * (0.009 - 0.00001) + 0.00001;
+        localStorage.setItem(tokenIndex, currentAmount + minedAmount);
+
+        let tokenIndexTotal = `total_token_${this.token}`;
+        let currentAmountTotal = parseFloat(localStorage.getItem(tokenIndexTotal)) || 0;
+        localStorage.setItem(tokenIndexTotal, currentAmountTotal + minedAmount);
       },
     },
     computed: {

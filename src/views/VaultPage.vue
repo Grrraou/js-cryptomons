@@ -1,72 +1,65 @@
 <template>
-    <div class="vault-page">
-      <h1>Crypto Vault</h1>
-      <p>View your stored crypto data here.</p>
-      <div class="vault-list">
-        <CryptoVault
-          v-for="(value, key) in floatStorageItems"
-          :key="key"
-          :title="key"
-          :value="value"
-        />
+  <div class="vault-page">
+    <h1>Crypto Vault</h1>
+    <p>View your stored crypto data here.</p>
+    <div class="vault-list">
+      <div v-for="token in tokens" :key="token.index" class="vault-item">
+        <h2>{{ token.name }}</h2>
+        <p><strong>Current Amount:</strong> {{ getTokenValue(token.index) }}</p>
+        <p><strong>Total Mined:</strong> {{ getTotalTokenValue(token.index) }}</p>
       </div>
     </div>
-  </template>
-  
-  <script>
-  import CryptoVault from '@/components/CryptoVault.vue';
-  
-  export default {
-    name: 'VaultPage',
-    components: {
-      CryptoVault,
+  </div>
+</template>
+
+<script>
+import { tokens } from '@/services/TokenService.js'; // Ensure the path is correct
+
+export default {
+  name: 'VaultPage',
+  data() {
+    return {
+      tokens,
+    };
+  },
+  methods: {
+    getTokenValue(index) {
+      const value = parseFloat(localStorage.getItem(`token_${index}`));
+      return !isNaN(value) ? value.toFixed(6) : '0.000000'; // Default formatting with 6 decimals
     },
-    data() {
-      return {
-        floatStorageItems: {},
-      };
+    getTotalTokenValue(index) {
+      const value = parseFloat(localStorage.getItem(`total_token_${index}`));
+      return !isNaN(value) ? value.toFixed(6) : '0.000000'; // Default formatting with 6 decimals
     },
-    created() {
-      this.loadFloatStorage();
-    },
-    methods: {
-      loadFloatStorage() {
-        const items = {};
-        const keys = [];
-  
-        // Get all keys from localStorage
-        for (let i = 0; i < localStorage.length; i++) {
-          const key = localStorage.key(i);
-          const value = parseFloat(localStorage.getItem(key));
-  
-          // Check if the value is a valid float number
-          if (!isNaN(value)) {
-            keys.push(key);
-          }
-        }
-  
-        // Sort keys alphabetically
-        keys.sort();
-  
-        // Populate items object with sorted keys and their values
-        keys.forEach((key) => {
-          items[key] = parseFloat(localStorage.getItem(key));
-        });
-  
-        this.floatStorageItems = items;
-      },
-    },
-  };
-  </script>
-  
-  <style scoped>
-  .vault-page {
-    padding-left: 220px; /* Space for the side menu */
-    margin-top: 50px;
-  }
-  
-  .vault-list {
-    margin-top: 20px;
-  }
-  </style>
-  
+  },
+};
+</script>
+
+<style scoped>
+.vault-page {
+  padding-left: 220px; /* Space for the side menu */
+  margin-top: 50px;
+}
+
+.vault-list {
+  margin-top: 20px;
+}
+
+.vault-item {
+  border: 1px solid #ccc;
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.vault-item h2 {
+  margin: 0 0 10px;
+  font-size: 22px;
+}
+
+.vault-item p {
+  font-size: 18px;
+  margin: 5px 0;
+}
+</style>

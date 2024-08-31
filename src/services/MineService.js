@@ -1,9 +1,8 @@
-// src/areas.js
 
 export const mines = [
-  { index: 'btc', name: 'Bitcoin' },
-  { index: 'xmr', name: 'Monero' },
-  { index: 'doge', name: 'Dogecoin' },
+  { index: 'btc_mine', name: 'Bitcoin', token: 'btc' },
+  { index: 'xmr_mine', name: 'Monero', token: 'xmr' },
+  { index: 'doge_mine', name: 'Dogecoin', token: 'doge' },
 ];
 
   

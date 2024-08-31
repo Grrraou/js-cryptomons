@@ -12,7 +12,7 @@
 
         <div class="areas-grid">
           <div class="area-wrapper" v-for="area in areas" :key="area.index">
-            <ClickerArea
+            <MineArea
               :areaIndex="area.index"
               :areaName="area.name"
               :initialClicks="getStoredValue(`clicks_area_${area.index}`, 0)"
@@ -35,23 +35,21 @@
 </template>
 
 <script>
-import ClickerArea from '@/components/ClickerArea.vue';
+import MineArea from '@/components/MineArea.vue';
 import HeroList from '@/components/HeroList.vue';
 import MenuWindow from '@/components/MenuWindow.vue';
+import { mines } from '@/services/MineService.js';
 
 export default {
   components: {
-    ClickerArea,
+    MineArea,
     HeroList,
     MenuWindow,
   },
   data() {
     return {
       areaCount: 5, // Number of clicker areas
-      areas: [
-        { index: 'btc', name: 'Bitcoin' },
-        { index: 'xmr', name: 'Monero' },
-      ],
+      areas: mines,
       heroes: [
         { name: 'Hero 1', image: require('@/assets/hero1.png'), boostPower: 2, assignedArea: null },
         { name: 'Hero 2', image: require('@/assets/hero2.png'), boostPower: 3, assignedArea: null },

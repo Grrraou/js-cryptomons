@@ -85,12 +85,6 @@ export default {
         this.heroes[heroIndex].assignedArea = null;
       }
     },
-    getAreasForRow(rowIndex) {
-      const itemsPerRow = Math.ceil(this.areas.length / this.rowCount);
-      const start = (rowIndex - 1) * itemsPerRow;
-      const end = start + itemsPerRow;
-      return this.areas.slice(start, end);
-    },
     resetStoredStats() {
       localStorage.clear();
 

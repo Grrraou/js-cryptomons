@@ -1,6 +1,6 @@
 <template>
     <div class="clicker-area" @dragover.prevent @drop="handleDrop">
-      <h2>Area {{ areaIndex + 1 }}</h2>
+      <h2>{{ areaName }}</h2>
       <p>Clicks: {{ clicks }}</p>
       <p>Level: {{ level }}</p>
       <p>Click Power: {{ clickPower }}</p>
@@ -15,7 +15,7 @@
       <p>Autoclicker Level: {{ autoClickerLevel }}</p>
       <p>Upgrade Click Power Cost: {{ upgradeCost(level) }} Clicks</p>
       <p>Upgrade Autoclicker Cost: {{ autoClickerCost(autoClickerLevel) }} Clicks</p>
-      <button @click="increaseClicks">Click Area {{ areaIndex + 1 }}</button>
+      <button @click="increaseClicks">Mine !</button>
       <button @click="upgradeClickPower" :disabled="!canUpgradeClickPower">
         Upgrade Click Power (Cost: {{ upgradeCost(level) }} Clicks)
       </button>
@@ -28,7 +28,8 @@
   <script>
   export default {
     props: {
-      areaIndex: Number,
+      areaIndex: String,
+      areaName: String,
       initialClicks: Number,
       initialLevel: Number,
       initialClickPower: Number,

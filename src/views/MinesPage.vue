@@ -8,23 +8,25 @@
       <!-- Left side: Clicker Areas -->
       <div class="areas-container">
         <h1>Clicker Game with Heroes and Clicker Areas</h1>
-        <!-- MenuWindow Component -->
         <MenuWindow @reset-stats="resetStoredStats" />
-        <div class="row" v-for="rowIndex in rowCount" :key="rowIndex">
-          <div class="area-wrapper" v-for="index in getAreasForRow(rowIndex)" :key="index">
+
+        <div class="areas-grid">
+          <div class="area-wrapper" v-for="area in areas" :key="area.index">
             <ClickerArea
-              :areaIndex="index - 1"
-              :initialClicks="getStoredValue(`clicks_area_${index - 1}`, 0)"
-              :initialLevel="getStoredValue(`level_area_${index - 1}`, 1)"
-              :initialClickPower="getStoredValue(`clickPower_area_${index - 1}`, 1)"
-              :initialAutoClickerLevel="getStoredValue(`autoClickerLevel_area_${index - 1}`, 0)"
-              :assignedHeroes="getHeroesForArea(index - 1)"
+              :areaIndex="area.index"
+              :areaName="area.name"
+              :initialClicks="getStoredValue(`clicks_area_${area.index - 1}`, 0)"
+              :initialLevel="getStoredValue(`level_area_${area.index - 1}`, 1)"
+              :initialClickPower="getStoredValue(`clickPower_area_${area.index - 1}`, 1)"
+              :initialAutoClickerLevel="getStoredValue(`autoClickerLevel_area_${area.index - 1}`, 0)"
+              :assignedHeroes="getHeroesForArea(area.index)"
               @assign-hero="assignHero"
               @remove-hero="removeHero"
             />
           </div>
         </div>
       </div>
+
 
       <!-- Right side: Hero List -->
       <HeroList class="hero-list" :heroes="heroes" @remove-hero="removeHero" />
@@ -46,6 +48,10 @@ export default {
   data() {
     return {
       areaCount: 5, // Number of clicker areas
+      areas: [
+        { index: 'btc', name: 'Bitcoin' },
+        { index: 'xmr', name: 'Monero' },
+      ],
       heroes: [
         { name: 'Hero 1', image: require('@/assets/hero1.png'), boostPower: 2, assignedArea: null },
         { name: 'Hero 2', image: require('@/assets/hero2.png'), boostPower: 3, assignedArea: null },
@@ -80,13 +86,10 @@ export default {
       }
     },
     getAreasForRow(rowIndex) {
-      const startIndex = (rowIndex - 1) * this.areasPerRow + 1;
-      const endIndex = Math.min(rowIndex * this.areasPerRow, this.areaCount);
-      const areaIndices = [];
-      for (let i = startIndex; i <= endIndex; i++) {
-        areaIndices.push(i);
-      }
-      return areaIndices;
+      const itemsPerRow = Math.ceil(this.areas.length / this.rowCount);
+      const start = (rowIndex - 1) * itemsPerRow;
+      const end = start + itemsPerRow;
+      return this.areas.slice(start, end);
     },
     resetStoredStats() {
       localStorage.clear();
@@ -113,7 +116,15 @@ export default {
 }
 
 .areas-container {
-  flex: 1;
+  width: 100%;
+  padding: 20px;
+}
+
+.areas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Adjust min-width as needed */
+  gap: 16px; /* Space between grid items */
+  margin-top: 20px; /* Optional: add space between MenuWindow and the grid */
 }
 
 .row {

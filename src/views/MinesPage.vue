@@ -8,7 +8,6 @@
       <!-- Left side: Clicker Areas -->
       <div class="areas-container">
         <h1>Clicker Game with Heroes and Clicker Areas</h1>
-        <MenuWindow @reset-stats="resetStoredStats" />
 
         <div class="areas-grid">
           <div class="area-wrapper" v-for="area in areas" :key="area.index">
@@ -37,14 +36,12 @@
 <script>
 import MineArea from '@/components/MineArea.vue';
 import HeroList from '@/components/HeroList.vue';
-import MenuWindow from '@/components/MenuWindow.vue';
 import { mines } from '@/services/MineService.js';
 
 export default {
   components: {
     MineArea,
     HeroList,
-    MenuWindow,
   },
   data() {
     return {
@@ -82,15 +79,6 @@ export default {
       if (heroIndex !== -1) {
         this.heroes[heroIndex].assignedArea = null;
       }
-    },
-    resetStoredStats() {
-      localStorage.clear();
-
-      this.heroes.forEach(hero => {
-        hero.assignedArea = null;
-      });
-
-      window.location.reload();
     },
   },
 };

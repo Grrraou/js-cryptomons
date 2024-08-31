@@ -1,7 +1,9 @@
 <template>
   <div class="stats-page">
+    <MenuWindow @reset-stats="resetStoredStats" />
     <h1>Stats Page</h1>
     <p>See your game stats here.</p>
+  
     <div class="stats-list">
       <div v-for="(value, key) in localStorageItems" :key="key" class="stat-item">
         <span class="stat-key">{{ key }}:</span>
@@ -12,8 +14,13 @@
 </template>
 
 <script>
+import MenuWindow from '@/components/MenuWindow.vue';
+
 export default {
   name: 'StatsPage',
+  components: {
+    MenuWindow,
+  },
   data() {
     return {
       localStorageItems: {},
@@ -41,6 +48,15 @@ export default {
       });
 
       this.localStorageItems = items;
+    },
+    resetStoredStats() {
+      localStorage.clear();
+
+      this.heroes.forEach(hero => {
+        hero.assignedArea = null;
+      });
+
+      window.location.reload();
     },
   },
 };

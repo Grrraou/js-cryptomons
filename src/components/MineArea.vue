@@ -74,21 +74,7 @@
           clearInterval(this.autoClickerInterval);
           this.autoClickerInterval = null; // Reset the interval variable
         }
-
-        // You can use heroCount to adjust the behavior accordingly
-        // For example, you might want to start the auto-clicker only if there's at least one hero assigned
-        if (heroCount > 0) {
-          console.log(`Starting auto-clicker for ${heroCount} heroes.`);
-        } else {
-          console.log('No heroes assigned, stopping auto-clicker.');
-        }
       },
-      stopAutoClicker() {
-      if (this.autoClickerInterval) {
-        clearInterval(this.autoClickerInterval);
-        this.autoClickerInterval = null; // Reset the interval variable
-      }
-    },
       handleDrop(event) {
         try {
           const heroData = event.dataTransfer.getData('heroData');

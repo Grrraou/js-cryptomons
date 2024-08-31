@@ -22,7 +22,24 @@ export const achievements = [
     target: 1000,
     storageKey: "clicks_area_btc_mine"
   },
-  // Add more achievements as needed for other areas or thresholds
+  {
+    key: "clicks_area_xmr_mine_10",
+    title: "Clicks Master - 10 Clicks",
+    target: 10,
+    storageKey: "clicks_area_xmr_mine"
+  },
+  {
+    key: "clicks_area_xmr_mine_100",
+    title: "Clicks Master - 100 Clicks",
+    target: 100,
+    storageKey: "clicks_area_xmr_mine"
+  },
+  {
+    key: "clicks_area_xmr_mine_1000",
+    title: "Clicks Master - 1000 Clicks",
+    target: 1000,
+    storageKey: "clicks_area_xmr_mine"
+  },
 ];
 
 export const startAchievementTracking = () => {

@@ -62,12 +62,9 @@
       upgradeCost(level) {
         return level * (10 * level);
       },
-      startAutoClicker(heroCount) {
-
-        console.log(`AutoClicker started with ${heroCount} assigned heroes.`);
-      
-      
-        if (this.autoClickerInterval) clearInterval(this.autoClickerInterval);
+      startAutoClicker(heroCount) {  
+        if (this.autoClickerInterval) 
+          clearInterval(this.autoClickerInterval);
         
         if (heroCount > 0) {
           this.autoClickerInterval = setInterval(() => {
@@ -173,7 +170,6 @@
     computed: {
       canUpgrade() {
         let stored = localStorage.getItem(`token_${this.token}`);
-        console.log(stored + this.token);
         return stored >= this.upgradeCost(this.level);
       },
     },

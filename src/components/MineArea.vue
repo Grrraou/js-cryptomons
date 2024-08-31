@@ -104,8 +104,21 @@
         let tokenIndexTotal = `total_token_${this.token}`;
         let currentAmountTotal = parseFloat(localStorage.getItem(tokenIndexTotal)) || 0;
         localStorage.setItem(tokenIndexTotal, currentAmountTotal + minedAmount);
+        
+        let x, y;
 
-        this.showFlyingText(minedAmount.toFixed(6), event.clientX, event.clientY);
+        if (event.clientX) {
+          // Use event coordinates if available
+          x = event.clientX;
+          y = event.clientY;
+        } else {
+          // Use the component's coordinates
+          const coords = this.getComponentCoordinates();
+          x = coords.x;
+          y = coords.y;
+        }
+        if (this.$route.name === 'Mines' && x && y)
+          this.showFlyingText(minedAmount.toFixed(6), x, y);
       },
       showFlyingText(amount, x, y) {
         const textElement = document.createElement('div');
@@ -139,7 +152,18 @@
             textElement.parentElement.removeChild(textElement);
           }
         }, 2000); // Match with the duration of the animation
-      }
+      },
+      getComponentCoordinates() {
+        if (this.$el) {
+          const rect = this.$el.getBoundingClientRect();
+          const x = rect.left + window.scrollX;
+          const y = rect.top + window.scrollY;
+          return { x, y };
+        } else {
+          console.error('Element is not available');
+          return { x: 0, y: 0 }; // Fallback values
+        }
+      },
     },
     mounted() {
     // Listen for the custom event from the global event bus

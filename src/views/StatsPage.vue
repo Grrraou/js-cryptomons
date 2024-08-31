@@ -51,11 +51,6 @@ export default {
     },
     resetStoredStats() {
       localStorage.clear();
-
-      this.heroes.forEach(hero => {
-        hero.assignedArea = null;
-      });
-
       window.location.reload();
     },
   },

@@ -7,7 +7,7 @@
     <div class="game-container">
       <!-- Left side: Clicker Areas -->
       <div class="areas-container">
-        <h1>Clicker Game with Heroes and Clicker Areas</h1>
+        <h1>Mines</h1>
 
         <div class="areas-grid">
           <div class="area-wrapper" v-for="area in areas" :key="area.index">
@@ -49,7 +49,6 @@ export default {
   },
   data() {
     return {
-      areaCount: 5, // Number of clicker areas
       areas: mines,
       heroes: heroes,
     };

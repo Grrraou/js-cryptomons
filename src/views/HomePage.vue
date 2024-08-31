@@ -1,6 +1,6 @@
 <template>
     <div class="home-page">
-      <h1>Home Page</h1>
+      <h1>Cryptomons clicker</h1>
       <p>Welcome to the game!</p>
     </div>
   </template>

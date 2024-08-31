@@ -12,6 +12,7 @@
         <div class="areas-grid">
           <div class="area-wrapper" v-for="area in areas" :key="area.index">
             <MineArea
+              ref="mineArea"
               :areaIndex="area.index"
               :areaName="area.name"
               :token="area.token"
@@ -38,6 +39,8 @@
 import MineArea from '@/components/MineArea.vue';
 import HeroList from '@/components/HeroList.vue';
 import { mines } from '@/services/MineService.js';
+import { heroes } from '@/services/HeroService.js';
+import eventBus from '@/eventBus.js';
 
 export default {
   components: {
@@ -48,12 +51,7 @@ export default {
     return {
       areaCount: 5, // Number of clicker areas
       areas: mines,
-      heroes: [
-        { name: 'Hero 1', image: require('@/assets/hero1.png'), boostPower: 2, assignedArea: null },
-        { name: 'Hero 2', image: require('@/assets/hero2.png'), boostPower: 3, assignedArea: null },
-        { name: 'Hero 3', image: require('@/assets/hero3.png'), boostPower: 5, assignedArea: null },
-      ],
-      areasPerRow: 3, // Adjust this to set the number of areas per row
+      heroes: heroes,
     };
   },
   computed: {
@@ -70,17 +68,32 @@ export default {
       return this.heroes.filter(hero => hero.assignedArea === areaIndex);
     },
     assignHero(hero, areaIndex) {
-      const heroIndex = this.heroes.findIndex(h => h.name === hero.name);
-      if (heroIndex !== -1) {
-        this.heroes[heroIndex].assignedArea = areaIndex;
+    const heroIndex = this.heroes.findIndex(h => h.name === hero.name);
+    if (heroIndex !== -1) {
+      this.heroes[heroIndex].assignedArea = areaIndex;
+
+      // Calculate the updated number of assigned heroes
+      const updatedHeroCount = this.getHeroesForArea(areaIndex).length;
+
+      // Emit the event with the updated hero count
+      eventBus.emit('trigger-start-auto-clicker', { areaIndex, heroCount: updatedHeroCount });
+    }
+  },
+  removeHero(hero) {
+    const heroIndex = this.heroes.findIndex(h => h.name === hero.name);
+    if (heroIndex !== -1) {
+      const areaIndex = this.heroes[heroIndex].assignedArea;
+      this.heroes[heroIndex].assignedArea = null;
+
+      if (areaIndex !== null) {
+        // Calculate the updated number of assigned heroes after removal
+        const updatedHeroCount = this.getHeroesForArea(areaIndex).length;
+
+        // Emit the event with the updated hero count
+        eventBus.emit('trigger-start-auto-clicker', { areaIndex, heroCount: updatedHeroCount });
       }
-    },
-    removeHero(hero) {
-      const heroIndex = this.heroes.findIndex(h => h.name === hero.name);
-      if (heroIndex !== -1) {
-        this.heroes[heroIndex].assignedArea = null;
-      }
-    },
+    }
+  },
   },
 };
 </script>

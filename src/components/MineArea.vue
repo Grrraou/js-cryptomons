@@ -14,18 +14,16 @@
       <p v-if="assignedHeroes.length === 0">No heroes assigned</p>
       <p>Autoclicker Level: {{ autoClickerLevel }}</p>
       <p>Upgrade Click Power Cost: {{ upgradeCost(level) }} Clicks</p>
-      <p>Upgrade Autoclicker Cost: {{ autoClickerCost(autoClickerLevel) }} Clicks</p>
       <button @click="mineManually($event)">Mine !</button>
       <button @click="upgradeClickPower" :disabled="!canUpgradeClickPower">
         Upgrade Click Power (Cost: {{ upgradeCost(level) }} Clicks)
-      </button>
-      <button @click="upgradeAutoClicker" :disabled="!canUpgradeAutoClicker">
-        Upgrade Autoclicker (Cost: {{ autoClickerCost(autoClickerLevel) }} Clicks)
       </button>
     </div>
   </template>
   
   <script>
+  import eventBus from '@/eventBus.js';
+
   export default {
     props: {
       areaIndex: String,
@@ -42,7 +40,7 @@
         clicks: this.initialClicks || 0,
         level: this.initialLevel || 1,
         clickPower: this.initialClickPower || 1,
-        autoClickerLevel: this.initialAutoClickerLevel || 0,
+        autoClickerLevel: this.initialAutoClickerLevel || 1,
       };
     },
     methods: {
@@ -75,16 +73,37 @@
       autoClickerCost(level) {
         return 10 * (level * level);
       },
-      startAutoClicker() {
+      startAutoClicker(heroCount) {
+
+        console.log(`AutoClicker started with ${heroCount} assigned heroes.`);
+      
+      
         if (this.autoClickerInterval) clearInterval(this.autoClickerInterval);
-  
-        if (this.autoClickerLevel > 0) {
+        
+        if (heroCount > 0) {
           this.autoClickerInterval = setInterval(() => {
-            this.clicks += this.autoClickerLevel;
+            this.clicks += heroCount;
             this.saveState();
           }, 1000);
+        } else {
+          clearInterval(this.autoClickerInterval);
+          this.autoClickerInterval = null; // Reset the interval variable
+        }
+
+        // You can use heroCount to adjust the behavior accordingly
+        // For example, you might want to start the auto-clicker only if there's at least one hero assigned
+        if (heroCount > 0) {
+          console.log(`Starting auto-clicker for ${heroCount} heroes.`);
+        } else {
+          console.log('No heroes assigned, stopping auto-clicker.');
         }
       },
+      stopAutoClicker() {
+      if (this.autoClickerInterval) {
+        clearInterval(this.autoClickerInterval);
+        this.autoClickerInterval = null; // Reset the interval variable
+      }
+    },
       handleDrop(event) {
         try {
           const heroData = event.dataTransfer.getData('heroData');
@@ -118,43 +137,51 @@
         this.showFlyingText(minedAmount.toFixed(6), event.clientX, event.clientY);
       },
       showFlyingText(amount, x, y) {
-  const textElement = document.createElement('div');
-  textElement.innerText = `+${amount}`;
-  
-  // Apply initial styles directly with JavaScript
-  textElement.style.position = 'fixed';
-  textElement.style.left = `${x}px`;
-  textElement.style.top = `${y}px`;
-  textElement.style.fontSize = '24px';
-  textElement.style.fontWeight = 'bold';
-  textElement.style.color = 'green';
-  textElement.style.opacity = '1'; // Start fully visible
-  textElement.style.pointerEvents = 'none'; // Ensure it doesn't interfere with user interactions
-  textElement.style.transition = 'transform 2s ease-out, opacity 2s ease-out'; // Smooth transition for both transform and opacity
-  textElement.style.zIndex = '9999'; // Ensure it appears on top of other elements
+        const textElement = document.createElement('div');
+        textElement.innerText = `+${amount}`;
+        
+        // Apply initial styles directly with JavaScript
+        textElement.style.position = 'fixed';
+        textElement.style.left = `${x}px`;
+        textElement.style.top = `${y}px`;
+        textElement.style.fontSize = '24px';
+        textElement.style.fontWeight = 'bold';
+        textElement.style.color = 'green';
+        textElement.style.opacity = '1'; // Start fully visible
+        textElement.style.pointerEvents = 'none'; // Ensure it doesn't interfere with user interactions
+        textElement.style.transition = 'transform 2s ease-out, opacity 2s ease-out'; // Smooth transition for both transform and opacity
+        textElement.style.zIndex = '9999'; // Ensure it appears on top of other elements
 
-  // Append the element to the document body
-  document.body.appendChild(textElement);
+        // Append the element to the document body
+        document.body.appendChild(textElement);
 
-  // Force a reflow to ensure the initial styles are applied before starting the animation
-  textElement.offsetHeight; // Trigger a reflow
+        // Force a reflow to ensure the initial styles are applied before starting the animation
+        textElement.offsetHeight; // Trigger a reflow
 
-  // Apply the transformation to move the text up and fade it out
-  textElement.style.transform = 'translateY(-50px)';
-  textElement.style.opacity = '0';
+        // Apply the transformation to move the text up and fade it out
+        textElement.style.transform = 'translateY(-50px)';
+        textElement.style.opacity = '0';
 
-  // Automatically remove the element after the animation ends
-  setTimeout(() => {
-    if (textElement && textElement.parentElement) {
-      textElement.parentElement.removeChild(textElement);
-    }
-  }, 2000); // Match with the duration of the animation
-}
-
-
-
-
+        // Automatically remove the element after the animation ends
+        setTimeout(() => {
+          if (textElement && textElement.parentElement) {
+            textElement.parentElement.removeChild(textElement);
+          }
+        }, 2000); // Match with the duration of the animation
+      }
     },
+    mounted() {
+    // Listen for the custom event from the global event bus
+    eventBus.on('trigger-start-auto-clicker', ({ areaIndex, heroCount }) => {
+      if (areaIndex === this.areaIndex) {
+        this.startAutoClicker(heroCount);
+      }
+    });
+  },
+  beforeUnmount() {
+    // Clean up the event listener when the component is destroyed
+    eventBus.off('trigger-start-auto-clicker');
+  },
     computed: {
       canUpgradeClickPower() {
         return this.clicks >= this.upgradeCost(this.level);

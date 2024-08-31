@@ -1,12 +1,15 @@
 <template>
   <div class="vault-page">
     <h1>Crypto Vault</h1>
+    <p>Total Value of Assets in Cryptocredits: {{ getTotalAssetsValue() }}</p>
     <p>View your stored crypto data here.</p>
     <div class="vault-list">
       <div v-for="token in tokens" :key="token.index" class="vault-item">
         <h2>{{ token.name }}</h2>
         <p><strong>Current Amount:</strong> {{ getTokenValue(token.index) }}</p>
         <p><strong>Total Mined:</strong> {{ getTotalTokenValue(token.index) }}</p>
+        <p><strong>Price per {{ token.name }}:</strong> {{ getCryptodollarValue(token.index) }} Cryptocredits</p>
+        <p><strong>Total Value in Cryptocredits:</strong> {{ getTotalCryptodollarValue(token.index) }}</p>
       </div>
     </div>
   </div>
@@ -30,6 +33,25 @@ export default {
     getTotalTokenValue(index) {
       const value = parseFloat(localStorage.getItem(`total_token_${index}`));
       return !isNaN(value) ? value.toFixed(6) : '0.000000'; // Default formatting with 6 decimals
+    },
+    getCryptodollarValue(index) {
+      const value = parseFloat(localStorage.getItem(`cryptodollar_value_${index}`));
+      return !isNaN(value) ? value.toFixed(6) : '0.000000'; // Default formatting with 6 decimals
+    },
+    getTotalCryptodollarValue(index) {
+      const tokenAmount = parseFloat(localStorage.getItem(`token_${index}`));
+      const cryptodollarValue = parseFloat(localStorage.getItem(`cryptodollar_value_${index}`));
+      const totalValue = tokenAmount * cryptodollarValue;
+      return !isNaN(totalValue) ? totalValue.toFixed(6) : '0.000000'; // Default formatting with 6 decimals
+    },
+    getTotalAssetsValue() {
+      let total = 0;
+      this.tokens.forEach(token => {
+        const tokenAmount = parseFloat(localStorage.getItem(`token_${token.index}`)) || 0;
+        const cryptodollarValue = parseFloat(localStorage.getItem(`cryptodollar_value_${token.index}`)) || 0;
+        total += tokenAmount * cryptodollarValue;
+      });
+      return total.toFixed(6); // Format the total value with 6 decimals
     },
   },
 };

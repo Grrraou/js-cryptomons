@@ -3,7 +3,6 @@
       <h2>{{ areaName }} ({{ token }})</h2>
       <p>Clicks: {{ clicks }}</p>
       <p>Level: {{ level }}</p>
-      <p>Click Power: {{ clickPower }}</p>
       <p>Heroes in this Area:</p>
       <div v-if="assignedHeroes.length > 0" class="heroes-in-area">
         <div v-for="(hero, index) in assignedHeroes" :key="index" class="hero-container">
@@ -12,11 +11,9 @@
         </div>
       </div>
       <p v-if="assignedHeroes.length === 0">No heroes assigned</p>
-      <p>Autoclicker Level: {{ autoClickerLevel }}</p>
-      <p>Upgrade Click Power Cost: {{ upgradeCost(level) }} Clicks</p>
       <button @click="mineManually($event)">Mine !</button>
-      <button @click="upgradeClickPower" :disabled="!canUpgradeClickPower">
-        Upgrade Click Power (Cost: {{ upgradeCost(level) }} Clicks)
+      <button @click="upgradeClickPower" :disabled="!canUpgrade">
+        Upgrade (Cost: {{ upgradeCost(level) }} {{ token }})
       </button>
     </div>
   </template>
@@ -54,27 +51,16 @@
       },
       upgradeClickPower() {
         const cost = this.upgradeCost(this.level);
-        if (this.clicks >= cost) {
-          this.clicks -= cost;
+        const storedAmmount = localStorage.getItem(`token_${this.token}`);
+        if (storedAmmount >= cost) {
+          const newAmount = storedAmmount - cost;
+          localStorage.setItem(`token_${this.token}`, newAmount);
           this.level++;
-          this.clickPower = this.level;
           this.saveState();
-        }
-      },
-      upgradeAutoClicker() {
-        const cost = this.autoClickerCost(this.autoClickerLevel);
-        if (this.clicks >= cost) {
-          this.clicks -= cost;
-          this.autoClickerLevel++;
-          this.saveState();
-          this.startAutoClicker();
         }
       },
       upgradeCost(level) {
-        return level * (1000 * level);
-      },
-      autoClickerCost(level) {
-        return 10 * (level * level);
+        return level * (10 * level);
       },
       startAutoClicker(heroCount) {
 
@@ -129,7 +115,7 @@
       mineTokens(event) {
         let tokenIndex = `token_${this.token}`;
         let currentAmount = parseFloat(localStorage.getItem(tokenIndex)) || 0;
-        let minedAmount = Math.random() * (0.009 - 0.00001) + 0.00001;
+        let minedAmount = (Math.random() * (this.level + 1) * (0.0009 - 0.000001) + 0.000001);
         localStorage.setItem(tokenIndex, currentAmount + minedAmount);
 
         let tokenIndexTotal = `total_token_${this.token}`;
@@ -185,11 +171,10 @@
     eventBus.off('trigger-start-auto-clicker');
   },
     computed: {
-      canUpgradeClickPower() {
-        return this.clicks >= this.upgradeCost(this.level);
-      },
-      canUpgradeAutoClicker() {
-        return this.clicks >= this.autoClickerCost(this.autoClickerLevel);
+      canUpgrade() {
+        let stored = localStorage.getItem(`token_${this.token}`);
+        console.log(stored + this.token);
+        return stored >= this.upgradeCost(this.level);
       },
     },
   };

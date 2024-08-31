@@ -15,7 +15,7 @@
       <p>Autoclicker Level: {{ autoClickerLevel }}</p>
       <p>Upgrade Click Power Cost: {{ upgradeCost(level) }} Clicks</p>
       <p>Upgrade Autoclicker Cost: {{ autoClickerCost(autoClickerLevel) }} Clicks</p>
-      <button @click="mineManually">Mine !</button>
+      <button @click="mineManually($event)">Mine !</button>
       <button @click="upgradeClickPower" :disabled="!canUpgradeClickPower">
         Upgrade Click Power (Cost: {{ upgradeCost(level) }} Clicks)
       </button>
@@ -46,10 +46,10 @@
       };
     },
     methods: {
-      mineManually() {
+      mineManually(event) {
         this.clicks += 1;
         this.saveState();
-        this.mineTokens();
+        this.mineTokens(event);
       },
       upgradeClickPower() {
         const cost = this.upgradeCost(this.level);
@@ -105,7 +105,7 @@
         localStorage.setItem(`clickPower_area_${this.areaIndex}`, this.clickPower.toString());
         localStorage.setItem(`autoClickerLevel_area_${this.areaIndex}`, this.autoClickerLevel.toString());
       },
-      mineTokens() {
+      mineTokens(event) {
         let tokenIndex = `token_${this.token}`;
         let currentAmount = parseFloat(localStorage.getItem(tokenIndex)) || 0;
         let minedAmount = Math.random() * (0.009 - 0.00001) + 0.00001;
@@ -114,7 +114,46 @@
         let tokenIndexTotal = `total_token_${this.token}`;
         let currentAmountTotal = parseFloat(localStorage.getItem(tokenIndexTotal)) || 0;
         localStorage.setItem(tokenIndexTotal, currentAmountTotal + minedAmount);
+
+        this.showFlyingText(minedAmount.toFixed(6), event.clientX, event.clientY);
       },
+      showFlyingText(amount, x, y) {
+  const textElement = document.createElement('div');
+  textElement.innerText = `+${amount}`;
+  
+  // Apply initial styles directly with JavaScript
+  textElement.style.position = 'fixed';
+  textElement.style.left = `${x}px`;
+  textElement.style.top = `${y}px`;
+  textElement.style.fontSize = '24px';
+  textElement.style.fontWeight = 'bold';
+  textElement.style.color = 'green';
+  textElement.style.opacity = '1'; // Start fully visible
+  textElement.style.pointerEvents = 'none'; // Ensure it doesn't interfere with user interactions
+  textElement.style.transition = 'transform 2s ease-out, opacity 2s ease-out'; // Smooth transition for both transform and opacity
+  textElement.style.zIndex = '9999'; // Ensure it appears on top of other elements
+
+  // Append the element to the document body
+  document.body.appendChild(textElement);
+
+  // Force a reflow to ensure the initial styles are applied before starting the animation
+  textElement.offsetHeight; // Trigger a reflow
+
+  // Apply the transformation to move the text up and fade it out
+  textElement.style.transform = 'translateY(-50px)';
+  textElement.style.opacity = '0';
+
+  // Automatically remove the element after the animation ends
+  setTimeout(() => {
+    if (textElement && textElement.parentElement) {
+      textElement.parentElement.removeChild(textElement);
+    }
+  }, 2000); // Match with the duration of the animation
+}
+
+
+
+
     },
     computed: {
       canUpgradeClickPower() {
@@ -163,5 +202,7 @@
     height: 50px;
     cursor: pointer;
   }
+
+
   </style>
   

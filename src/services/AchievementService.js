@@ -23,6 +23,24 @@ export const achievements = [
     storageKey: "clicks_area_btc_mine"
   },
   {
+    key: "upgrade_area_btc_mine_10",
+    title: "Upgrade Master - upgrade mine 10 times",
+    target: 10,
+    storageKey: "level_area_btc_mine"
+  },
+  {
+    key: "upgrade_area_btc_mine_100",
+    title: "Upgrade Master - upgrade mine 100 times",
+    target: 100,
+    storageKey: "level_area_btc_mine"
+  },
+  {
+    key: "upgrade_area_btc_mine_1000",
+    title: "Upgrade Master - upgrade mine 1000 times",
+    target: 100,
+    storageKey: "level_area_btc_mine"
+  },
+  {
     key: "clicks_area_xmr_mine_10",
     title: "Clicks Master - 10 Clicks",
     target: 10,
@@ -39,6 +57,60 @@ export const achievements = [
     title: "Clicks Master - 1000 Clicks",
     target: 1000,
     storageKey: "clicks_area_xmr_mine"
+  },
+  {
+    key: "upgrade_area_xmr_mine_10",
+    title: "Upgrade Master - upgrade mine 10 times",
+    target: 10,
+    storageKey: "level_area_xmr_mine"
+  },
+  {
+    key: "upgrade_area_xmr_mine_100",
+    title: "Upgrade Master - upgrade mine 100 times",
+    target: 100,
+    storageKey: "level_area_xmr_mine"
+  },
+  {
+    key: "upgrade_area_xmr_mine_1000",
+    title: "Upgrade Master - upgrade mine 1000 times",
+    target: 100,
+    storageKey: "level_area_xmr_mine"
+  },
+  {
+    key: "clicks_area_doge_mine_10",
+    title: "Clicks Master - 10 Clicks",
+    target: 10,
+    storageKey: "clicks_area_doge_mine"
+  },
+  {
+    key: "clicks_area_doge_mine_100",
+    title: "Clicks Master - 100 Clicks",
+    target: 100,
+    storageKey: "clicks_area_doge_mine"
+  },
+  {
+    key: "clicks_area_doge_mine_1000",
+    title: "Clicks Master - 1000 Clicks",
+    target: 1000,
+    storageKey: "clicks_area_doge_mine"
+  },
+  {
+    key: "upgrade_area_doge_mine_10",
+    title: "Upgrade Master - upgrade mine 10 times",
+    target: 10,
+    storageKey: "level_area_doge_mine"
+  },
+  {
+    key: "upgrade_area_doge_mine_100",
+    title: "Upgrade Master - upgrade mine 100 times",
+    target: 100,
+    storageKey: "level_area_doge_mine"
+  },
+  {
+    key: "upgrade_area_doge_mine_1000",
+    title: "Upgrade Master - upgrade mine 1000 times",
+    target: 100,
+    storageKey: "level_area_doge_mine"
   },
 ];
 

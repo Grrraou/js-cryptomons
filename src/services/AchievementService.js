@@ -3,24 +3,24 @@ import { useToast } from "vue-toastification";
 const toast = useToast();
 let checkInterval = null;
 
-const achievements = [
+export const achievements = [
   {
-    key: "clicks_area_0_10",
+    key: "clicks_area_btc_10",
     title: "Clicks Master - 10 Clicks",
     target: 10,
-    storageKey: "clicks_area_0"
+    storageKey: "clicks_area_btc"
   },
   {
-    key: "clicks_area_0_100",
+    key: "clicks_area_btc_100",
     title: "Clicks Master - 100 Clicks",
     target: 100,
-    storageKey: "clicks_area_0"
+    storageKey: "clicks_area_btc"
   },
   {
-    key: "clicks_area_0_1000",
+    key: "clicks_area_btc_1000",
     title: "Clicks Master - 1000 Clicks",
     target: 1000,
-    storageKey: "clicks_area_0"
+    storageKey: "clicks_area_btc"
   },
   // Add more achievements as needed for other areas or thresholds
 ];

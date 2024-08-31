@@ -13,6 +13,7 @@
 
 <script>
 import AchievementBox from '@/components/AchievementBox.vue';
+import { achievements } from '@/services/AchievementService.js';
 
 export default {
   components: {
@@ -20,27 +21,7 @@ export default {
   },
   data() {
     return {
-      achievements: [
-        {
-          key: "clicks_area_0_10",
-          title: "Clicks Master - 10 Clicks",
-          storageKey: "clicks_area_0",
-          target: 10
-        },
-        {
-          key: "clicks_area_0_100",
-          title: "Clicks Master - 100 Clicks",
-          storageKey: "clicks_area_0",
-          target: 100
-        },
-        {
-          key: "clicks_area_0_1000",
-          title: "Clicks Master - 1000 Clicks",
-          storageKey: "clicks_area_0",
-          target: 1000
-        },
-        // Add more achievements as needed
-      ],
+      achievements,
     };
   },
 };

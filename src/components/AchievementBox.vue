@@ -2,6 +2,8 @@
     <div class="achievement-box" :class="{ unlocked: isUnlocked }">
       <div class="achievement-content">
         <h3>{{ title }}</h3>
+        <h3>{{ storageKey }}</h3>
+        <h3>{{ target }}</h3>
         <p v-if="!isUnlocked">Locked</p>
         <p v-else>Unlocked!</p>
       </div>
@@ -34,15 +36,9 @@
     },
     methods: {
       checkIfUnlocked() {
-        const unlocked = localStorage.getItem(`${this.storageKey}_${this.target}_unlocked`);
+        const unlocked = localStorage.getItem(`${this.storageKey}_${this.target}`);
         if (unlocked) {
           this.isUnlocked = true;
-        } else {
-          const value = parseInt(localStorage.getItem(this.storageKey), 10) || 0;
-          if (value >= this.target) {
-            this.isUnlocked = true;
-            localStorage.setItem(`${this.storageKey}_${this.target}_unlocked`, "true");
-          }
         }
       },
     },

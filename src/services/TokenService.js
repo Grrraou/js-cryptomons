@@ -1,9 +1,16 @@
 
 export const tokens = [
-  { index: 'btc', name: 'Bitcoin' },
-  { index: 'xmr', name: 'Monero' },
-  { index: 'doge', name: 'Dogecoin' },
-  { index: 'ore', name: 'Ore' },
+  { index: 'btc', name: 'Bitcoin', cryptodollar: 50 },
+  { index: 'xmr', name: 'Monero', cryptodollar: 22 },
+  { index: 'doge', name: 'Dogecoin', cryptodollar: 0.2 },
+  { index: 'ore', name: 'Ore', cryptodollar: 10 },
 ];
 
-  
+export function initCryptodollarValues() {
+  tokens.forEach((token) => {
+    const key = `cryptodollar_value_${token.index}`;
+    if (localStorage.getItem(key) === null) {
+      localStorage.setItem(key, token.cryptodollar);
+    }
+  });
+}

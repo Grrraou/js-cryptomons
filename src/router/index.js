@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import HomePage from '@/views/HomePage.vue';
 import MinesPage from '@/views/MinesPage.vue';
 import VaultPage from '@/views/VaultPage.vue';
+import SwapPage from '@/views/SwapPage.vue';
 import AchievementsPage from '@/views/AchievementsPage.vue';
 import StatsPage from '@/views/StatsPage.vue';
 
@@ -10,6 +11,7 @@ const routes = [
   { path: '/', name: 'Home', component: HomePage },
   { path: '/mines', name: 'Mines', component: MinesPage },
   { path: '/vault', name: 'Vault', component: VaultPage },
+  { path: '/swap', name: 'Swap', component: SwapPage },
   { path: '/achievements', name: 'Achievements', component: AchievementsPage },
   { path: '/stats', name: 'Stats', component: StatsPage },
 ];

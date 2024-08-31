@@ -5,6 +5,7 @@ import router from './router';
 import Toast, { POSITION } from 'vue-toastification';
 import 'vue-toastification/dist/index.css';
 import { startAchievementTracking } from './services/AchievementService';
+import { initCryptodollarValues } from './services/TokenService';
 
 createApp(App).use(router).use(Toast, {
   position: POSITION.TOP_RIGHT,
@@ -12,3 +13,4 @@ createApp(App).use(router).use(Toast, {
 }).mount('#app');
 
 startAchievementTracking();
+initCryptodollarValues();

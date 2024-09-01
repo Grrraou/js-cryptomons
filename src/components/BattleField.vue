@@ -61,9 +61,10 @@
       },
     },
     methods: {
-      creatureClicked() {
-        this.$emit('creature-click', this.battleIndex); // Use battleIndex
-      },
+        creatureClicked() {
+        const manualDamageAmount = 10; // Define a fixed amount of damage for manual hits
+        this.$emit('creature-click', this.battleIndex, manualDamageAmount); // Pass the amount along with the battle index
+        },
       onDrop(event) {
         const heroData = event.dataTransfer.getData('heroData');
         if (heroData) {

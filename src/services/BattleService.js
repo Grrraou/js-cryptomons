@@ -53,13 +53,23 @@ export const monsters = [
 ];
 
 
-  export function generateCreature() {
+export function generateCreature() {
     const randomIndex = Math.floor(Math.random() * monsters.length);
-  const selectedMonster = monsters[randomIndex];
-
-  return {
-    ...selectedMonster,
-    health: selectedMonster.power * 100, // Example health calculation based on power
-  };
+    const selectedMonster = monsters[randomIndex];
+  
+    let portrait;
+    try {
+      // Attempt to load the specific monster image
+      portrait = require(`@/assets/monsters/${selectedMonster.index}.png`);
+    } catch (e) {
+      // Fallback to the default image if the specific image doesn't exist
+      portrait = require('@/assets/monsters/default.png');
+    }
+  
+    return {
+      ...selectedMonster,
+      health: selectedMonster.power * 100, // Example health calculation based on power
+      portrait: portrait,
+    };
   }
   

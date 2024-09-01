@@ -123,13 +123,26 @@
   </script>
   
   <style scoped>
+
   .swap-box {
-    border: 1px solid #ccc;
-    padding: 16px;
-    max-width: 400px;
-    margin: auto;
+    margin: 10px auto;
+    padding: 20px;
+    border: 2px solid #ffa500;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fdfdfd;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-blend-mode: 'lighten';
+    font-size: 1.3em;
+    font-weight: bold;
+    color: #444; /* White text color */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7); /* Dark shadow for contrast */
+    width: 500px;
   }
-  
+
   .swap-interface {
     display: flex;
     flex-direction: column;

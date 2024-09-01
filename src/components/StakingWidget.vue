@@ -45,7 +45,7 @@
       },
       backgroundStyle() {
         let backgroundUrl;
-        console.log(this.staking.index);
+
         try {
           // Try to load the background image based on the areaIndex
           backgroundUrl = require(`@/assets/staking/${this.staking.index}_bg.png`);

@@ -85,12 +85,26 @@ export default {
 }
 
 .vault-item {
-  border: 1px solid #ccc;
-  padding: 15px;
-  margin-bottom: 20px;
-  border-radius: 5px;
-  background-color: #f9f9f9;
-}
+    margin: 10px;
+    padding: 20px;
+    width: 10%;
+    border: 2px solid #ffa500;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fdfdfd;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 1.3em;
+    font-weight: bold;
+    color: #444; /* White text color */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7); /* Dark shadow for contrast */
+  }
+
+  .vault-item:hover {
+    border: 6px solid #ffa500;
+  }
 
 .vault-item h2 {
   margin: 0 0 10px;

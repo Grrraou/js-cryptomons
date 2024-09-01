@@ -4,28 +4,28 @@
         <nav>
           <ul>
             <li>
-              <router-link to="/">Home</router-link>
+              <router-link to="/">🏠 Home</router-link>
             </li>
             <li>
-              <router-link to="/mines">Mines</router-link>
+              <router-link to="/mines">⛏️ Mines</router-link>
             </li>
             <li>
-              <router-link to="/staking">Staking</router-link>
+              <router-link to="/staking">🔒 Staking</router-link>
             </li>
             <li>
-              <router-link to="/vault">Vault</router-link>
+              <router-link to="/vault">🏛️ Vault</router-link>
             </li>
             <li>
-              <router-link to="/swap">Swap</router-link>
+              <router-link to="/swap">🔄 Swap</router-link>
             </li>
             <li>
-              <router-link to="/achievements">Achievements</router-link>
+              <router-link to="/achievements">🏆 Achievements</router-link>
             </li>
             <li>
-              <router-link to="/stats">Stats</router-link>
+              <router-link to="/stats">📊 Stats</router-link>
             </li>
             <li>
-              <router-link to="/settings">Settings</router-link>
+              <router-link to="/settings">⚙️ Settings</router-link>
             </li>
           </ul>
         </nav>
@@ -41,7 +41,7 @@
   
   <style scoped>
   .side-menu {
-    width: 250px;
+    width: 160px;
     padding: 20px;
   }
 

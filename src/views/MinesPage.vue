@@ -114,12 +114,7 @@ export default {
   padding: 20px;
 }
 
-.areas-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Adjust min-width as needed */
-  gap: 16px; /* Space between grid items */
-  margin-top: 20px; /* Optional: add space between MenuWindow and the grid */
-}
+
 
 .row {
   display: flex;

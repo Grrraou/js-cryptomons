@@ -1,5 +1,5 @@
 <template>
-    <div class="staking-page">
+    <div class="staking-page game-container">
       <h1 class="page-title">Crypto Staking</h1>
       <p>Stake your crypto assets here.</p>
       <div class="staking-list">

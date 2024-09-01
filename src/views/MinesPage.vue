@@ -95,6 +95,10 @@ export default {
 </script>
 
 <style scoped>
+.game-container {
+  display: flex;
+}
+
 .page-title {
   position: relative;
   font-size: 28px; /* Slightly larger font size for emphasis */
@@ -114,11 +118,6 @@ export default {
 
 .clicker-game {
   text-align: center;
-}
-
-.game-container {
-  display: flex;
-  justify-content: space-between;
 }
 
 .areas-container {

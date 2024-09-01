@@ -1,5 +1,5 @@
 <template>
-    <div class="home-page">
+    <div class="home-page game-container">
       <h1 class="page-title">Cryptomons clicker</h1>
       <p>Welcome to the game!</p>
     </div>

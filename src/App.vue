@@ -11,6 +11,7 @@
 </template>
 <script>
 import SideMenu from './components/SideMenu.vue';
+import './assets/styles/main.css';
 
 export default {
   components: {
@@ -20,6 +21,10 @@ export default {
 </script>
 
 <style scoped>
+body {
+  margin: 0px !important;
+}
+
 .layout {
   display: flex;
   height: 100vh; /* Full viewport height */

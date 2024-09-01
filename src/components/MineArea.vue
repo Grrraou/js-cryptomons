@@ -283,6 +283,10 @@
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7); /* Dark shadow for contrast */
   }
 
+  .clicker-area:hover {
+    border: 6px solid #ffa500;
+  }
+
   
 
   /* Title and logo section */
@@ -302,7 +306,7 @@
     max-width: 80px;
     max-height: 80px;
     border: 3px solid #ffa500;
-    border-radius: 50%;
+    border-radius: 33%;
   }
 
   .logo-image {

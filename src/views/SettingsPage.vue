@@ -1,5 +1,5 @@
 <template>
-    <div class="settings-page">
+    <div class="settings-page game-container">
       <h1 class="page-title">Settings</h1>
       <ExportComponent />
       <ImportComponent />

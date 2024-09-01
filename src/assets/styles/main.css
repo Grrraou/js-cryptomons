@@ -1,0 +1,20 @@
+body {
+    margin: 0;
+    background-image: url('@/assets/menuBG.png');
+    background-size: cover;
+}
+
+.page-content {
+    padding: 0 !important;
+    padding: 0 !important;
+    background-size: cover;
+    background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.5)) center center / cover, url('@/assets/defaultBG.png');
+    
+}
+
+.game-container {
+    justify-content: space-between;
+    padding: 0 !important;
+    background-size: cover;
+    background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.5)) center center / cover, url('@/assets/defaultBG.png');
+}

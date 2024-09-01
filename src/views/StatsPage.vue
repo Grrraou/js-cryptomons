@@ -1,5 +1,5 @@
 <template>
-  <div class="stats-page">
+  <div class="stats-page game-container">
     <h1 class="page-title">Stats Page</h1>
     <p>See your game stats here.</p>
     <MenuWindow @reset-stats="resetStoredStats" />

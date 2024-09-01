@@ -1,6 +1,6 @@
 <template>
-    <h1 class="page-title">SWAP</h1>
-    <div class="swap-page">
+    <div class="swap-page game-container">
+        <h1 class="page-title">SWAP</h1>
       <SwapBox />
     </div>
   </template>

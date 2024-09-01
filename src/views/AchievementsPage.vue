@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="game-container">
     <h1 class="page-title">Achievements</h1>
     <AchievementBox
       v-for="achievement in achievements"

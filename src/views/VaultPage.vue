@@ -1,5 +1,5 @@
 <template>
-  <div class="vault-page">
+  <div class="vault-page game-container">
     <h1 class="page-title">Crypto Vault</h1>
     <p>Total Value of Assets in Cryptocredits: {{ getTotalAssetsValue() }}</p>
     <p>View your stored crypto data here.</p>

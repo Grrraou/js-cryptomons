@@ -87,6 +87,10 @@
     color: #444; /* White text color */
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7); /* Dark shadow for contrast */
   }
+
+  .achievement-box:hover {
+    transform: translateY(-4px);
+  }
   
   .achievement-box.unlocked {
     color: #ffa500;

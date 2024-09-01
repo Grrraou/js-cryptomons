@@ -26,7 +26,10 @@
           </div>
         </div>
   
-        <button @click="swapTokens">Swap</button>
+        <button class="swap-button" @click="swapTokens">
+          <img src="@/assets/swap/swapButton.png" alt="Swap Logo" class="button-logo" />
+          Swap !
+        </button>
       </div>
       <div v-if="swapResult" class="swap-result">
         <p>You will receive approximately {{ swapResult }} {{ toToken.toUpperCase() }}</p>
@@ -74,6 +77,10 @@
         this.calculatePotentialSwap();
       },
       swapTokens() {
+        if (this.amount <= 0) {
+          alert(`Can't swap 0.`);
+            return;
+        }
         if (this.fromTokenBalance < this.amount) {
             alert(`Insufficient ${this.fromToken.toUpperCase()} balance.`);
             return;
@@ -162,6 +169,33 @@
     margin-top: 20px;
     color: green;
     font-weight: bold;
+  }
+
+  .swap-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 10px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #ffffff;
+    background-color: #ffa500; /* Orange background */
+    border: 2px solid #444;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+
+  .swap-button:hover, .upgrade-button:hover {
+    background-color: #ff8c00; /* Darker orange on hover */
+    transform: translateY(-2px); /* Slight lift on hover */
+  }
+
+  .button-logo {
+    width: 50px; /* Adjust size as needed */
+    height: 50px; /* Adjust size as needed */
+    margin-right: 8px; /* Space between logo and text */
   }
   </style>
   

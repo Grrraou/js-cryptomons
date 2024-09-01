@@ -114,7 +114,6 @@ export default {
 
 .clicker-game {
   text-align: center;
-  margin-top: 50px;
 }
 
 .game-container {

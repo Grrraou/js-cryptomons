@@ -123,7 +123,6 @@ export default {
 
 .areas-container {
   width: 100%;
-  padding: 20px;
 }
 
 

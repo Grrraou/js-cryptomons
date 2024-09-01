@@ -93,7 +93,7 @@ export default {
   border: 2px solid #444; /* Border around the hero list */
   border-radius: 15px; /* Rounded corners */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
-  height: calc(70vh); /* Full height minus the space for the title */
+  height: calc(80vh); /* Full height minus the space for the title */
   overflow-y: auto; /* Scroll if the content exceeds the height */
   margin-top: 30px; /* Add some margin to account for the title */
 }

@@ -265,7 +265,7 @@
   <style scoped>
   /* Main area wrapper */
   .clicker-area {
-    margin: 0 auto 20px;
+    margin: 10px auto;
     padding: 20px;
     width: 90%;
     border: 2px solid #ffa500;
@@ -279,7 +279,6 @@
     background-blend-mode: 'lighten';
     font-size: 1.3em;
     font-weight: bold;
-    margin-right: 10px;
     color: #ffffff; /* White text color */
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7); /* Dark shadow for contrast */
   }

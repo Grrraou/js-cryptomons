@@ -4,6 +4,7 @@
     <AchievementBox
       v-for="achievement in achievements"
       :key="achievement.key"
+      :indexKey="achievement.key"
       :storageKey="achievement.storageKey"
       :title="achievement.title"
       :target="achievement.target"

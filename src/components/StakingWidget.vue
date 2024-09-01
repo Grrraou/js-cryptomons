@@ -1,5 +1,5 @@
 <template>
-    <div class="staking-widget">
+    <div class="staking-widget" :style="backgroundStyle">
       <h3>{{ staking.name }} Staking</h3>
       <p><strong>Staked Amount:</strong> {{ stakedAmount }} {{ staking.token.toUpperCase() }}</p>
       <p><strong>Stored Amount:</strong> {{ storedAmount }} {{ staking.token.toUpperCase() }}</p>
@@ -42,6 +42,25 @@
       },
       gainPerRound() {
         return this.stakedAmount * parseFloat(this.staking.apr) / 3600; // Gain per 10-second interval
+      },
+      backgroundStyle() {
+        let backgroundUrl;
+        console.log(this.staking.index);
+        try {
+          // Try to load the background image based on the areaIndex
+          backgroundUrl = require(`@/assets/staking/${this.staking.index}_bg.png`);
+        } catch (error) {
+          // If the specific background image isn't found, use the default background image
+          backgroundUrl = require('@/assets/staking/default_staking_bg.png');
+        }
+
+        return {
+          //backgroundImage: `url(${backgroundUrl})`,
+          background: `linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), 
+              url(${backgroundUrl}) center/cover no-repeat`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        };
       },
     },
     methods: {
@@ -96,11 +115,26 @@
   
   <style scoped>
   .staking-widget {
-    border: 1px solid #ccc;
-    padding: 15px;
-    margin-bottom: 20px;
-    border-radius: 5px;
-    background-color: #f9f9f9;
+    margin: 10px auto;
+    padding: 20px;
+    width: 90%;
+    border: 2px solid #ffa500;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fdfdfd;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-blend-mode: 'lighten';
+    font-size: 1.3em;
+    font-weight: bold;
+    color: #444; /* White text color */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7); /* Dark shadow for contrast */
+  }
+
+  .staking-widget:hover {
+    border: 6px solid #ffa500;
   }
   
   .staking-widget h3 {

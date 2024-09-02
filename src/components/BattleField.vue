@@ -31,11 +31,10 @@
             <p>{{ hero.name }}</p>
           </div>
         </div>
-      </div>
-  
-      <!-- Drop Zone -->
-      <div class="drop-area" @drop="onDrop" @dragover.prevent>
-        Drop heroes here to assign
+        <!-- Drop Zone -->
+        <div class="drop-area" @drop="onDrop" @dragover.prevent>
+            Drop heroes here to assign
+        </div>
       </div>
     </div>
   </template>
@@ -85,7 +84,6 @@
   <style scoped>
   .battle-field {
     display: flex;
-    flex-direction: column;
     gap: 10px;
   }
   

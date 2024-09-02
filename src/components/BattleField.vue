@@ -1,21 +1,18 @@
 <template>
     <div class="battle-field">
-      <!-- Battlefield Name -->
       <div class="battle-name">
         <h2>{{ battle.name }}</h2>
       </div>
   
-      <!-- Monster Area -->
       <div class="monster-area" @click="creatureClicked">
-        <img v-if="currentCreatures"
-             :src="currentCreatures.portrait"
-             :alt="currentCreatures.name"
+        <img v-if="localCreature"
+             :src="localCreature.portrait"
+             :alt="localCreature.name"
              class="monster-portrait" />
-        <p v-if="currentCreatures">{{ currentCreatures.name }} (HP: {{ currentCreatures.health }})</p>
+        <p v-if="localCreature">{{ localCreature.name }} (HP: {{ localCreature.health }})</p>
         <p v-else>No monster</p>
       </div>
   
-      <!-- Assigned Heroes -->
       <div class="heroes-area">
         <h3>Assigned Heroes</h3>
         <div class="heroes-grid">
@@ -31,15 +28,16 @@
             <p>{{ hero.name }}</p>
           </div>
         </div>
-        <!-- Drop Zone -->
         <div class="drop-area" @drop="onDrop" @dragover.prevent>
-            Drop heroes here to assign
+          Drop heroes here to assign
         </div>
       </div>
     </div>
   </template>
   
   <script>
+  import eventBus from '@/eventBus.js';
+  
   export default {
     props: {
       battle: {
@@ -59,16 +57,21 @@
         required: true 
       },
     },
+    data() {
+      return {
+        localCreature: { ...this.currentCreatures }
+      };
+    },
     methods: {
-        creatureClicked() {
-        const manualDamageAmount = 10; // Define a fixed amount of damage for manual hits
-        this.$emit('creature-click', this.battleIndex, manualDamageAmount); // Pass the amount along with the battle index
-        },
+      creatureClicked() {
+        const manualDamageAmount = 10;
+        this.$emit('creature-click', this.battleIndex, manualDamageAmount);
+      },
       onDrop(event) {
         const heroData = event.dataTransfer.getData('heroData');
         if (heroData) {
           const hero = JSON.parse(heroData);
-          this.$emit('hero-dropped', hero, this.battleIndex); // Use battleIndex
+          this.$emit('hero-dropped', hero, this.battleIndex);
         }
       },
       dragStart(hero) {
@@ -76,11 +79,27 @@
       },
       removeHeroFromBattle(hero) {
         this.$emit('remove-hero', hero);
+      },
+      updateCreature({ battleIndex, creature }) {
+        if (this.battleIndex === battleIndex) {
+          this.localCreature = { ...creature };
+        }
       }
     },
+    mounted() {
+      eventBus.on('monster-updated', this.updateCreature);
+    },
+    beforeUnmount() {
+      eventBus.off('monster-updated', this.updateCreature);
+    }
   };
   </script>
   
+  <style scoped>
+  /* Your existing styles */
+  </style>
+  
+
   <style scoped>
   .battle-field {
     display: flex;

@@ -1,8 +1,6 @@
 <template>
-    <h1 class="page-title">Achievements</h1>
     <div class="battle-page game-container">
       <div class="battlefields-container">
-        <!-- Render each BattleField as a block -->
         <div v-for="(battle, index) in battleData" :key="battle.id" class="battlefield-block">
           <BattleField
             :battle="battle"
@@ -15,8 +13,6 @@
           />
         </div>
       </div>
-  
-      <!-- HeroList component -->
       <HeroList
         class="hero-list"
         :heroes="availableHeroes"
@@ -26,104 +22,74 @@
   </template>
   
   <script>
-import BattleField from '@/components/BattleField.vue';
-import HeroList from '@/components/HeroList.vue';
-import { getBattleData, generateCreature } from '@/services/BattleService.js';
-import { heroes as initialHeroes } from '@/services/HeroService.js';
-
-export default {
-  components: {
-    BattleField,
-    HeroList,
-  },
-  data() {
-    return {
-      battleData: [], // Battle data
-      heroes: initialHeroes, // All heroes
-      currentCreatures: [], // Creatures on each battlefield
-    };
-  },
-  computed: {
-    availableHeroes() {
-      return this.heroes.filter(hero => hero.assignedArea === null);
-    }
-  },
-  created() {
-    this.battleData = getBattleData(); // Initialize battle data
-    this.currentCreatures = this.loadCreatures(); // Load creatures from localStorage or initialize
-    this.startAutoDamage(); // Start auto-damage mechanism
-  },
-  beforeUnmount() { // Use beforeUnmount instead of beforeDestroy
-    clearInterval(this.autoDamageInterval); // Clear interval on component unmount
-  },
-  methods: {
-    initializeCreatures() {
-      return this.battleData.map(() => generateCreature());
-    },
-    saveCreatures() {
-      localStorage.setItem('currentCreatures', JSON.stringify(this.currentCreatures));
-    },
-    loadCreatures() {
-      const storedCreatures = localStorage.getItem('currentCreatures');
-      if (storedCreatures) {
-        return JSON.parse(storedCreatures);
-      }
-      return this.initializeCreatures();
-    },
-    damageCreature(battleIndex, amount) {
-      const creature = this.currentCreatures[battleIndex];
-
-      // Ensure creature exists and health is a valid number
-      if (creature && typeof creature.health === 'number' && !isNaN(creature.health)) {
-        creature.health -= amount; // Subtract damage amount
-
-        // Check if health falls below or equals zero
-        if (creature.health <= 0) {
-          this.currentCreatures[battleIndex] = generateCreature(); // Replace with a new creature
-        }
-        this.saveCreatures(); // Save creatures after damage
-      } else {
-        console.error(`Invalid health value for creature at battlefield ${battleIndex}:`, creature);
-        // Optionally reinitialize the creature if the health is invalid
-        this.currentCreatures[battleIndex] = generateCreature();
-        this.saveCreatures(); // Save after reinitialization
-      }
-    },
-    removeHero(hero) {
-      const heroIndex = this.heroes.findIndex(h => h.name === hero.name);
-      if (heroIndex !== -1) {
-        this.heroes[heroIndex].assignedArea = null;
-      }
-    },
-    assignHeroToBattle(hero, battleIndex) {
-      this.removeHero(hero); // Remove the hero from any previous assignment
-      const heroIndex = this.heroes.findIndex(h => h.name === hero.name);
-      if (heroIndex !== -1) {
-        this.heroes[heroIndex].assignedArea = battleIndex; // Assign to the correct battlefield
-      }
-    },
-    removeHeroFromBattle(hero) {
-      this.removeHero(hero);
-    },
-    getHeroesForBattle(battleIndex) {
-      return this.heroes.filter(hero => hero.assignedArea === battleIndex);
-    },
-    startAutoDamage() {
-      this.autoDamageInterval = setInterval(() => {
-        this.battleData.forEach((battle, index) => {
-          const assignedHeroes = this.getHeroesForBattle(index);
-          if (assignedHeroes.length > 0) {
-            const damage = assignedHeroes.length * 10; // Each hero does 10 damage per tick
-            this.damageCreature(index, damage);
-          }
-        });
-      }, 1000); // Damage every second
-    },
-  },
-};
-</script>
-
+  import BattleField from '@/components/BattleField.vue';
+  import HeroList from '@/components/HeroList.vue';
+  import { getBattleData, generateCreature } from '@/services/BattleService.js';
+  import { heroes as initialHeroes } from '@/services/HeroService.js'; // Correct import
+  import BattleManager from '@/services/BattleManager.js';
   
+  export default {
+    components: {
+      BattleField,
+      HeroList,
+    },
+    data() {
+      return {
+        battleData: [],
+        heroes: initialHeroes,
+        currentCreatures: [],
+      };
+    },
+    computed: {
+      availableHeroes() {
+        return this.heroes.filter(hero => hero.assignedArea === null);
+      }
+    },
+    created() {
+      this.battleData = getBattleData();
+      BattleManager.init(this.battleData, this.loadCreaturesFromStorage());
+      this.currentCreatures = BattleManager.currentCreatures;
+    },
+    methods: {
+      loadCreaturesFromStorage() {
+        const storedCreatures = JSON.parse(localStorage.getItem('currentCreatures'));
+        if (storedCreatures && storedCreatures.length === this.battleData.length) {
+          return storedCreatures;
+        } else {
+          return this.battleData.map(() => generateCreature());
+        }
+      },
+      damageCreature(battleIndex, amount) {
+        BattleManager.damageCreature(battleIndex, amount);
+      },
+      getHeroesForBattle(battleIndex) {
+        return this.heroes.filter(hero => hero.assignedArea === battleIndex);
+      },
+      removeHero(hero) {
+        const heroIndex = this.heroes.findIndex(h => h.name === hero.name);
+        if (heroIndex !== -1) {
+          this.heroes[heroIndex].assignedArea = null;
+        }
+      },
+      assignHeroToBattle(hero, battleIndex) {
+        this.removeHero(hero);
+        const heroIndex = this.heroes.findIndex(h => h.name === hero.name);
+        if (heroIndex !== -1) {
+          this.heroes[heroIndex].assignedArea = battleIndex;
+        }
+      },
+      removeHeroFromBattle(hero) {
+        this.removeHero(hero);
+      },
+    },
+  };
+  </script>
+  
+  <style scoped>
+  /* Your existing styles */
+  </style>
+  
+
   <style scoped>
 .page-title {
   position: relative;

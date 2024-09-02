@@ -12,13 +12,20 @@
 <script>
 import SideMenu from './components/SideMenu.vue';
 import './assets/styles/main.css';
+import BattleManager from '@/services/BattleManager.js';
+import { getBattleData } from '@/services/BattleService.js';
 
 export default {
   components: {
     SideMenu,
   },
+  created() {
+    const battleData = getBattleData();
+    BattleManager.init(battleData, BattleManager.loadState());
+  }
 };
 </script>
+
 
 <style scoped>
 body {

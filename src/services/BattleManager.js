@@ -57,6 +57,8 @@ class BattleManager {
     if (creature && typeof creature.health === 'number' && !isNaN(creature.health)) {
       creature.health -= amount;
       if (creature.health <= 0) {
+        const currentAmount = parseFloat(localStorage.getItem("token_btc")) || 0;
+        localStorage.setItem("token_btc", (currentAmount + 1).toString());
         this.currentCreatures[index] = generateCreature();
       }
       eventBus.emit('monster-updated', { battleIndex: index, creature: this.currentCreatures[index] });

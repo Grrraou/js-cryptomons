@@ -86,20 +86,30 @@
             return;
         }
 
-        // Update balances
-        const newFromTokenAmount = this.fromTokenBalance - this.amount;
-        const newToTokenAmount = this.toTokenBalance + parseFloat(this.swapResult);
+        const swapSound = new Audio(require('@/assets/sounds/swap.wav'));
+        swapSound.volume = 1;
+        swapSound.play().then(() => {
+          // Once the sound has started playing, you can show the alert
+          alert(`Swapped ${this.amount} ${this.fromToken.toUpperCase()} to ${this.swapResult} ${this.toToken.toUpperCase()}`);
 
-        localStorage.setItem(`token_${this.fromToken}`, newFromTokenAmount);
-        localStorage.setItem(`token_${this.toToken}`, newToTokenAmount);
+          // Update balances
+          const newFromTokenAmount = this.fromTokenBalance - this.amount;
+          const newToTokenAmount = this.toTokenBalance + parseFloat(this.swapResult);
 
-        alert(`Swapped ${this.amount} ${this.fromToken.toUpperCase()} to ${this.swapResult} ${this.toToken.toUpperCase()}`);
+          localStorage.setItem(`token_${this.fromToken}`, newFromTokenAmount);
+          localStorage.setItem(`token_${this.toToken}`, newToTokenAmount);
+          // Adjust cryptodollar values
+          this.updateCryptodollarValues();
 
-        // Adjust cryptodollar values
-        this.updateCryptodollarValues();
+          // Reload the page after the swap
+          window.location.reload();
+        }).catch((error) => {
+          console.error('Error playing sound:', error);
+          // Show the alert anyway if there's an error playing the sound
+          alert(`Swapped ${this.amount} ${this.fromToken.toUpperCase()} to ${this.swapResult} ${this.toToken.toUpperCase()}`);
+        });
 
-        // Reload the page after the swap
-        window.location.reload();
+        
         },
 
         updateCryptodollarValues() {

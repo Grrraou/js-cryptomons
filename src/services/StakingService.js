@@ -17,6 +17,11 @@ export function startStakingUpdates() {
       const storedAmount = parseFloat(localStorage.getItem(storedKey)) || 0;
       const lastUpdateTime = parseFloat(localStorage.getItem(lastUpdateKey)) || Date.now();
 
+      if (window.location.pathname === '/staking') {
+        const stakingSound = new Audio(require('@/assets/sounds/staking.wav'));
+        stakingSound.volume = 0.5;
+        stakingSound.play();
+      }
       const now = Date.now();
       const elapsedTime = (now - lastUpdateTime) / 1000; // Time in seconds
       const periods = Math.floor(elapsedTime / 10); // Number of 10-second intervals since last update

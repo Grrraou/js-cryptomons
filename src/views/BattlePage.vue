@@ -3,7 +3,7 @@
     <div class="battle-page game-container">
         
       <div class="battlefields-container">
-        <div v-for="(battle, index) in battleData" :key="battle.id" class="battlefield-block" :style="backgroundStyle">
+        <div v-for="(battle, index) in battleData" :key="battle.id" class="battlefield-block" :style="getBackgroundStyle(index)">
           <BattleField
             :battle="battle"
             :currentCreatures="currentCreatures[index]"
@@ -46,26 +46,6 @@
       availableHeroes() {
         return this.heroes.filter(hero => hero.assignedArea === null);
       },
-        backgroundStyle() {
-        let backgroundUrl;
-        
-        try {
-            console.log(this.battleIndex);
-          // Try to load the background image based on the areaIndex
-          backgroundUrl = require(`@/assets/battlefields/${this.battleIndex}_bg.png`);
-        } catch (error) {
-          // If the specific background image isn't found, use the default background image
-          backgroundUrl = require('@/assets/battlefields/defaultBG.png');
-        }
-
-        return {
-          //backgroundImage: `url(${backgroundUrl})`,
-          background: `linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), 
-              url(${backgroundUrl}) center/cover no-repeat`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-        };
-      },
     },
     created() {
       this.battleData = getBattleData();
@@ -103,6 +83,23 @@
       removeHeroFromBattle(hero) {
         this.removeHero(hero);
       },
+      getBackgroundStyle(battleIndex) {
+        let backgroundUrl;
+        try {
+            // Use the battleIndex to dynamically load the background image
+            backgroundUrl = require(`@/assets/battlefields/${battleIndex}_bg.png`);
+        } catch (error) {
+            // Fallback to a default background if the image is not found
+            backgroundUrl = require('@/assets/battlefields/defaultBG.png');
+        }
+
+        return {
+            background: `linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), 
+                url(${backgroundUrl}) center/cover no-repeat`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+        };
+        },
     },
   };
   </script>

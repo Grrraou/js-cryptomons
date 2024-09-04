@@ -2,6 +2,7 @@
 import eventBus from '@/eventBus.js';
 import { generateCreature } from '@/services/BattleService.js';
 import { heroes } from '@/services/HeroService.js';
+import { items } from './ItemService';
 
 class BattleManager {
   constructor() {
@@ -71,6 +72,23 @@ class BattleManager {
       creature.health -= amount;
       if (creature.health <= 0) {
         const currentAmount = parseFloat(localStorage.getItem("token_btc")) || 0;
+
+        // Loot a random item from the items array
+        const randomItem = items[Math.floor(Math.random() * items.length)];
+
+        // Retrieve the player's inventory from localStorage
+        let playerInventory = JSON.parse(localStorage.getItem('playerInventory')) || [];
+
+        // Add the random item to the inventory
+        playerInventory.push(randomItem);
+
+        // Save the updated inventory back to localStorage
+        localStorage.setItem('playerInventory', JSON.stringify(playerInventory));
+
+        // Log the looted item (optional)
+        console.log(`Looted item: ${randomItem.name}`);
+
+
         localStorage.setItem("token_btc", (currentAmount + 1).toString());
         this.currentCreatures[index] = generateCreature();
       }

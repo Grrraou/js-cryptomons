@@ -2,13 +2,12 @@
   <div class="vault-page game-container">
     <h1 class="page-title">Crypto Vault</h1>
     <p>Total Value of Assets in Cryptocredits: {{ getTotalAssetsValue() }}</p>
-    <p>View your stored crypto data here.</p>
     <div class="vault-list">
       <!-- Use filteredTokens instead of tokens -->
       <div v-for="token in filteredTokens" :key="token.index" class="vault-item">
         <h2>{{ token.name }}</h2>
         <p><strong>Current Amount:</strong> {{ getTokenValue(token.index) }}</p>
-        <p><strong>Total Mined:</strong> {{ getTotalTokenValue(token.index) }}</p>
+        <p><strong>Total Obtained:</strong> {{ getTotalTokenValue(token.index) }}</p>
         <p><strong>Price per {{ token.name }}:</strong> {{ getCryptodollarValue(token.index) }} Cryptocredits</p>
         <p><strong>Total Value in Cryptocredits:</strong> {{ getTotalCryptodollarValue(token.index) }}</p>
       </div>
@@ -38,7 +37,8 @@ export default {
       return !isNaN(value) ? value.toFixed(6) : '0.000000';
     },
     getTotalTokenValue(index) {
-      const value = parseFloat(localStorage.getItem(`total_token_${index}`));
+      const value = parseFloat(localStorage.getItem(`token_${index}`));
+      
       return !isNaN(value) ? value.toFixed(6) : '0.000000';
     },
     getCryptodollarValue(index) {

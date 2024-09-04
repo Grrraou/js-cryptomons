@@ -1,5 +1,6 @@
 
 export const tokens = [
+  { index: 'cryptodollar', name: 'Crypto Dollar', cryptodollar: 1 },
   { index: 'btc', name: 'Bitcoin', cryptodollar: 50 },
   { index: 'eth', name: 'Ethereum', cryptodollar: 14 },
   { index: 'sol', name: 'Solana', cryptodollar: 7 },

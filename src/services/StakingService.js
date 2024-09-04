@@ -26,7 +26,7 @@ export function startStakingUpdates() {
       // Optionally, play sound if the user is on the staking page
       if (window.location.pathname === '/staking') {
         const stakingSound = new Audio(require('@/assets/sounds/staking.wav'));
-        stakingSound.volume = 0.5;
+        stakingSound.volume = 0.2;
         stakingSound.play();
       }
     };

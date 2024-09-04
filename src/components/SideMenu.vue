@@ -22,6 +22,9 @@
               <router-link to="/battle">⚔️ Battle</router-link>
             </li>
             <li>
+              <router-link to="/inventory">📦 Inventory</router-link>
+            </li>
+            <li>
               <router-link to="/swap">🔄 Swap</router-link>
             </li>
             <li>

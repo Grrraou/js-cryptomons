@@ -8,6 +8,8 @@ class BattleManager {
     this.battleData = [];
     this.currentCreatures = [];
     this.heroAttackInterval = null;
+    this.sound = new Audio(require('@/assets/sounds/slash.ogg'));
+    this.sound.volume = 0.5;
   }
 
   init(battleData, initialCreatures) {
@@ -53,6 +55,10 @@ class BattleManager {
   }
 
   damageCreature(index, amount) {
+    if (window.location.pathname === '/battle') {
+      this.sound.play();
+    }
+      
     const creature = this.currentCreatures[index];
     if (creature && typeof creature.health === 'number' && !isNaN(creature.health)) {
       creature.health -= amount;

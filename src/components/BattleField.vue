@@ -1,37 +1,38 @@
 <template>
-    <div class="battle-field">
-      <div class="battle-name">
-        <h2>{{ battle.name }}</h2>
-      </div>
-  
-      <div class="monster-area" @click="creatureClicked">
-        <img v-if="localCreature"
-             :src="localCreature.portrait"
-             :alt="localCreature.name"
-             class="monster-portrait" />
-        <p v-if="localCreature">{{ localCreature.name }} (HP: {{ localCreature.health }})</p>
-        <p v-else>No monster</p>
-      </div>
-  
-      <div class="heroes-area">
-        <h3>Assigned Heroes</h3>
-        <div class="heroes-grid">
-          <div
-            v-for="hero in heroes"
-            :key="hero.name"
-            class="hero"
-            draggable="true"
-            @dragstart="dragStart(hero)"
-            @dragend="removeHeroFromBattle(hero)"
-          >
-            <img :src="hero.image" :alt="hero.name" class="hero-image" />
-            <p>{{ hero.name }}</p>
-          </div>
+    <div class="battlefieldContainer">
+        <div class="battle-name">
+            <h2>{{ battle.name }}</h2>
         </div>
-        <div class="drop-area" @drop="onDrop" @dragover.prevent>
-          Drop heroes here to assign
+        <div class="battle-field">
+        <div class="monster-area" @click="creatureClicked">
+            <img v-if="localCreature"
+                :src="localCreature.portrait"
+                :alt="localCreature.name"
+                class="monster-portrait" />
+            <p v-if="localCreature">{{ localCreature.name }} (HP: {{ localCreature.health }})</p>
+            <p v-else>No monster</p>
         </div>
-      </div>
+    
+        <div class="heroes-area">
+            <h3>Assigned Heroes</h3>
+            <div class="heroes-grid">
+            <div
+                v-for="hero in heroes"
+                :key="hero.name"
+                class="hero"
+                draggable="true"
+                @dragstart="dragStart(hero)"
+                @dragend="removeHeroFromBattle(hero)"
+            >
+                <img :src="hero.image" :alt="hero.name" class="hero-image" />
+                <p>{{ hero.name }}</p>
+            </div>
+            </div>
+            <div class="drop-area" @drop="onDrop" @dragover.prevent>
+            Drop heroes here to assign
+            </div>
+        </div>
+        </div>
     </div>
   </template>
   
@@ -94,13 +95,13 @@
     }
   };
   </script>
-  
-  <style scoped>
-  /* Your existing styles */
-  </style>
-  
 
   <style scoped>
+    .battlefieldContainer {
+        width: 100%;
+    }
+
+
   .battle-field {
     display: flex;
     gap: 10px;
@@ -108,29 +109,43 @@
   
   .battle-name {
     font-size: 18px;
+    text-align: center;
+    color: #444;
     font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.7); /* Dark shadow for contrast */
   }
   
   .monster-area {
     background-color: #ffe6e6;
-    border: 1px solid #ff9999;
+    border: 3px solid #9c1616;
     padding: 10px;
     border-radius: 5px;
     text-align: center;
+    background: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.6)), 
+              url('@/assets/battlefields/mobsWidgetBG.png') center/cover no-repeat;
+  }
+
+  .monster-area p {
+    color: #444;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.7); /* Dark shadow for contrast */
   }
   
   .monster-portrait {
     width: 100px;
     height: 100px;
     object-fit: cover;
-    border-radius: 50%;
+    border-radius: 33%;
     margin-bottom: 10px;
+    border: 3px solid #ffa500;
   }
   
   .heroes-area {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    color: #444;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.7); /* Dark shadow for contrast */
   }
   
   .heroes-grid {
@@ -140,14 +155,26 @@
   }
   
   .hero {
-    width: 60px;
-    text-align: center;
-    cursor: grab;
-  }
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px;
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
   
   .hero-image {
-    width: 100%;
+    width: 80px;
+    height: 80px;
+    text-align: center;
+    cursor: grab;
     border-radius: 50%;
+    margin-bottom: 10px;
+    border: 3px solid #ffa500;
+    cursor: grab;
   }
   
   .drop-area {

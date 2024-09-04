@@ -134,16 +134,20 @@ export const achievements = [
 
 
 export const startAchievementTracking = () => {
+  const achievementSound = new Audio(require('@/assets/sounds/achievement.wav'));
+  achievementSound.volume = 0.5;
   if (checkInterval) return; // Prevent multiple intervals
 
   checkInterval = setInterval(() => {
     achievements.forEach((achievement) => {
       const value = parseInt(localStorage.getItem(achievement.storageKey), 10) || 0;
-
+      
       // Check if the value meets the target and if the achievement is not already unlocked
       if (value >= achievement.target && !localStorage.getItem(achievement.key)) {
+        achievementSound.play();
         localStorage.setItem(achievement.key, "true"); // Mark achievement as unlocked
         toast.success(`${achievement.title} unlocked!`);
+
       }
     });
   }, 1000); // Check every second

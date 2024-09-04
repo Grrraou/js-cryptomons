@@ -47,6 +47,7 @@
   
   <script>
   import eventBus from '@/eventBus.js';
+  import { miningSounds } from '@/services/MineService';
 
   export default {
     props: {
@@ -131,6 +132,13 @@
         localStorage.setItem(`autoClickerLevel_area_${this.areaIndex}`, this.autoClickerLevel.toString());
       },
       mineTokens(event) {
+        if (window.location.pathname === '/mines') {
+          const randomIndex = Math.floor(Math.random() * miningSounds.length); // Use miningSounds.length here
+          const miningSound = miningSounds[randomIndex]; // Access the sound from the imported miningSounds array
+          miningSound.volume = 0.5;
+          miningSound.play();
+        }
+
         let tokenIndex = `token_${this.token}`;
         let currentAmount = parseFloat(localStorage.getItem(tokenIndex)) || 0;
         let minedAmount = (Math.random() * (this.level + 1) * (0.0009 - 0.000001) + 0.000001);

@@ -8,8 +8,10 @@ class BattleManager {
     this.battleData = [];
     this.currentCreatures = [];
     this.heroAttackInterval = null;
-    this.sound = new Audio(require('@/assets/sounds/slash.ogg'));
-    this.sound.volume = 0.5;
+    this.attackSounds = [
+      new Audio(require('@/assets/sounds/slash.ogg')),
+      new Audio(require('@/assets/sounds/slash2.wav'))
+    ];
   }
 
   init(battleData, initialCreatures) {
@@ -56,7 +58,10 @@ class BattleManager {
 
   damageCreature(index, amount) {
     if (window.location.pathname === '/battle') {
-      this.sound.play();
+      const randomIndex = Math.floor(Math.random() * this.attackSounds.length);
+      const slashSound = this.attackSounds[randomIndex];
+      slashSound.volume = 0.5;
+      slashSound.play();
     }
       
     const creature = this.currentCreatures[index];

@@ -10,7 +10,9 @@ class BattleManager {
     this.heroAttackInterval = null;
     this.attackSounds = [
       new Audio(require('@/assets/sounds/slash.ogg')),
-      new Audio(require('@/assets/sounds/slash2.wav'))
+      new Audio(require('@/assets/sounds/slash2.wav')),
+      new Audio(require('@/assets/sounds/slash3.wav')),
+      new Audio(require('@/assets/sounds/slash4.wav')),
     ];
   }
 

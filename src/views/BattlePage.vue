@@ -1,5 +1,7 @@
 <template>
+    <h1 class="page-title">BattleFields</h1>
     <div class="battle-page game-container">
+        
       <div class="battlefields-container">
         <div v-for="(battle, index) in battleData" :key="battle.id" class="battlefield-block" :style="backgroundStyle">
           <BattleField

@@ -4,7 +4,8 @@
     <p>Total Value of Assets in Cryptocredits: {{ getTotalAssetsValue() }}</p>
     <p>View your stored crypto data here.</p>
     <div class="vault-list">
-      <div v-for="token in tokens" :key="token.index" class="vault-item">
+      <!-- Use filteredTokens instead of tokens -->
+      <div v-for="token in filteredTokens" :key="token.index" class="vault-item">
         <h2>{{ token.name }}</h2>
         <p><strong>Current Amount:</strong> {{ getTokenValue(token.index) }}</p>
         <p><strong>Total Mined:</strong> {{ getTotalTokenValue(token.index) }}</p>
@@ -16,7 +17,7 @@
 </template>
 
 <script>
-import { tokens } from '@/services/TokenService.js';
+import { tokens } from '@/services/TokenService';
 
 export default {
   name: 'VaultPage',
@@ -25,6 +26,11 @@ export default {
       tokens,
       intervalId: null,
     };
+  },
+  computed: {
+    filteredTokens() {
+      return this.tokens.filter(token => parseFloat(this.getTotalTokenValue(token.index)) > 0);
+    },
   },
   methods: {
     getTokenValue(index) {
@@ -68,6 +74,7 @@ export default {
     clearInterval(this.intervalId);
   },
 };
+
 </script>
 
 <style scoped>

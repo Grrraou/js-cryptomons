@@ -6,6 +6,7 @@
   </template>
   
   <script>
+  // Import the eventBus to communicate between components
   import eventBus from '@/eventBus';
   
   export default {
@@ -18,28 +19,23 @@
         const item = JSON.parse(itemData);
   
         if (item && item.value) {
-          // Update the player's cryptodollar balance
           const currentCryptodollar = parseFloat(localStorage.getItem('token_cryptodollar')) || 0;
           const newCryptodollar = currentCryptodollar + item.value;
           localStorage.setItem('token_cryptodollar', newCryptodollar.toFixed(2));
   
-          // Check if the item came from equipment (via slotType)
+          // If the item came from equipment, notify the equipment to clear the slot
           if (slotType) {
-            // Notify EquipementComponent to clear the slot
-            eventBus.emit('inventory-item-sold', slotType);
-          } else {
-            // Remove the item from inventory only if it comes from inventory
-            let playerInventory = JSON.parse(localStorage.getItem('playerInventory')) || [];
-            const itemIndex = playerInventory.findIndex(invItem => invItem.index === item.index);
+            eventBus.emit('inventory-item-sold', slotType); // Notify EquipementComponent to clear the slot
+          }
   
-            if (itemIndex !== -1) {
-              playerInventory.splice(itemIndex, 1);
-              localStorage.setItem('playerInventory', JSON.stringify(playerInventory));
-              // Emit an event to notify InventoryComponent to update the UI
-              eventBus.emit('inventory-updated');
-            } else {
-              console.error('Item not found in the inventory.');
-            }
+          // Remove the item from the inventory if it's in there
+          let playerInventory = JSON.parse(localStorage.getItem('playerInventory')) || [];
+          const itemIndex = playerInventory.findIndex(invItem => invItem.index === item.index);
+  
+          if (itemIndex !== -1) {
+            playerInventory.splice(itemIndex, 1);
+            localStorage.setItem('playerInventory', JSON.stringify(playerInventory));
+            eventBus.emit('inventory-updated'); // Notify the InventoryComponent to update
           }
         } else {
           console.error('Item data is invalid or has no value.');

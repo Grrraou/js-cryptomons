@@ -1,16 +1,16 @@
 <template>
     <div class="inventory-page">
-      <!-- Equipement Component (RPG Equipement Style) -->
-      <div class="equipement-section">
-        <EquipementComponent />
+      <!-- Top Section: Equipement and Selling -->
+      <div class="top-section">
+        <div class="equipement-section">
+          <EquipementComponent />
+        </div>
+        <div class="selling-section">
+          <SellingComponent />
+        </div>
       </div>
   
-      <!-- Selling Component (Drag and Drop to Sell) -->
-      <div class="selling-section">
-        <SellingComponent />
-      </div>
-  
-      <!-- Inventory Component (Scrollable List of Items) -->
+      <!-- Bottom Section: Inventory Component (Full Width) -->
       <div class="inventory-section">
         <InventoryComponent />
       </div>
@@ -35,33 +35,55 @@
   .inventory-page {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    width: 100%;
     height: 100vh;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+  
+  /* Top Section: Split Equipement (90%) and Selling (10%) */
+  .top-section {
+    display: flex;
+    width: 100%;
+    height: 40%; /* Top section takes 40% of the page height */
+    margin-bottom: 10px;
   }
   
   .equipement-section {
-    width: 70%; /* Adjust as needed */
-    height: 40%; /* Equipement section takes 40% of the height */
-    background-color: #f0f0f0; /* Just for visualization, adjust as needed */
-    margin-bottom: 10px; /* Space between sections */
+    width: 90%; /* Equipment takes 90% of the width */
+    border: 2px solid #444;
+    border-radius: 10px;
+    background-color: #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
   }
   
   .selling-section {
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: 25%; /* Adjust width of the selling section */
-    height: 40%; /* Same height as the equipement section */
-    background-color: #f5c6cb; /* Just for visualization, adjust as needed */
-    margin-left: 10px;
+    width: 10%; /* Selling takes 10% of the width */
+    border: 2px solid #444;
+    border-radius: 10px;
+    background-color: #f5c6cb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   
+  /* Bottom Section: Full Width Scrollable Inventory */
   .inventory-section {
-    width: 100%;
-    height: 50%; /* Inventory section takes the remaining 50% of the page */
-    background-color: #e0f7fa; /* Just for visualization, adjust as needed */
-    overflow-y: scroll;
-    margin-top: 10px; /* Space between sections */
+    width: 100%; /* Full width */
+    height: 60%; /* Inventory section takes 60% of the page height */
+    border: 2px solid #444;
+    border-radius: 10px;
+    background-color: #e0f7fa;
+    overflow-y: auto; /* Scrollable */
+    display: flex;
+    align-items: flex-start; /* Align items to the top */
+    justify-content: flex-start; /* Align items to the left */
+    flex-wrap: wrap; /* Wrap items to the next line if necessary */
+    padding: 10px;
+    box-sizing: border-box;
   }
   </style>
   

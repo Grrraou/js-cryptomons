@@ -85,8 +85,6 @@ class BattleManager {
         // Save the updated inventory back to localStorage
         localStorage.setItem('playerInventory', JSON.stringify(playerInventory));
 
-        // Log the looted item (optional)
-        console.log(`Looted item: ${randomItem.name}`);
 
 
         localStorage.setItem("token_btc", (currentAmount + 1).toString());

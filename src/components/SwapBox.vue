@@ -134,7 +134,6 @@
           localStorage.setItem(`cryptodollar_value_${this.toToken}`, toTokenValue.toFixed(6));
         }
 
-        console.log(`Updated values - ${this.fromToken.toUpperCase()}: ${fromTokenValue}, ${this.toToken.toUpperCase()}: ${toTokenValue}`);
         }
     },
     mounted() {

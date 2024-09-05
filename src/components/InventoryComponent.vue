@@ -68,7 +68,6 @@
     overflow-y: auto;
     height: 100%;
     max-height: 400px;
-    border: 2px solid #ccc;
     border-radius: 5px;
   }
   

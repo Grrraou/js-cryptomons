@@ -52,7 +52,6 @@
     align-items: center;
     justify-content: center;
     height: 100%;
-    background-color: #ffcccb;
     padding: 10px;
     border: 2px solid #444;
     border-radius: 10px;

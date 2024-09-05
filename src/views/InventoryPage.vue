@@ -58,6 +58,8 @@
     align-items: center;
     justify-content: center;
     margin-right: 10px;
+    background-size: cover;
+    background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.5)) center center / cover, url('@/assets/inventory/equipmentBG.png');
   }
   
   .selling-section {
@@ -68,6 +70,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    background-size: cover;
+    background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.5)) center center / cover, url('@/assets/inventory/sellingBG.png');
   }
   
   /* Bottom Section: Full Width Scrollable Inventory */
@@ -84,6 +88,8 @@
     flex-wrap: wrap; /* Wrap items to the next line if necessary */
     padding: 10px;
     box-sizing: border-box;
+    background-size: cover;
+    background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.5)) center center / cover, url('@/assets/inventory/inventoryBG.png');
   }
   </style>
   

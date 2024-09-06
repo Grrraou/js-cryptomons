@@ -160,8 +160,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 15%;
-    height: 15%;
     border: 2px solid #444;
     border-radius: 10px;
     background-color: #fff;

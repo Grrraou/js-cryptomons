@@ -29,10 +29,8 @@ export const items = [
       description: 'A magical potion that restores 50 HP.',
       value: 50,
       type: 'Consumable',
-      effect: function (player) {
-        const healedAmount = 50;
-        player.hp = Math.min(player.hp + healedAmount, player.maxHp); // Heals but doesn't exceed max HP
-        return `Player healed by ${healedAmount} HP!`;
+      effect: function () {
+        alert('healing potion consumed');
       }, // Effect function for a consumable
     },
     {
@@ -41,12 +39,8 @@ export const items = [
       description: 'An elixir that increases speed for 30 seconds.',
       value: 75,
       type: 'Consumable',
-      effect: function (player) {
-        player.speed += 20; // Temporary speed boost
-        setTimeout(() => {
-          player.speed -= 20; // Speed returns to normal after 30 seconds
-        }, 30000);
-        return `Player's speed increased by 20 for 30 seconds!`;
+      effect: function () {
+        alert('speed elixir consumed');
       }, // Effect for speed boost
     },
   ];

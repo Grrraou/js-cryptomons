@@ -5,8 +5,14 @@
         v-for="(item, index) in items" 
         :key="index" 
         draggable="true" 
-        @dragstart="dragItem(item, $event)">
+        @dragstart="dragItem(item, $event)"
+      >
         <p>{{ item.name }} ({{ item.type }})</p>
+  
+        <!-- Consumable Button: Visible only for consumable items -->
+        <button v-if="item.type === 'Consumable'" class="consume-btn" @click="consumeItem(item, index)">
+          Use
+        </button>
       </div>
     </div>
   </template>
@@ -14,6 +20,8 @@
   <script>
   // Import the eventBus to listen for updates
   import eventBus from '@/eventBus';
+  // Import the items from ItemService
+  import { items as itemDefinitions } from '@/services/ItemService';
   
   export default {
     data() {
@@ -46,8 +54,32 @@
   
       loadInventory() {
         const inventory = JSON.parse(localStorage.getItem('playerInventory')) || [];
-        this.items = inventory;
+  
+        // Map over the inventory and find the matching item in ItemService.js
+        this.items = inventory.map(item => {
+          // Find the item by its index
+          const originalItem = itemDefinitions.find(defItem => defItem.index === item.index);
+  
+          // If found, restore its effect function
+          if (originalItem && originalItem.effect) {
+            item.effect = originalItem.effect;
+          }
+  
+          return item;
+        });
       },
+  
+      // Consume a consumable item
+      consumeItem(item, index) {
+        if (typeof item.effect === 'function') {
+          item.effect(); // Execute the item's effect function
+        }
+  
+        // Remove the item from the inventory
+        this.items.splice(index, 1);
+        localStorage.setItem('playerInventory', JSON.stringify(this.items));
+        eventBus.emit('inventory-updated');
+      }
     },
     mounted() {
       this.loadInventory();
@@ -68,10 +100,12 @@
     overflow-y: auto;
     height: 100%;
     max-height: 400px;
+    border: 2px solid #ccc;
     border-radius: 5px;
   }
   
   .item {
+    position: relative; /* Enable relative positioning for the consume button */
     width: 150px;
     height: 100px;
     background-color: #ddd;
@@ -87,6 +121,23 @@
   
   .item:hover {
     background-color: #ccc;
+  }
+  
+  .consume-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    padding: 2px 6px;
+    font-size: 12px;
+    background-color: #ff5c5c;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  
+  .consume-btn:hover {
+    background-color: #ff0000;
   }
   </style>
   

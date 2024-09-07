@@ -1,3 +1,8 @@
+import eventBus from '@/eventBus.js';
+
+// Define the current buffs (this will store active buffs)
+export const currentBuff = [];
+
 export const items = [
     {
       index: 'iron-helmet', // Manually slugified name
@@ -24,24 +29,36 @@ export const items = [
       effect: null, // Equipment doesn't use effect
     },
     {
-      index: 'healing-potion', // Manually slugified name
-      name: 'Healing Potion',
-      description: 'A magical potion that restores 50 HP.',
-      value: 50,
-      type: 'Consumable',
-      effect: function () {
-        alert('healing potion consumed');
-      }, // Effect function for a consumable
-    },
-    {
-      index: 'speed-elixir', // Manually slugified name
-      name: 'Speed Elixir',
-      description: 'An elixir that increases speed for 30 seconds.',
-      value: 75,
-      type: 'Consumable',
-      effect: function () {
-        alert('speed elixir consumed');
-      }, // Effect for speed boost
+        index: 'manual-mining-potion', // Manually slugified name
+        name: 'Manual Mining Potion',
+        description: '2x Mining efficiency',
+        value: 50,
+        type: 'Consumable',
+        effect: function () {
+            alert('Manual Mining Potion consumed! Double mining power for 2 minutes.');
+
+             // Store the mining boost buff in currentBuff
+            currentBuff.push({
+                buffType: 'miningMultiplier',
+                multiplier: 2000,
+                expiration: Date.now() + 120000, // 2 minutes from now
+            });
+
+            // Emit an event to notify the application about the buff
+            eventBus.emit('buff-applied', 'manual-mining-boost');
+
+            // Set a timeout to remove the buff after 2 minutes
+            setTimeout(() => {
+                // Remove the buff from currentBuff when the effect expires
+                const index = currentBuff.findIndex(buff => buff.buffType === 'miningMultiplier');
+                if (index !== -1) {
+                currentBuff.splice(index, 1);
+                }
+
+                // Emit an event to notify the application that the buff has expired
+                eventBus.emit('buff-expired', 'manual-mining-boost');
+            }, 120000); // 2 minutes (120000 ms)
+        },
     },
   ];
   

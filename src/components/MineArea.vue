@@ -48,6 +48,7 @@
   <script>
   import eventBus from '@/eventBus.js';
   import { miningSounds } from '@/services/MineService';
+  import { currentBuff } from '@/services/ItemService';
 
   export default {
     props: {
@@ -66,6 +67,7 @@
         level: this.initialLevel || 1,
         clickPower: this.initialClickPower || 1,
         autoClickerLevel: this.initialAutoClickerLevel || 1,
+        manualMiningMultiplier: 1,
       };
     },
     methods: {
@@ -142,16 +144,21 @@
         let tokenIndex = `token_${this.token}`;
         let currentAmount = parseFloat(localStorage.getItem(tokenIndex)) || 0;
         let minedAmount = (Math.random() * (this.level + 1) * (0.0009 - 0.000001) + 0.000001);
-        localStorage.setItem(tokenIndex, currentAmount + minedAmount);
+        
 
         let tokenIndexTotal = `total_token_${this.token}`;
         let currentAmountTotal = parseFloat(localStorage.getItem(tokenIndexTotal)) || 0;
-        localStorage.setItem(tokenIndexTotal, currentAmountTotal + minedAmount);
+        
         
         let x, y;
 
         if (event.clientX) {
           // Use event coordinates if available
+          const manualMiningBuff = currentBuff.find(buff => buff.buffType === 'miningMultiplier' && Date.now() < buff.expiration);
+          console.log(manualMiningBuff);
+          const manualMutliplier = manualMiningBuff?.multiplier || 1;
+          console.log(manualMutliplier);
+          minedAmount = minedAmount * manualMutliplier;
           x = event.clientX;
           y = event.clientY;
           this.showFlyingText(minedAmount.toFixed(6), x, y);
@@ -159,6 +166,9 @@
           // Use the component's coordinates
           this.showAreaLog(minedAmount.toFixed(6));
         }
+
+        localStorage.setItem(tokenIndex, currentAmount + minedAmount);
+        localStorage.setItem(tokenIndexTotal, currentAmountTotal + minedAmount);
         //if (this.$route.name === 'Mines' && x && y)
           //this.showFlyingText(minedAmount.toFixed(6), x, y);
       },
@@ -236,6 +246,15 @@
       if (areaIndex === this.areaIndex) {
         this.startAutoClicker(heroCount);
       }
+    });
+     // Listen for the potion effect to double mining power
+     eventBus.on('manual-mining-boost', ({ multiplier, duration }) => {
+      this.miningMultiplier = multiplier;
+
+      // Reset the multiplier back to 1 after the duration expires
+      setTimeout(() => {
+        this.miningMultiplier = 1;
+      }, duration);
     });
   },
   beforeUnmount() {

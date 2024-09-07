@@ -26,7 +26,9 @@ export const items = [
       description: 'A sword imbued with fire, increasing attack power.',
       value: 500,
       type: 'Weapon',
-      effect: null, // Equipment doesn't use effect
+      effect: function () {
+        return 1;
+      }, // Equipment doesn't use effect
     },
     {
         index: 'manual-mining-potion', // Manually slugified name

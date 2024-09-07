@@ -38,6 +38,7 @@
   
   <script>
   import eventBus from '@/eventBus.js';
+  import { items } from '@/services/ItemService';
   
   export default {
     props: {
@@ -65,7 +66,14 @@
     },
     methods: {
       creatureClicked() {
-        const manualDamageAmount = 10;
+        let manualDamageAmount = 1;
+        const playerEquipement = JSON.parse(localStorage.getItem('playerEquipement')) || {};
+        const weapon = playerEquipement.Weapon;
+        if (weapon) {
+          const weaponObject = items.find(item => item.index === weapon.index)
+          manualDamageAmount += weaponObject.effect();
+        }
+
         this.$emit('creature-click', this.battleIndex, manualDamageAmount);
       },
       onDrop(event) {

@@ -161,10 +161,10 @@
           minedAmount = minedAmount * manualMutliplier;
           x = event.clientX;
           y = event.clientY;
-          this.showFlyingText(minedAmount.toFixed(6), x, y);
+          this.showFlyingText(this.token, minedAmount.toFixed(6), x, y);
         } else {
           // Use the component's coordinates
-          this.showAreaLog(minedAmount.toFixed(6));
+          this.showAreaLog(this.token, minedAmount.toFixed(6));
         }
 
         localStorage.setItem(tokenIndex, currentAmount + minedAmount);
@@ -172,8 +172,15 @@
         //if (this.$route.name === 'Mines' && x && y)
           //this.showFlyingText(minedAmount.toFixed(6), x, y);
       },
-      showFlyingText(amount, x, y) {
+      showFlyingText(token, amount, x, y) {
         const textElement = document.createElement('div');
+
+        const imgElement = document.createElement('img');
+        imgElement.src = require(`@/assets/tokens/${token}.png`); // Replace with the actual image path
+        imgElement.style.width = '16px'; // Set the image size
+        imgElement.style.height = '16px'; 
+        imgElement.style.marginLeft = '8px';
+
         textElement.innerText = `+${amount}`;
         
         // Apply initial styles directly with JavaScript
@@ -189,6 +196,7 @@
         textElement.style.zIndex = '9999'; // Ensure it appears on top of other elements
 
         // Append the element to the document body
+        textElement.appendChild(imgElement);
         document.body.appendChild(textElement);
 
         // Force a reflow to ensure the initial styles are applied before starting the animation
@@ -205,12 +213,18 @@
           }
         }, 2000); // Match with the duration of the animation
       },
-      showAreaLog(text) {
+      showAreaLog(token, text) {
         if (this.$el) {
           const logsDiv = this.$el.querySelector('.logs');
           if (logsDiv) {
             // Create a new text node
             const textNode = document.createTextNode(text);
+
+            const imgElement = document.createElement('img');
+            imgElement.src = require(`@/assets/tokens/${token}.png`); // Replace with the actual image path
+            imgElement.style.width = '16px'; // Set the image size
+            imgElement.style.height = '16px'; 
+            imgElement.style.marginLeft = '8px';
 
             // Create a new paragraph element and append the text node to it
             const newParagraph = document.createElement('p');
@@ -222,7 +236,9 @@
             newParagraph.style.transition = 'transform 2s ease-out, opacity 2s ease-out'; // Smooth transition for both transform and opacity
             newParagraph.style.zIndex = '9999'; // Ensure it appears on top of other elements
 
+            
             newParagraph.appendChild(textNode);
+            newParagraph.appendChild(imgElement);
 
             // Append the new paragraph to the .logs div
             logsDiv.appendChild(newParagraph);

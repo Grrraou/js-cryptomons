@@ -18,7 +18,9 @@ export const items = [
       description: 'A heavy steel chestplate that provides excellent protection.',
       value: 250,
       type: 'Chest',
-      effect: null, // No effect, it's a piece of armor
+      effect: function () {
+        return 1;
+      }, // No effect, it's a piece of armor
     },
     {
       index: 'fire-sword', // Manually slugified name

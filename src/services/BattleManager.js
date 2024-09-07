@@ -38,8 +38,15 @@ class BattleManager {
   handleHeroAttacks() {
     this.battleData.forEach((battle, index) => {
       const assignedHeroes = this.getHeroesForBattle(index);
+      let heroesDamage = 1;
+      const playerEquipement = JSON.parse(localStorage.getItem('playerEquipement')) || {};
+        const chest = playerEquipement.Chest;
+        if (chest) {
+          const chestObject = items.find(item => item.index === chest.index)
+          heroesDamage += chestObject.effect();
+        }
       if (assignedHeroes.length > 0) {
-        const damage = assignedHeroes.length * 10;
+        const damage = assignedHeroes.length * heroesDamage;
         this.damageCreature(index, damage);
       }
     });

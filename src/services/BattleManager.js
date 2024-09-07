@@ -3,6 +3,7 @@ import eventBus from '@/eventBus.js';
 import { generateCreature } from '@/services/BattleService.js';
 import { heroes } from '@/services/HeroService.js';
 import { items } from './ItemService';
+import { useToast } from 'vue-toastification';
 
 class BattleManager {
   constructor() {
@@ -78,23 +79,34 @@ class BattleManager {
     if (creature && typeof creature.health === 'number' && !isNaN(creature.health)) {
       creature.health -= amount;
       if (creature.health <= 0) {
-        const currentAmount = parseFloat(localStorage.getItem("token_btc")) || 0;
-
         // Loot a random item from the items array
-        const randomItem = items[Math.floor(Math.random() * items.length)];
+        const lootItem = items.find(item => item.index === creature.loot.index);
+        let ratio = creature.loot.ratio;
+        // get Head bonus
+        const playerEquipement = JSON.parse(localStorage.getItem('playerEquipement')) || {};
+        const head = playerEquipement.Head;
+        console.log('before:' + ratio);
+        if (head) {
+          const headObject = items.find(item => item.index === head.index)
+          ratio = ratio + (ratio * headObject.effect());
+          console.log('after:' + ratio);
+        }
 
-        // Retrieve the player's inventory from localStorage
-        let playerInventory = JSON.parse(localStorage.getItem('playerInventory')) || [];
+        if (Math.random() <= ratio) {
+          console.log('yee');
+          // Retrieve the player's inventory from localStorage
+          let playerInventory = JSON.parse(localStorage.getItem('playerInventory')) || [];
 
-        // Add the random item to the inventory
-        playerInventory.push(randomItem);
+          // Add the random item to the inventory
+          playerInventory.push(lootItem);
 
-        // Save the updated inventory back to localStorage
-        localStorage.setItem('playerInventory', JSON.stringify(playerInventory));
+          // Save the updated inventory back to localStorage
+          localStorage.setItem('playerInventory', JSON.stringify(playerInventory));
+          const toast = useToast();
+          toast.success(`looted ${lootItem.name}!`);
+        }
+        
 
-
-
-        localStorage.setItem("token_btc", (currentAmount + 1).toString());
         this.currentCreatures[index] = generateCreature();
       }
       eventBus.emit('monster-updated', { battleIndex: index, creature: this.currentCreatures[index] });

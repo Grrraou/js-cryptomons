@@ -10,7 +10,9 @@ export const items = [
       description: 'A sturdy helmet made of iron that protects the head.',
       value: 100,
       type: 'Head',
-      effect: null, // Equipment generally won't have an "effect" function
+      effect: function () {
+        return 0.1;
+      }, // Equipment generally won't have an "effect" function
     },
     {
       index: 'steel-chestplate', // Manually slugified name

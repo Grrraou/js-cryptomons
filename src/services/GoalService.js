@@ -268,7 +268,7 @@ export const goals = [
 
 // Stupid goals
   {
-    index: 'save_harambe',
+    index: 'buy_pizza_with_bitcoins',
     name: 'Buy a pizza with bitcoins',
     description: 'A nice pizza, without ananas and just for 10 000 BTC !',
     costs: [

@@ -12,6 +12,7 @@
 <script>
 import SideMenu from './components/SideMenu.vue';
 import './assets/styles/main.css';
+import 'vue3-select/dist/vue3-select.css';
 import BattleManager from '@/services/BattleManager.js';
 import { getBattleData } from '@/services/BattleService.js';
 import { startStakingUpdates } from '@/services/StakingService';

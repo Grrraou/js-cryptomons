@@ -1,9 +1,14 @@
 <template>
     <div :style="backgroundStyle" class="goal-box">
       <div class="goal-header">
-        <h3>{{ goal.name }}</h3>
-        <p>{{ goal.description }}</p>
-        <p>🏅 {{ goal.reward }}</p>
+        <div>
+          <h3>{{ goal.name }}</h3>
+          <p>{{ goal.description }}</p>
+          <p>🏅 {{ goal.reward }}</p>
+        </div>
+        <div>
+          <img :src="getBackgroundImage()" class="goal-logo">
+        </div>
       </div>
   
       <!-- Costs section: Show only if the goal is not unlocked -->
@@ -30,7 +35,6 @@
       <!-- Unlocked section: Show when the goal is unlocked -->
       <div v-else class="goal-unlocked-message">
         <p class="unlocked-text">🎉 This Goal is Unlocked! 🎉</p>
-        <p class="unlocked-description">You have successfully unlocked the "{{ goal.name }}" goal.</p>
       </div>
     </div>
   </template>
@@ -139,6 +143,7 @@
   <style scoped>
   .goal-box {
     border-radius: 15px;
+    border: 2px solid #ffa500;
     padding: 20px;
     margin: 15px 0;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
@@ -148,6 +153,17 @@
   
   .goal-header {
     margin-bottom: 20px;
+    display: flex;
+    justify-content: center;  /* Aligns content horizontally */
+    align-items: center;
+  }
+
+  .goal-logo {
+    max-width: 80px;
+    max-height: 80px;
+    border: 3px solid #ffa500;
+    border-radius: 33%;
+    margin-left: 15px;
   }
   
   .goal-header h3 {

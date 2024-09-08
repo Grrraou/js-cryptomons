@@ -43,7 +43,20 @@ const routes = [
       }
     },
   },
-  { path: '/battle', name: 'Battle', component: BattlePage },
+  { 
+    path: '/battle', 
+    name: 'Battle', 
+    component: BattlePage,
+    beforeEnter: (to, from, next) => {
+      const isGoalUnlocked = localStorage.getItem('goal_build_and_build_unlocked') === 'true';
+      if (isGoalUnlocked) {
+        next(); 
+      } else {
+        alert('You need to build and build and build and build and build before accessing the battlefield.');
+        next('/goals'); // Redirect to Goals page if the goal is not unlocked
+      }
+    }, 
+  },
   { 
     path: '/inventory', 
     name: 'Inventory', 

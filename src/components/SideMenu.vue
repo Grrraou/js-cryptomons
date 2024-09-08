@@ -27,8 +27,11 @@
           <li v-else>
             <router-link to="/vault" class="forbidden-link">🚫 Vault</router-link>
           </li>
-          <li>
+          <li v-if="isBattleUnlocked">
             <router-link to="/battle">⚔️ Battle</router-link>
+          </li>
+          <li v-else>
+            <router-link to="/battle" class="forbidden-link">🚫 Battle</router-link>
           </li>
           <li v-if="isInventoryUnlocked">
             <router-link to="/inventory">📦 Inventory</router-link>
@@ -71,6 +74,7 @@ export default {
       totalAssetsValue: 0,
       isStakingUnlocked: false,
       isVaultUnlocked: false,
+      isBattleUnlocked: false,
       isInventoryUnlocked: false,
       isSwapUnlocked: false, // Track the vault goal unlock status
       intervalId: null, // Track the interval ID to clear it later
@@ -94,6 +98,10 @@ export default {
       // Check if the vault goal is unlocked in localStorage
       this.isVaultUnlocked = localStorage.getItem('goal_grandma_bitcoin_unlocked') === 'true';
     },
+    checkBattleUnlocked() {
+      // Check if the vault goal is unlocked in localStorage
+      this.isBattleUnlocked = localStorage.getItem('goal_build_and_build_unlocked') === 'true';
+    },
     checkInventoryUnlocked() {
       // Check if the vault goal is unlocked in localStorage
       this.isInventoryUnlocked = localStorage.getItem('goal_shopping_on_silk_road_unlocked') === 'true';
@@ -109,6 +117,9 @@ export default {
       if (event.key === 'goal_grandma_bitcoin_unlocked') {
         this.checkVaultUnlocked();
       }
+      if (event.key === 'goal_build_and_build_unlocked') {
+        this.checkBattleUnlocked();
+      }
       if (event.key === 'goal_shopping_on_silk_road_unlocked') {
         this.checkInventoryUnlocked();
       }
@@ -122,6 +133,7 @@ export default {
         this.updateTotalAssetsValue();
         this.checkStakingUnlocked();
         this.checkVaultUnlocked();
+        this.checkBattleUnlocked();
         this.checkInventoryUnlocked();
         this.checkSwapUnlocked();
       }, 1000);
@@ -131,6 +143,7 @@ export default {
     // Initial check when the component is mounted
     this.checkStakingUnlocked();
     this.checkVaultUnlocked();
+    this.checkBattleUnlocked();
     this.checkInventoryUnlocked();
     this.checkSwapUnlocked();
 

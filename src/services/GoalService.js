@@ -164,6 +164,15 @@ export const goals = [
     ],
     reward: 'Unlock Tron staking'
   },
+  {
+    index: 'build_and_build',
+    name: 'Build and Build',
+    description: 'and build and build and build and build and build and build and build',
+    costs: [
+      { token: 'cryptodollar', value: 10000000 },
+    ],
+    reward: 'Unlock the Battlefield'
+  },
 
 
 

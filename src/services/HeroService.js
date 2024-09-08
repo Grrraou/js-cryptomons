@@ -7,4 +7,5 @@ export const heroes = [
   { index: 'tezosomon', name: 'Tezosomon', requirement: 'harass_your_friends_about_nfts', assignedArea: null },
   { index: 'polkadotmon', name: 'Polkadotmon', requirement: 'crowdsource_parachain', assignedArea: null },
   { index: 'solanamon', name: 'Solanamon', requirement: 'beat_visa_transaction_speed', assignedArea: null },
+  { index: 'shibainumon', name: 'Shibainumon', requirement: 'send_shitcoins_to_vitalik', assignedArea: null },
 ];

@@ -232,6 +232,16 @@ export const goals = [
     ],
     reward: 'Unlock Solanamon'
   },
+  {
+    index: 'send_shitcoins_to_vitalik',
+    name: 'Send your shitcoins to Vitalik',
+    description: 'Better be in a rich man garbage than a poor guy wallet',
+    costs: [
+      { token: 'cryptodollar', value: 500000 },
+      { token: 'shib', value: 500000 },
+    ],
+    reward: 'Unlock Shibainumon'
+  },
 
 
 

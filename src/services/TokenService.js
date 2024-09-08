@@ -20,6 +20,7 @@ export const tokens = [
   { index: 'xtz', name: 'Tezos', cryptodollar: 0.2 },//2018
   { index: 'dot', name: 'Polkadot', cryptodollar: 0.2 },//2020
   { index: 'sol', name: 'Solana', cryptodollar: 1 },//2020
+  { index: 'shib', name: 'Shiba Inu', cryptodollar: 0.1 },//2020
   
   
   //{ index: 'ore', name: 'Ore', cryptodollar: 0.1 },

@@ -1,22 +1,23 @@
 
 export const tokens = [
   { index: 'cryptodollar', name: 'Crypto Dollar', cryptodollar: 1 },
-  { index: 'btc', name: 'Bitcoin', cryptodollar: 10 },
-  { index: 'nmc', name: 'Namecoin', cryptodollar: 5 },
-  { index: 'ltc', name: 'Litecoin', cryptodollar: 5 },
-  { index: 'xrp', name: 'Ripple', cryptodollar: 1 },
-  { index: 'ppc', name: 'Peercoin', cryptodollar: 1 },
-  { index: 'dash', name: 'Dash', cryptodollar: 2 },
-  { index: 'xmr', name: 'Monero', cryptodollar: 0.5 },
-  { index: 'doge', name: 'Dogecoin', cryptodollar: 0.2 },
-  { index: 'eth', name: 'Ethereum', cryptodollar: 2 },
-  { index: 'zec', name: 'Zcash', cryptodollar: 2 },
-  { index: 'bch', name: 'Bitcoin Cash', cryptodollar: 0.2 },
-  { index: 'eos', name: 'EOS', cryptodollar: 0.2 },
-  { index: 'ada', name: 'Cardano', cryptodollar: 0.2 },
-  { index: 'trx', name: 'Tron', cryptodollar: 0.2 },
-  { index: 'bnb', name: 'Binance Coin', cryptodollar: 0.2 },
-  { index: 'link', name: 'Chainlink', cryptodollar: 0.2 },
+  { index: 'btc', name: 'Bitcoin', cryptodollar: 10 },//2009
+  { index: 'nmc', name: 'Namecoin', cryptodollar: 5 },//2011
+  { index: 'ltc', name: 'Litecoin', cryptodollar: 5 },//2011
+  { index: 'xrp', name: 'Ripple', cryptodollar: 1 },//2012
+  { index: 'ppc', name: 'Peercoin', cryptodollar: 1 },//2012
+  { index: 'doge', name: 'Dogecoin', cryptodollar: 0.2 },//2013
+  { index: 'dash', name: 'Dash', cryptodollar: 2 },//2014
+  { index: 'xmr', name: 'Monero', cryptodollar: 0.5 },//2014
+  { index: 'eth', name: 'Ethereum', cryptodollar: 2 },//2015
+  { index: 'zec', name: 'Zcash', cryptodollar: 2 },//2016
+  { index: 'bch', name: 'Bitcoin Cash', cryptodollar: 0.2 },//2017
+  { index: 'eos', name: 'EOS', cryptodollar: 0.2 },//2017
+  { index: 'ada', name: 'Cardano', cryptodollar: 0.2 },//2017
+  { index: 'trx', name: 'Tron', cryptodollar: 0.2 },//2017
+  { index: 'bnb', name: 'Binance Coin', cryptodollar: 0.2 },//2017
+  { index: 'link', name: 'Chainlink', cryptodollar: 0.2 },//2017
+  { index: 'xtz', name: 'Tezos', cryptodollar: 0.2 },//2018
  /*  { index: 'sol', name: 'Solana', cryptodollar: 1 },
   
   

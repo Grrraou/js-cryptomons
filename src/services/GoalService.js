@@ -188,8 +188,19 @@ export const goals = [
     description: 'Ask them for lottery numbers, might work this time',
     costs: [
       { token: 'cryptodollar', value: 50000000 },
+      { token: 'link', value: 5000000 },
     ],
     reward: 'Unlock Chainlinkomon'
+  },
+  {
+    index: 'harass_your_friends_about_nfts',
+    name: 'Harass your friends about NFTs',
+    description: 'I\'m sure they will find you SUPER cool !',
+    costs: [
+      { token: 'cryptodollar', value: 500000 },
+      { token: 'xtz', value: 500000 },
+    ],
+    reward: 'Unlock Tezosomon'
   },
 
 

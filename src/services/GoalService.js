@@ -1,5 +1,15 @@
 export const goals = [
-    {
+  {
+    index: 'grandma_bitcoin',
+    name: 'Convince Grandma to Buy Bitcoin',
+    description: 'Help your grandma set up a crypto wallet and buy her first bitcoin.',
+    costs: [
+      { token: 'btc', value: 1 },
+    ],
+    reward: 'Unlock the Vault and gain access to all your cryptos!'
+  },
+  
+ /*    {
       index: 'fix_inflation',
       name: 'Fix Inflation',
       description: 'Fix inflation by printing more cryptodollars.',
@@ -24,15 +34,6 @@ export const goals = [
       costs: [
         { token: 'btc', value: 2000 },
         { token: 'cryptodollar', value: 1200 },
-      ],
-    },
-    {
-      index: 'pizza_delivery',
-      name: 'Decentralized Pizza Delivery',
-      description: 'Decentralize pizza deliveries using blockchain.',
-      costs: [
-        { token: 'btc', value: 500 },
-        { token: 'cryptodollar', value: 250 },
       ],
     },
     {
@@ -133,6 +134,6 @@ export const goals = [
         { token: 'btc', value: 1600 },
         { token: 'cryptodollar', value: 900 },
       ],
-    },
+    }, */
   ];
   

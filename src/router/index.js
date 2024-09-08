@@ -16,7 +16,20 @@ const routes = [
   { path: '/', name: 'Home', component: HomePage },
   { path: '/mines', name: 'Mines', component: MinesPage },
   { path: '/staking', name: 'Staking', component: StakingPage },
-  { path: '/vault', name: 'Vault', component: VaultPage },
+  { 
+    path: '/vault', 
+    name: 'Vault', 
+    component: VaultPage,
+    beforeEnter: (to, from, next) => {
+      const isGoalUnlocked = localStorage.getItem('goal_grandma_bitcoin_unlocked') === 'true';
+      if (isGoalUnlocked) {
+        next(); // Allow access to Vault
+      } else {
+        alert('You need to Convince Grandma to Buy Bitcoin before accessing the Vault.');
+        next('/goals'); // Redirect to Goals page if the goal is not unlocked
+      }
+    },
+  },
   { path: '/battle', name: 'Battle', component: BattlePage },
   { path: '/inventory', name: 'Inventory', component: InventoryPage },
   { path: '/swap', name: 'Swap', component: SwapPage },

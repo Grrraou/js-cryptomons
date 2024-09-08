@@ -3,6 +3,7 @@
       <div class="goal-header">
         <h3>{{ goal.name }}</h3>
         <p>{{ goal.description }}</p>
+        <p>{{ goal.reward }}</p>
       </div>
   
       <!-- Costs section: Show only if the goal is not unlocked -->

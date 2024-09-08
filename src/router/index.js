@@ -44,7 +44,20 @@ const routes = [
     },
   },
   { path: '/battle', name: 'Battle', component: BattlePage },
-  { path: '/inventory', name: 'Inventory', component: InventoryPage },
+  { 
+    path: '/inventory', 
+    name: 'Inventory', 
+    component: InventoryPage,
+    beforeEnter: (to, from, next) => {
+      const isGoalUnlocked = localStorage.getItem('goal_shopping_on_silk_road_unlocked') === 'true';
+      if (isGoalUnlocked) {
+        next(); 
+      } else {
+        alert('You need to do some shopping on Silk Road before accessing the inventory.');
+        next('/goals'); // Redirect to Goals page if the goal is not unlocked
+      }
+    }, 
+  },
   { 
     path: '/swap', 
     name: 'Swap', 
@@ -57,7 +70,8 @@ const routes = [
         alert('You need to Centralize decentralization before accessing the swap.');
         next('/goals'); // Redirect to Goals page if the goal is not unlocked
       }
-    }, },
+    }, 
+  },
   { path: '/goals', name: 'Goals', component: GoalsPage },
   { path: '/achievements', name: 'Achievements', component: AchievementsPage },
   { path: '/stats', name: 'Stats', component: StatsPage },

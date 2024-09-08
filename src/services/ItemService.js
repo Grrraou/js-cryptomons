@@ -1,9 +1,25 @@
 import eventBus from '@/eventBus.js';
+import { useToast } from 'vue-toastification';
 
 // Define the current buffs (this will store active buffs)
 export const currentBuff = [];
 
 export const items = [
+  {
+    index: 'good_new_btc', // Manually slugified name
+    name: 'Good News: Bitcoin is secure !',
+    description: 'Increase bitcoin value by 5.',
+    value: 100,
+    type: 'Consumable',
+    effect: function () {
+      const storageIndex = 'cryptodollar_value_btc';
+      const currentValue = parseFloat(localStorage.getItem(storageIndex));
+      const newValue = parseFloat(currentValue + 5);
+      localStorage.setItem(storageIndex, newValue);
+      const toast = useToast();
+      toast.success(`🚀 Bitcoin going to the moon ! 🚀`);
+    }, // Equipment generally won't have an "effect" function
+  },
     {
       index: 'iron-helmet', // Manually slugified name
       name: 'Iron Helmet',
@@ -68,3 +84,13 @@ export const items = [
     },
   ];
   
+
+  export function initInventory() {
+    let playerInventory = JSON.parse(localStorage.getItem('playerInventory')) || [];
+    const isInventoryUnlocked = localStorage.getItem('goal_shopping_on_silk_road_unlocked')
+    if (playerInventory.length === 0 && !isInventoryUnlocked) {
+      const lootItem = items.find(item => item.index === 'good_new_btc');
+      playerInventory.push(lootItem);
+      localStorage.setItem('playerInventory', JSON.stringify(playerInventory));
+    }
+  }

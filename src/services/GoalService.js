@@ -62,6 +62,15 @@ export const goals = [
     ],
     reward: 'Unlock Dogecoin mine !'
   },
+  {
+    index: 'shopping_on_silk_road',
+    name: 'Do some shopping on Silk Road',
+    description: 'Make your mama proud',
+    costs: [
+      { token: 'btc', value: 500 },
+    ],
+    reward: 'Unlock The inventory !'
+  },
 
 
 

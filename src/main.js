@@ -7,6 +7,7 @@ import 'vue-toastification/dist/index.css';
 import { startAchievementTracking } from './services/AchievementService';
 import { initCryptodollarValues } from './services/TokenService';
 import { startStakingUpdates } from './services/StakingService';
+import { initInventory } from './services/ItemService';
 
 createApp(App).use(router).use(Toast, {
   position: POSITION.TOP_RIGHT,
@@ -15,4 +16,5 @@ createApp(App).use(router).use(Toast, {
 
 startAchievementTracking();
 initCryptodollarValues();
+initInventory();
 startStakingUpdates();

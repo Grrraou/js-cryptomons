@@ -30,8 +30,11 @@
           <li>
             <router-link to="/battle">⚔️ Battle</router-link>
           </li>
-          <li>
+          <li v-if="isInventoryUnlocked">
             <router-link to="/inventory">📦 Inventory</router-link>
+          </li>
+          <li v-else>
+            <router-link to="/inventory" class="forbidden-link">🚫 Inventory</router-link>
           </li>
           <li v-if="isSwapUnlocked">
             <router-link to="/swap">🔄 Swap</router-link>
@@ -68,6 +71,7 @@ export default {
       totalAssetsValue: 0,
       isStakingUnlocked: false,
       isVaultUnlocked: false,
+      isInventoryUnlocked: false,
       isSwapUnlocked: false, // Track the vault goal unlock status
       intervalId: null, // Track the interval ID to clear it later
     };
@@ -90,6 +94,10 @@ export default {
       // Check if the vault goal is unlocked in localStorage
       this.isVaultUnlocked = localStorage.getItem('goal_grandma_bitcoin_unlocked') === 'true';
     },
+    checkInventoryUnlocked() {
+      // Check if the vault goal is unlocked in localStorage
+      this.isInventoryUnlocked = localStorage.getItem('goal_shopping_on_silk_road_unlocked') === 'true';
+    },
     checkSwapUnlocked() {
       // Check if the vault goal is unlocked in localStorage
       this.isSwapUnlocked = localStorage.getItem('goal_centralize_decentralization_unlocked') === 'true';
@@ -101,6 +109,9 @@ export default {
       if (event.key === 'goal_grandma_bitcoin_unlocked') {
         this.checkVaultUnlocked();
       }
+      if (event.key === 'goal_shopping_on_silk_road_unlocked') {
+        this.checkInventoryUnlocked();
+      }
       if (event.key === 'goal_centralize_decentralization_unlocked') {
         this.checkSwapUnlocked();
       }
@@ -111,6 +122,7 @@ export default {
         this.updateTotalAssetsValue();
         this.checkStakingUnlocked();
         this.checkVaultUnlocked();
+        this.checkInventoryUnlocked();
         this.checkSwapUnlocked();
       }, 1000);
     }
@@ -119,6 +131,7 @@ export default {
     // Initial check when the component is mounted
     this.checkStakingUnlocked();
     this.checkVaultUnlocked();
+    this.checkInventoryUnlocked();
     this.checkSwapUnlocked();
 
     // Listen for changes in localStorage from other tabs

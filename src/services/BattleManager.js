@@ -85,15 +85,12 @@ class BattleManager {
         // get Head bonus
         const playerEquipement = JSON.parse(localStorage.getItem('playerEquipement')) || {};
         const head = playerEquipement.Head;
-        console.log('before:' + ratio);
         if (head) {
           const headObject = items.find(item => item.index === head.index)
           ratio = ratio + (ratio * headObject.effect());
-          console.log('after:' + ratio);
         }
 
         if (Math.random() <= ratio) {
-          console.log('yee');
           // Retrieve the player's inventory from localStorage
           let playerInventory = JSON.parse(localStorage.getItem('playerInventory')) || [];
 

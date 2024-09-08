@@ -18,6 +18,7 @@ export const tokens = [
   { index: 'bnb', name: 'Binance Coin', cryptodollar: 0.2 },//2017
   { index: 'link', name: 'Chainlink', cryptodollar: 0.2 },//2017
   { index: 'xtz', name: 'Tezos', cryptodollar: 0.2 },//2018
+  { index: 'dot', name: 'Polkadot', cryptodollar: 0.2 },//2020
  /*  { index: 'sol', name: 'Solana', cryptodollar: 1 },
   
   

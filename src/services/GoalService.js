@@ -202,6 +202,16 @@ export const goals = [
     ],
     reward: 'Unlock Tezosomon'
   },
+  {
+    index: 'crowdsource_parachain',
+    name: 'Crowdsource a Parachain',
+    description: 'It looks like chinese but a quick google might helps.',
+    costs: [
+      { token: 'cryptodollar', value: 500000 },
+      { token: 'dot', value: 500000 },
+    ],
+    reward: 'Unlock Polkadotmon'
+  },
 
 
 

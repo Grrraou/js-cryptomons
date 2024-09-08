@@ -173,6 +173,15 @@ export const goals = [
     ],
     reward: 'Unlock the Battlefield'
   },
+  {
+    index: 'buy_uwucrew_and_digidaigaku',
+    name: 'Buy some uwucrew and DigiDaigaku',
+    description: 'Kawai desu neeee',
+    costs: [
+      { token: 'cryptodollar', value: 10000000 },
+    ],
+    reward: 'Unlock the Kraken\'s Abyss'
+  },
 
 
 

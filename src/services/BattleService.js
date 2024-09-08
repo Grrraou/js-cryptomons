@@ -1,9 +1,9 @@
 // services/BattleService.js
 export function getBattleData() {
     return [
-        { id: 1, name: 'Kraken\'s Abyss', description: 'A deep and treacherous battlefield where the strongest survive.' },
-        { id: 2, name: 'Binance Barricade', description: 'A fortified position with endless waves of enemies.' },
-        { id: 3, name: 'Uniswap Underground', description: 'A labyrinthine network of tunnels filled with hidden dangers.' },
+        { index: 'binance_barricade', name: 'Binance Barricade', requirement: null },
+        { index: 'kraken_abyss', name: 'Kraken\'s Abyss', requirement: 'buy_uwucrew_and_digidaigaku' },
+      /*  { id: 3, name: 'Uniswap Underground', description: 'A labyrinthine network of tunnels filled with hidden dangers.' },
         { id: 4, name: 'Gemini Gorge', description: 'A narrow pass where only the cleverest can outmaneuver their foes.' },
         { id: 5, name: 'Bybit Blitz', description: 'A fast-paced battleground where speed and agility are key.' },
         { id: 6, name: 'SushiSwap Slaughterhouse', description: 'A chaotic arena where every move could be your last.' },
@@ -20,7 +20,7 @@ export function getBattleData() {
         { id: 17, name: 'Arbitrum Ambush', description: 'A place of sudden attacks and fierce skirmishes.' },
         { id: 18, name: 'Optimism Outpost', description: 'An outpost where hope and strategy combine to win the day.' },
         { id: 19, name: 'Yearn Yard', description: 'A yard filled with traps and surprises where the clever prevail.' },
-        { id: 20, name: 'Gnosis Gorge', description: 'A narrow gorge where knowledge and cunning are the keys to victory.' }
+        { id: 20, name: 'Gnosis Gorge', description: 'A narrow gorge where knowledge and cunning are the keys to victory.' } */
     ];
   }
   

@@ -3,7 +3,7 @@
     <div class="battle-page game-container">
         
       <div class="battlefields-container">
-        <div v-for="(battle, index) in battleData" :key="battle.id" class="battlefield-block" :style="getBackgroundStyle(index)">
+        <div v-for="(battle, index) in battleData" :key="battle.index" class="battlefield-block" :style="getBackgroundStyle(index)">
           <BattleField
             :battle="battle"
             :currentCreatures="currentCreatures[index]"
@@ -14,6 +14,17 @@
             :battleIndex="index"
           />
         </div>
+     <!--    <div v-for="battle in filteredBattlefields" :key="area.index" :style="getBackgroundStyle(index)">
+          <BattleField
+            :battle="battle"
+            :currentCreatures="currentCreatures[index]"
+            :heroes="getHeroesForBattle(index)"
+            @creature-click="damageCreature"
+            @hero-dropped="assignHeroToBattle"
+            @remove-hero="removeHeroFromBattle"
+            :battleIndex="index"
+          />
+        </div> -->
       </div>
       <HeroList
         class="hero-list"
@@ -43,12 +54,20 @@
       };
     },
     computed: {
-      availableHeroes() {
+    availableHeroes() {
         return this.heroes.filter(hero => hero.assignedArea === null);
       },
     },
     created() {
-      this.battleData = getBattleData();
+      this.battleData = getBattleData().filter(battlefield => {
+        // Check if the mine has a requirement
+        if (battlefield.requirement) {
+          // Check if the required goal is unlocked in localStorage
+          return localStorage.getItem(`goal_${battlefield.requirement}_unlocked`) === 'true';
+        }
+        // If no requirement, always show the area
+        return true;
+      });
       BattleManager.init(this.battleData, this.loadCreaturesFromStorage());
       this.currentCreatures = BattleManager.currentCreatures;
     },

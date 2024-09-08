@@ -55,7 +55,7 @@
         required: true,
       },
       battleIndex: { 
-        type: Number, 
+        type: String, 
         required: true 
       },
     },

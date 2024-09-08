@@ -16,6 +16,7 @@ export const tokens = [
   { index: 'ada', name: 'Cardano', cryptodollar: 0.2 },
   { index: 'trx', name: 'Tron', cryptodollar: 0.2 },
   { index: 'bnb', name: 'Binance Coin', cryptodollar: 0.2 },
+  { index: 'link', name: 'Chainlink', cryptodollar: 0.2 },
  /*  { index: 'sol', name: 'Solana', cryptodollar: 1 },
   
   

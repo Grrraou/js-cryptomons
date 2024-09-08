@@ -182,6 +182,15 @@ export const goals = [
     ],
     reward: 'Unlock the Kraken\'s Abyss'
   },
+  {
+    index: 'consult_the_oracles',
+    name: 'Consult the oracles',
+    description: 'Ask them for lottery numbers, might work this time',
+    costs: [
+      { token: 'cryptodollar', value: 50000000 },
+    ],
+    reward: 'Unlock Chainlinkomon'
+  },
 
 
 

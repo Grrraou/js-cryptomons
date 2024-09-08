@@ -2,7 +2,6 @@
   <div class="clicker-area" :style="backgroundStyle" @dragover.prevent @drop="handleDrop">
     <!-- Title and Logo Section -->
     <div class="title-section">
-      <h2>{{ areaName }} ({{ token }})</h2>
       <img :src="getLogoPath(areaIndex)" alt="Bitcoin Mine Logo" class="logo-image" />
       <div class="logs"></div>
     </div>
@@ -196,7 +195,8 @@
         const textElement = document.createElement('div');
 
         const imgElement = document.createElement('img');
-        imgElement.src = require(`@/assets/tokens/${token}.png`); // Replace with the actual image path
+        imgElement.src = this.getTokenIcon(token); 
+  /*       imgElement.src = require(`@/assets/tokens/${token}.png`); // Replace with the actual image path */
         imgElement.style.width = '16px'; // Set the image size
         imgElement.style.height = '16px'; 
         imgElement.style.marginLeft = '8px';

@@ -8,6 +8,38 @@ export const goals = [
     ],
     reward: 'Unlock the Vault and gain access to all your cryptos!'
   },
+  {
+    index: 'decentralize_dns',
+    name: 'Decentralize the Domain Name System',
+    description: 'Everything must be decentralized, start with DNS.',
+    costs: [
+      { token: 'btc', value: 5 },
+    ],
+    reward: 'Unlock the Namecoin mine'
+  },
+
+
+
+
+// Stupid goals
+  {
+    index: 'save_harambe',
+    name: 'Buy a pizza with bitcoins',
+    description: 'A nice pizza, without ananas and just for 10 000 BTC !',
+    costs: [
+      { token: 'btc', value: 10000 },
+    ],
+    reward: 'A pizza'
+  },
+  {
+    index: 'save_harambe',
+    name: 'Save Harambe',
+    description: 'Save the world from collapse by saving Harembe.',
+    costs: [
+      { token: 'cryptodollar', value: 400000000 },
+    ],
+    reward: 'Ooooh ooohh AAAhh AH!'
+  },
   
  /*    {
       index: 'fix_inflation',
@@ -16,15 +48,6 @@ export const goals = [
       costs: [
         { token: 'btc', value: 1000 },
         { token: 'cryptodollar', value: 500 },
-      ],
-    },
-    {
-      index: 'save_harambe',
-      name: 'Save Harambe',
-      description: 'Send Harambe’s spirit to the blockchain.',
-      costs: [
-        { token: 'btc', value: 800 },
-        { token: 'cryptodollar', value: 400 },
       ],
     },
     {

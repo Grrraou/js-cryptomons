@@ -1,57 +1,75 @@
 <template>
-    <div class="side-menu">
-      <div class="side-menu-container">
-        <div class="logo-container">
-          <img src="@/assets/mainLogo.png" alt="Cryptomons Logo" class="logo" />
-        </div>
-        <nav>
-          <ul>
-            <li>
-              <router-link to="/">🏠 Home</router-link>
-            </li>
-            <li>
-              <router-link to="/mines">⛏️ Mines</router-link>
-            </li>
-            <li>
-              <router-link to="/staking">🔒 Staking</router-link>
-            </li>
-            <li>
-              <router-link to="/vault">🏛️ Vault</router-link>
-            </li>
-            <li>
-              <router-link to="/battle">⚔️ Battle</router-link>
-            </li>
-            <li>
-              <router-link to="/inventory">📦 Inventory</router-link>
-            </li>
-            <li>
-              <router-link to="/swap">🔄 Swap</router-link>
-            </li>
-            <li>
-              <router-link to="/goals">🎯 Goals</router-link>
-            </li>
-            <li>
-              <router-link to="/achievements">🏆 Achievements</router-link>
-            </li>
-            <li>
-              <router-link to="/stats">📊 Stats</router-link>
-            </li>
-            <li>
-              <router-link to="/settings">⚙️ Settings</router-link>
-            </li>
-          </ul>
-        </nav>
+  <div class="side-menu">
+    <div class="side-menu-container">
+      <div class="logo-container">
+        <img src="@/assets/mainLogo.png" alt="Cryptomons Logo" class="logo" />
       </div>
+      <nav>
+        <ul>
+          <li>
+            <router-link to="/">🏠 Home</router-link>
+          </li>
+          <li>
+            <router-link to="/mines">⛏️ Mines</router-link>
+          </li>
+          <li>
+            <router-link to="/staking">🔒 Staking</router-link>
+          </li>
+          <li v-if="isVaultUnlocked">
+            <router-link to="/vault">🏛️ Vault</router-link>
+          </li>
+          <li v-else>
+            <router-link to="/vault" class="forbidden-link">🚫🚫🚫 Vault</router-link>
+          </li>
+          <li>
+            <router-link to="/battle">⚔️ Battle</router-link>
+          </li>
+          <li>
+            <router-link to="/inventory">📦 Inventory</router-link>
+          </li>
+          <li>
+            <router-link to="/swap">🔄 Swap</router-link>
+          </li>
+          <li>
+            <router-link to="/goals">🎯 Goals</router-link>
+          </li>
+          <li>
+            <router-link to="/achievements">🏆 Achievements</router-link>
+          </li>
+          <li>
+            <router-link to="/stats">📊 Stats</router-link>
+          </li>
+          <li>
+            <router-link to="/settings">⚙️ Settings</router-link>
+          </li>
+        </ul>
+      </nav>
     </div>
-  </template>
-  
-  <script>
-  export default {
-    name: 'SideMenu',
-  };
-  </script>
-  
-  <style scoped>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'SideMenu',
+  data() {
+    return {
+      isVaultUnlocked: false, // Track the vault goal unlock status
+    };
+  },
+  methods: {
+    checkVaultUnlocked() {
+      // Check if the vault goal is unlocked in localStorage
+      this.isVaultUnlocked = localStorage.getItem('goal_grandma_bitcoin_unlocked') === 'true';
+    },
+  },
+  mounted() {
+    // Run the check when the component is mounted
+    this.checkVaultUnlocked();
+  },
+};
+</script>
+
+<style scoped>
 .logo-container {
   display: flex;
   justify-content: center;
@@ -76,37 +94,42 @@
   transform: scale(1.1);
 }
 
-  .side-menu {
-    width: 160px;
-    padding: 20px;
-  }
+.side-menu {
+  width: 160px;
+  padding: 20px;
+}
 
-  .side-menu-container {
-    position: fixed;
-    height: 100vh;
-  }
-  
-  nav ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  
-  nav ul li {
-    margin: 10px 0;
-  }
-  
-  nav ul li a {
-    text-decoration: none;
-    color: #333;
-    font-weight: bold;
-  }
+.side-menu-container {
+  position: fixed;
+  height: 100vh;
+}
 
-  nav ul li a:hover {
-    font-size: 1.2em;
-  }
-  
-  nav ul li a.router-link-active {
-    color: #42b983;
-  }
-  </style>
-  
+nav ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+nav ul li {
+  margin: 10px 0;
+}
+
+nav ul li a {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+}
+
+nav ul li a:hover {
+  font-size: 1.2em;
+}
+
+nav ul li a.router-link-active {
+  color: #42b983;
+}
+
+.forbidden-link {
+  color: red;
+  font-weight: bold;
+  cursor: not-allowed;
+}
+</style>

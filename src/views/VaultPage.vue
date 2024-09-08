@@ -5,7 +5,7 @@
     <div class="vault-list">
       <!-- Use filteredTokens instead of tokens -->
       <div v-for="token in filteredTokens" :key="token.index" class="vault-item">
-        <h2><img class="tokenSymbol" :src="require(`@/assets/tokens/${token.index}.png`)"> {{ token.name }}</h2>
+        <h2><img class="tokenSymbol" :src="getTokenIcon(token.index)"> {{ token.name }}</h2>
         <p><strong>Current Amount:</strong> {{ getTokenValue(token.index) }}</p>
         <p><strong>Total Obtained:</strong> {{ getTotalTokenValue(token.index) }}</p>
         <p><strong>Price per {{ token.name }}:</strong> {{ getCryptodollarValue(token.index) }} Cryptocredits</p>
@@ -32,6 +32,13 @@ export default {
     },
   },
   methods: {
+    getTokenIcon(token) {
+        try {
+          return require(`@/assets/tokens/${token}.png`);
+        } catch (error) {
+          return require('@/assets/tokens/default.png');
+        }
+      },
     getTokenValue(index) {
       const value = parseFloat(localStorage.getItem(`token_${index}`));
       return !isNaN(value) ? value.toFixed(6) : '0.000000';

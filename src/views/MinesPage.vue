@@ -6,7 +6,7 @@
         <h1 class="page-title">Mines</h1>
 
         <div class="areas-grid">
-          <div class="area-wrapper" v-for="area in areas" :key="area.index">
+          <div class="area-wrapper" v-for="area in filteredAreas" :key="area.index">
             <MineArea
               ref="mineArea"
               :areaIndex="area.index"
@@ -23,7 +23,6 @@
           </div>
         </div>
       </div>
-
 
       <!-- Right side: Hero List -->
       <HeroList class="hero-list" :heroes="heroes" @remove-hero="removeHero" />
@@ -50,8 +49,16 @@ export default {
     };
   },
   computed: {
-    rowCount() {
-      return Math.ceil(this.areaCount / this.areasPerRow); // Calculate the number of rows based on the areas
+    filteredAreas() {
+      return this.areas.filter(area => {
+        // Check if the mine has a requirement
+        if (area.requirement) {
+          // Check if the required goal is unlocked in localStorage
+          return localStorage.getItem(`goal_${area.requirement}_unlocked`) === 'true';
+        }
+        // If no requirement, always show the area
+        return true;
+      });
     },
   },
   methods: {
@@ -98,7 +105,6 @@ export default {
 .game-container {
   display: flex;
 }
-
 .page-title {
   position: relative;
   font-size: 28px; /* Slightly larger font size for emphasis */

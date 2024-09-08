@@ -10,6 +10,7 @@ import AchievementsPage from '@/views/AchievementsPage.vue';
 import StatsPage from '@/views/StatsPage.vue';
 import SettingsPage from '@/views/SettingsPage.vue';
 import InventoryPage from '@/views/InventoryPage.vue';
+import GoalsPage from '@/views/GoalsPage.vue';
 
 const routes = [
   { path: '/', name: 'Home', component: HomePage },
@@ -19,6 +20,7 @@ const routes = [
   { path: '/battle', name: 'Battle', component: BattlePage },
   { path: '/inventory', name: 'Inventory', component: InventoryPage },
   { path: '/swap', name: 'Swap', component: SwapPage },
+  { path: '/goals', name: 'Goals', component: GoalsPage },
   { path: '/achievements', name: 'Achievements', component: AchievementsPage },
   { path: '/stats', name: 'Stats', component: StatsPage },
   { path: '/settings', name: 'Settings', component: SettingsPage },

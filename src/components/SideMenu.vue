@@ -28,6 +28,9 @@
               <router-link to="/swap">🔄 Swap</router-link>
             </li>
             <li>
+              <router-link to="/goals">🎯 Goals</router-link>
+            </li>
+            <li>
               <router-link to="/achievements">🏆 Achievements</router-link>
             </li>
             <li>

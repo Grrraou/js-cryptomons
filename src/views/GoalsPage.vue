@@ -3,7 +3,7 @@
 <template>
     <div class="goals-page">
       <h1>Goals</h1>
-  
+      <p>It is recommanded to unlock them in order but i don't really care, you're free !</p>
       <div v-for="goal in goals" :key="goal.index">
         <GoalBox :goal="goal" />
       </div>

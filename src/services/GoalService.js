@@ -17,6 +17,15 @@ export const goals = [
     ],
     reward: 'Unlock the Namecoin mine'
   },
+  {
+    index: 'gold_deserve_silver',
+    name: 'Gold deserve Silver',
+    description: 'If you have gold, why not having silver too ?',
+    costs: [
+      { token: 'nmc', value: 20 },
+    ],
+    reward: 'Unlock the Litecoin mine'
+  },
 
 
 

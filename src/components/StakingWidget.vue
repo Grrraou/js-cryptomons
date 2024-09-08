@@ -1,10 +1,10 @@
 <template>
   <div class="staking-widget" :style="backgroundStyle">
     <h3>{{ staking.name }} Staking</h3>
-    <p><strong>Staked Amount:</strong> {{ stakedAmount }} {{ staking.token.toUpperCase() }}</p>
-    <p><strong>Stored Amount:</strong> {{ storedAmount }} {{ staking.token.toUpperCase() }}</p>
+    <p><strong>Staked Amount:</strong> {{ stakedAmount }} <img :src="getTokenIcon(staking.token)" class="token-icon" :title="staking.token"></p>
+    <p><strong>Stored Amount:</strong> {{ storedAmount }} <img :src="getTokenIcon(staking.token)" class="token-icon" :title="staking.token"></p>
     <p><strong>APR:</strong> {{ staking.apr * 100 }}%</p>
-    <p><strong>Gain per Round:</strong> {{ gainPerRound.toFixed(6) }} {{ staking.token.toUpperCase() }}</p>
+    <p><strong>Gain per Round:</strong> {{ gainPerRound.toFixed(6) }} <img :src="getTokenIcon(staking.token)" class="token-icon" :title="staking.token"></p>
     <input type="number" v-model.number="stakeInput" placeholder="Enter amount to stake" />
     <div class="convenience-buttons">
       <button @click="setStakePercentage(25)">Stake 25%</button>
@@ -12,7 +12,7 @@
       <button @click="setStakePercentage(75)">Stake 75%</button>
       <button @click="setStakePercentage(100)">Stake 100%</button>
     </div>
-    <button @click="stakeTokens">Stake</button>
+    <button @click="stakeTokens" class="staking-button">Stake</button>
   </div>
 </template>
 
@@ -63,6 +63,13 @@ export default {
     },
   },
   methods: {
+    getTokenIcon(token) {
+      try {
+        return require(`@/assets/tokens/${token}.png`);
+      } catch (error) {
+        return require('@/assets/tokens/default.png');
+      }
+    },
     loadAmounts() {
       this.stakedAmount = parseFloat(localStorage.getItem(this.stakedKey)) || 0;
       this.storedAmount = parseFloat(localStorage.getItem(this.storedKey)) || 0;
@@ -112,6 +119,30 @@ export default {
 </script>
 
 <style scoped>
+  .staking-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 10px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #ffffff;
+    background-color: #ffa500; /* Orange background */
+    border: 2px solid #444;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  .staking-button:hover {
+    background-color: #ff8c00; /* Darker orange on hover */
+    transform: translateY(-2px); /* Slight lift on hover */
+  }
+.token-icon {
+    width: 16px;
+    height: auto;
+    transition: transform 0.3s ease;
+  }
 .staking-widget {
   margin: 10px auto;
   padding: 20px;

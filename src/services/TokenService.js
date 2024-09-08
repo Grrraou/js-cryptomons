@@ -4,10 +4,10 @@ export const tokens = [
   { index: 'btc', name: 'Bitcoin', cryptodollar: 10 },
   { index: 'nmc', name: 'Namecoin', cryptodollar: 5 },
   { index: 'eth', name: 'Ethereum', cryptodollar: 2 },
-  { index: 'sol', name: 'Solana', cryptodollar: 1 },
+ /*  { index: 'sol', name: 'Solana', cryptodollar: 1 },
   { index: 'xmr', name: 'Monero', cryptodollar: 0.5 },
   { index: 'doge', name: 'Dogecoin', cryptodollar: 0.2 },
-  { index: 'ore', name: 'Ore', cryptodollar: 0.1 },
+  { index: 'ore', name: 'Ore', cryptodollar: 0.1 }, */
 ];
 
 export function initCryptodollarValues() {

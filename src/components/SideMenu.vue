@@ -19,7 +19,7 @@
             <router-link to="/vault">🏛️ Vault</router-link>
           </li>
           <li v-else>
-            <router-link to="/vault" class="forbidden-link">🚫🚫🚫 Vault</router-link>
+            <router-link to="/vault" class="forbidden-link">🚫 Vault</router-link>
           </li>
           <li>
             <router-link to="/battle">⚔️ Battle</router-link>

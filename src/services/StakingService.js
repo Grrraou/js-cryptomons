@@ -1,6 +1,6 @@
 export const stakings = [
   { index: 'ethereum_staking', name: 'Ethereum', token: 'eth', apr: '0.002' },
-  { index: 'solana_staking', name: 'Solana', token: 'sol', apr: '0.001' },
+ /*  { index: 'solana_staking', name: 'Solana', token: 'sol', apr: '0.001' }, */
 ];
 
 const intervals = {};

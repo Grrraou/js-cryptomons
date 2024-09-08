@@ -242,6 +242,16 @@ export const goals = [
     ],
     reward: 'Unlock Shibainumon'
   },
+  {
+    index: 'fill_a_pool_with_cash_money',
+    name: 'Fill a pool with cash money',
+    description: 'Save water, swim in cash.',
+    costs: [
+      { token: 'cryptodollar', value: 500000 },
+      { token: 'uni', value: 500000 },
+    ],
+    reward: 'Unlock the Uniswap Underground'
+  },
 
 
 

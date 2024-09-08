@@ -3,8 +3,8 @@ export function getBattleData() {
     return [
         { index: 'binance_barricade', name: 'Binance Barricade', requirement: null },
         { index: 'kraken_abyss', name: 'Kraken\'s Abyss', requirement: 'buy_uwucrew_and_digidaigaku' },
-      /*  { id: 3, name: 'Uniswap Underground', description: 'A labyrinthine network of tunnels filled with hidden dangers.' },
-        { id: 4, name: 'Gemini Gorge', description: 'A narrow pass where only the cleverest can outmaneuver their foes.' },
+        { index: 'uniswap_underground', name: 'Uniswap Underground', requirement: 'fill_a_pool_with_cash_money' },
+      /*  { id: 4, name: 'Gemini Gorge', description: 'A narrow pass where only the cleverest can outmaneuver their foes.' },
         { id: 5, name: 'Bybit Blitz', description: 'A fast-paced battleground where speed and agility are key.' },
         { id: 6, name: 'SushiSwap Slaughterhouse', description: 'A chaotic arena where every move could be your last.' },
         { id: 7, name: 'KuCoin Citadel', description: 'A heavily defended fortress with layers of traps and defenses.' },

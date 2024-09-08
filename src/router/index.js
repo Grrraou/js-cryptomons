@@ -15,7 +15,20 @@ import GoalsPage from '@/views/GoalsPage.vue';
 const routes = [
   { path: '/', name: 'Home', component: HomePage },
   { path: '/mines', name: 'Mines', component: MinesPage },
-  { path: '/staking', name: 'Staking', component: StakingPage },
+  { 
+    path: '/staking', 
+    name: 'Staking', 
+    component: StakingPage,
+    beforeEnter: (to, from, next) => {
+      const isGoalUnlocked = localStorage.getItem('goal_discover_proof_of_stake_unlocked') === 'true';
+      if (isGoalUnlocked) {
+        next(); 
+      } else {
+        alert('You need to discover the proof of stake before accessing the Staking.');
+        next('/goals'); // Redirect to Goals page if the goal is not unlocked
+      }
+    },
+  },
   { 
     path: '/vault', 
     name: 'Vault', 

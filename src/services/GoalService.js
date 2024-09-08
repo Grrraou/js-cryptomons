@@ -35,6 +35,15 @@ export const goals = [
     ],
     reward: 'Unlock Swap'
   },
+  {
+    index: 'discover_proof_of_stake',
+    name: 'Discover the Proof of stake',
+    description: 'How dare you mining crypto when you can just stake !?',
+    costs: [
+      { token: 'xrp', value: 100 },
+    ],
+    reward: 'Unlock Staking'
+  },
 
 
 

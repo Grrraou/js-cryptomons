@@ -12,8 +12,11 @@
           <li>
             <router-link to="/mines">⛏️ Mines</router-link>
           </li>
-          <li>
+          <li v-if="isStakingUnlocked">
             <router-link to="/staking">🔒 Staking</router-link>
+          </li>
+          <li v-else>
+            <router-link to="/staking" class="forbidden-link">🚫 Staking</router-link>
           </li>
           <li v-if="isVaultUnlocked">
             <router-link to="/vault">🏛️ Vault</router-link>
@@ -56,12 +59,17 @@ export default {
   name: 'SideMenu',
   data() {
     return {
+      isStakingUnlocked: false,
       isVaultUnlocked: false,
       isSwapUnlocked: false, // Track the vault goal unlock status
       intervalId: null, // Track the interval ID to clear it later
     };
   },
   methods: {
+    checkStakingUnlocked() {
+      // Check if the vault goal is unlocked in localStorage
+      this.isStakingUnlocked = localStorage.getItem('goal_discover_proof_of_stake_unlocked') === 'true';
+    },
     checkVaultUnlocked() {
       // Check if the vault goal is unlocked in localStorage
       this.isVaultUnlocked = localStorage.getItem('goal_grandma_bitcoin_unlocked') === 'true';
@@ -71,6 +79,9 @@ export default {
       this.isSwapUnlocked = localStorage.getItem('goal_centralize_decentralization_unlocked') === 'true';
     },
     handleStorageChange(event) {
+      if (event.key === 'goal_discover_proof_of_stake_unlocked') {
+        this.checkStakingUnlocked();
+      }
       if (event.key === 'goal_grandma_bitcoin_unlocked') {
         this.checkVaultUnlocked();
       }
@@ -81,6 +92,7 @@ export default {
     startPolling() {
       // Poll for changes every second to capture changes made in the same tab
       this.intervalId = setInterval(() => {
+        this.checkStakingUnlocked();
         this.checkVaultUnlocked();
         this.checkSwapUnlocked();
       }, 1000);
@@ -88,6 +100,7 @@ export default {
   },
   mounted() {
     // Initial check when the component is mounted
+    this.checkStakingUnlocked();
     this.checkVaultUnlocked();
     this.checkSwapUnlocked();
 

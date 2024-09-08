@@ -5,6 +5,7 @@ export const tokens = [
   { index: 'nmc', name: 'Namecoin', cryptodollar: 5 },
   { index: 'ltc', name: 'Litecoin', cryptodollar: 5 },
   { index: 'xrp', name: 'Ripple', cryptodollar: 1 },
+  { index: 'ppc', name: 'Peercoin', cryptodollar: 1 },
   { index: 'eth', name: 'Ethereum', cryptodollar: 2 },
  /*  { index: 'sol', name: 'Solana', cryptodollar: 1 },
   { index: 'xmr', name: 'Monero', cryptodollar: 0.5 },

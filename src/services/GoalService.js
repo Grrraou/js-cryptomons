@@ -144,7 +144,7 @@ export const goals = [
     costs: [
       { token: 'cryptodollar', value: 250000 },
     ],
-    reward: 'Unlock Bitcoin EOS staking'
+    reward: 'Unlock EOS staking'
   },
   {
     index: 'read_ada_lovelace_wikipedia_page',
@@ -153,7 +153,16 @@ export const goals = [
     costs: [
       { token: 'cryptodollar', value: 550000 },
     ],
-    reward: 'Unlock Bitcoin Cardano staking'
+    reward: 'Unlock Cardano staking'
+  },
+  {
+    index: 'have_lunch_with_warren_buffet',
+    name: 'Have a lunch with Warren Buffet',
+    description: 'Ask him for lottery numbers',
+    costs: [
+      { token: 'cryptodollar', value: 4600000 },
+    ],
+    reward: 'Unlock Tron staking'
   },
 
 

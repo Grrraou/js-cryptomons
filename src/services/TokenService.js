@@ -19,10 +19,10 @@ export const tokens = [
   { index: 'link', name: 'Chainlink', cryptodollar: 0.2 },//2017
   { index: 'xtz', name: 'Tezos', cryptodollar: 0.2 },//2018
   { index: 'dot', name: 'Polkadot', cryptodollar: 0.2 },//2020
- /*  { index: 'sol', name: 'Solana', cryptodollar: 1 },
+  { index: 'sol', name: 'Solana', cryptodollar: 1 },//2020
   
   
-  { index: 'ore', name: 'Ore', cryptodollar: 0.1 }, */
+  //{ index: 'ore', name: 'Ore', cryptodollar: 0.1 },
 ];
 
 export function initCryptodollarValues() {

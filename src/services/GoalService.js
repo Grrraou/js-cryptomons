@@ -212,6 +212,26 @@ export const goals = [
     ],
     reward: 'Unlock Polkadotmon'
   },
+  {
+    index: 'ok_boomer',
+    name: 'OK boomer !',
+    description: 'The future is now, old man',
+    costs: [
+      { token: 'cryptodollar', value: 500000 },
+      { token: 'sol', value: 500000 },
+    ],
+    reward: 'Unlock Solana Staking'
+  },
+  {
+    index: 'beat_visa_transaction_speed',
+    name: 'Beat VISA transaction speed',
+    description: 'VISA is so over-rated',
+    costs: [
+      { token: 'cryptodollar', value: 500000 },
+      { token: 'sol', value: 500000 },
+    ],
+    reward: 'Unlock Solanamon'
+  },
 
 
 

@@ -6,6 +6,5 @@ export const heroes = [
   { index: 'chainlinkomon', name: 'Chainlinkomon', requirement: 'consult_the_oracles', assignedArea: null },
   { index: 'tezosomon', name: 'Tezosomon', requirement: 'harass_your_friends_about_nfts', assignedArea: null },
   { index: 'polkadotmon', name: 'Polkadotmon', requirement: 'crowdsource_parachain', assignedArea: null },
- /* { index: 'solanamon', name: 'Solanamon', requirement: 'halving_bitcoin', assignedArea: null },
- */
+  { index: 'solanamon', name: 'Solanamon', requirement: 'beat_visa_transaction_speed', assignedArea: null },
 ];

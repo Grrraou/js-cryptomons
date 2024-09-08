@@ -107,7 +107,17 @@ export const goals = [
       { token: 'cryptodollar', value: 35000 },
       { token: 'ppc', value: 820 },
     ],
-    reward: 'Unlock Monero mine'
+    reward: 'Unlock Ethereum mine'
+  },
+  {
+    index: 'rejected_by_bitcoin_community',
+    name: 'Be rejected by Bitcoin community',
+    description: 'Your idea suck, go do it solo !',
+    costs: [
+      { token: 'cryptodollar', value: 35000 },
+      { token: 'eth', value: 450 },
+    ],
+    reward: 'Unlock Etheremon'
   },
   {
     index: 'zero_knowledge_master',
@@ -126,6 +136,15 @@ export const goals = [
       { token: 'cryptodollar', value: 150000 },
     ],
     reward: 'Unlock Bitcoin Cash mine'
+  },
+  {
+    index: 'participate_an_ico',
+    name: 'Participate an ICO',
+    description: 'Shut up and take my money !',
+    costs: [
+      { token: 'cryptodollar', value: 250000 },
+    ],
+    reward: 'Unlock Bitcoin EOS staking'
   },
 
 

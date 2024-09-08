@@ -8,7 +8,7 @@
         <h2><img class="tokenSymbol" :src="getTokenIcon(token.index)"> {{ token.name }}</h2>
         <p><strong>Current Amount:</strong> {{ getTokenValue(token.index) }}</p>
         <p><strong>Total Obtained:</strong> {{ getTotalTokenValue(token.index) }}</p>
-        <p><strong>Price per {{ token.name }}:</strong> {{ getCryptodollarValue(token.index) }} Cryptocredits</p>
+        <p><strong>Price per {{ token.name }}:</strong> {{ getCryptodollarValue(token.index) }} <img class="token-icon" src="@/assets/tokens/cryptodollar.png"></p>
         <p><strong>Total Value in Cryptocredits:</strong> {{ getTotalCryptodollarValue(token.index) }}</p>
       </div>
     </div>
@@ -85,6 +85,11 @@ export default {
 </script>
 
 <style scoped>
+.token-icon {
+    width: 16px;
+    height: auto;
+    transition: transform 0.3s ease;
+  }
 .page-title {
   position: relative;
   font-size: 28px;

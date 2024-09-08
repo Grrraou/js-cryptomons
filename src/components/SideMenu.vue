@@ -4,6 +4,9 @@
       <div class="logo-container">
         <img src="@/assets/mainLogo.png" alt="Cryptomons Logo" class="logo" />
       </div>
+      <div class="totalAssets">
+        {{ totalAssetsValue }} <img class="token-icon" src="@/assets/tokens/cryptodollar.png">
+      </div>
       <nav>
         <ul>
           <li>
@@ -55,10 +58,14 @@
 </template>
 
 <script>
+import { tokens } from '@/services/TokenService';
+
 export default {
   name: 'SideMenu',
   data() {
     return {
+      tokens,
+      totalAssetsValue: 0,
       isStakingUnlocked: false,
       isVaultUnlocked: false,
       isSwapUnlocked: false, // Track the vault goal unlock status
@@ -66,6 +73,15 @@ export default {
     };
   },
   methods: {
+    updateTotalAssetsValue() {
+      let total = 0;
+      this.tokens.forEach(token => {
+        const tokenAmount = parseFloat(localStorage.getItem(`token_${token.index}`)) || 0;
+        const cryptodollarValue = parseFloat(localStorage.getItem(`cryptodollar_value_${token.index}`)) || 0;
+        total += tokenAmount * cryptodollarValue;
+      });
+      this.totalAssetsValue = total.toFixed(6);
+    },
     checkStakingUnlocked() {
       // Check if the vault goal is unlocked in localStorage
       this.isStakingUnlocked = localStorage.getItem('goal_discover_proof_of_stake_unlocked') === 'true';
@@ -92,6 +108,7 @@ export default {
     startPolling() {
       // Poll for changes every second to capture changes made in the same tab
       this.intervalId = setInterval(() => {
+        this.updateTotalAssetsValue();
         this.checkStakingUnlocked();
         this.checkVaultUnlocked();
         this.checkSwapUnlocked();
@@ -119,6 +136,11 @@ export default {
 </script>
 
 <style scoped>
+.token-icon {
+    width: 16px;
+    height: auto;
+    transition: transform 0.3s ease;
+  }
 .logo-container {
   display: flex;
   justify-content: center;

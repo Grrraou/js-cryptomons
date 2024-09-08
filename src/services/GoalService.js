@@ -71,9 +71,6 @@ export const goals = [
     ],
     reward: 'Unlock The inventory !'
   },
-
-
-
   {
     index: 'sponsorize_nascar_driver',
     name: 'Sponsorize a NASCAR driver',
@@ -82,6 +79,15 @@ export const goals = [
       { token: 'doge', value: 5000 },
     ],
     reward: 'Unlock Dogemon'
+  },
+  {
+    index: 'work_for_lazarus_group',
+    name: 'Work for the Lazarus group (APT38)',
+    description: 'Join the glorious leaders and fight evil america.',
+    costs: [
+      { token: 'cryptodollar', value: 25000 },
+    ],
+    reward: 'Unlock Monero mine'
   },
 
 

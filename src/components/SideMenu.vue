@@ -54,6 +54,7 @@ export default {
   data() {
     return {
       isVaultUnlocked: false, // Track the vault goal unlock status
+      intervalId: null, // Track the interval ID to clear it later
     };
   },
   methods: {
@@ -61,10 +62,32 @@ export default {
       // Check if the vault goal is unlocked in localStorage
       this.isVaultUnlocked = localStorage.getItem('goal_grandma_bitcoin_unlocked') === 'true';
     },
+    handleStorageChange(event) {
+      if (event.key === 'goal_grandma_bitcoin_unlocked') {
+        this.checkVaultUnlocked();
+      }
+    },
+    startPolling() {
+      // Poll for changes every second to capture changes made in the same tab
+      this.intervalId = setInterval(() => {
+        this.checkVaultUnlocked();
+      }, 1000);
+    }
   },
   mounted() {
-    // Run the check when the component is mounted
+    // Initial check when the component is mounted
     this.checkVaultUnlocked();
+
+    // Listen for changes in localStorage from other tabs
+    window.addEventListener('storage', this.handleStorageChange);
+
+    // Start polling to capture changes made in the same tab
+    this.startPolling();
+  },
+  beforeUnmount() {
+    // Clean up interval and event listener
+    clearInterval(this.intervalId);
+    window.removeEventListener('storage', this.handleStorageChange);
   },
 };
 </script>

@@ -9,6 +9,15 @@ export const goals = [
     reward: 'Unlock the Vault and gain access to all your cryptos!'
   },
   {
+    index: 'halving_bitcoin',
+    name: 'Halving Bitcoin',
+    description: 'This won\'t really halve BTC mining... or maybe it will.. uhm',
+    costs: [
+      { token: 'btc', value: 10 },
+    ],
+    reward: 'Unlock Bitcomon !'
+  },
+  {
     index: 'decentralize_dns',
     name: 'Decentralize the Domain Name System',
     description: 'Everything must be decentralized, start with DNS.',

@@ -118,7 +118,7 @@
         let toTokenValue = parseFloat(localStorage.getItem(`cryptodollar_value_${this.toToken}`)) || 0;
 
         // Calculate the impact based on the amount swapped
-        const impactFactor = this.amount / (this.amount + 1000); // Arbitrary factor for illustration
+        const impactFactor = this.amount / (this.amount + 10); // Arbitrary factor for illustration
         
         // Decrease the value of the sold token
         fromTokenValue = fromTokenValue * (1 - impactFactor);

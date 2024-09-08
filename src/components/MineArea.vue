@@ -42,7 +42,7 @@
       <p v-if="assignedHeroes.length === 0" class="no-heroes">No workers assigned</p>
       <div v-if="assignedHeroes.length > 0" class="heroes-in-area">
         <div v-for="(hero, index) in assignedHeroes" :key="index" class="hero-container">
-          <img :src="hero.image" :alt="hero.name" class="hero-image" draggable="true" @dragstart="dragStart(hero)" />
+          <img :src="getHeroPicture(hero.index)" :alt="hero.name" class="hero-image" draggable="true" @dragstart="dragStart(hero)" />
           <p class="hero-name">{{ hero.name }}</p>
         </div>
       </div>
@@ -79,6 +79,15 @@
       };
     },
     methods: {
+      getHeroPicture(heroIndex) { 
+        try {
+          // Try to load the background image based on the areaIndex
+          return require(`@/assets/heroes/${heroIndex}.png`);
+        } catch (error) {
+          // If the specific background image isn't found, use the default background image
+          return require('@/assets/heroes/default.png');
+        }
+    },
       getTokenIcon(token) {
         try {
           return require(`@/assets/tokens/${token}.png`);

@@ -24,7 +24,7 @@
                 @dragstart="dragStart(hero)"
                 @dragend="removeHeroFromBattle(hero)"
             >
-                <img :src="hero.image" :alt="hero.name" class="hero-image" />
+                <img :src="getHeroPicture(hero.index)" :alt="hero.name" class="hero-image" />
                 <p>{{ hero.name }}</p>
             </div>
             </div>
@@ -65,6 +65,15 @@
       };
     },
     methods: {
+      getHeroPicture(heroIndex) { 
+        try {
+          // Try to load the background image based on the areaIndex
+          return require(`@/assets/heroes/${heroIndex}.png`);
+        } catch (error) {
+          // If the specific background image isn't found, use the default background image
+          return require('@/assets/heroes/default.png');
+        }
+    },
       creatureClicked() {
         let manualDamageAmount = 1;
         const playerEquipement = JSON.parse(localStorage.getItem('playerEquipement')) || {};

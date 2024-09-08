@@ -81,6 +81,16 @@ export const goals = [
     reward: 'Unlock Dogemon'
   },
   {
+    index: 'fork_bitcoin_plug_paypal',
+    name: 'Fork Bitcoin and plug it to paypal',
+    description: 'Ever dreamed of paying with crypto via paypal ?',
+    costs: [
+      { token: 'cryptodollar', value: 10000 },
+      { token: 'btc', value: 200 },
+    ],
+    reward: 'Unlock Dash mine'
+  },
+  {
     index: 'work_for_lazarus_group',
     name: 'Work for the Lazarus group (APT38)',
     description: 'Join the glorious leaders and fight evil america.',

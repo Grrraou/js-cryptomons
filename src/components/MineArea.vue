@@ -17,6 +17,10 @@
         <span class="level-text">{{ level }}</span>
         <img src="@/assets/mines/upgradeLevel.png" class="level-icon" />
       </p>
+      <p class="token-balance-display">
+        <span class="token-balance-text">{{ tokenBalance.toFixed(6) }}</span>
+        <img :src="getTokenIcon(token)" class="token-icon" />
+      </p>
       <div class="action-container">
         <button class="mine-button" @click="mineManually($event)">
           <img src="@/assets/mines/miningButton.png" alt="Mine Logo" class="button-logo" />
@@ -68,9 +72,17 @@
         clickPower: this.initialClickPower || 1,
         autoClickerLevel: this.initialAutoClickerLevel || 1,
         manualMiningMultiplier: 1,
+        tokenBalance: 0, 
       };
     },
     methods: {
+      getTokenIcon(token) {
+        try {
+          return require(`@/assets/tokens/${token}.png`);
+        } catch (error) {
+          return require('@/assets/tokens/default.png');
+        }
+      },
       getLogoPath(index) {
         try {
           return require(`@/assets/mines/${index}.png`);
@@ -133,6 +145,9 @@
         localStorage.setItem(`clickPower_area_${this.areaIndex}`, this.clickPower.toString());
         localStorage.setItem(`autoClickerLevel_area_${this.areaIndex}`, this.autoClickerLevel.toString());
       },
+      updateTokenBalance() {
+        this.tokenBalance = parseFloat(localStorage.getItem(`token_${this.token}`)) || 0;
+      },
       mineTokens(event) {
         if (window.location.pathname === '/mines') {
           const randomIndex = Math.floor(Math.random() * miningSounds.length); // Use miningSounds.length here
@@ -169,6 +184,7 @@
 
         localStorage.setItem(tokenIndex, currentAmount + minedAmount);
         localStorage.setItem(tokenIndexTotal, currentAmountTotal + minedAmount);
+        this.updateTokenBalance();
         //if (this.$route.name === 'Mines' && x && y)
           //this.showFlyingText(minedAmount.toFixed(6), x, y);
       },
@@ -263,6 +279,9 @@
         this.startAutoClicker(heroCount);
       }
     });
+
+    this.updateTokenBalance();
+
      // Listen for the potion effect to double mining power
      eventBus.on('manual-mining-boost', ({ multiplier, duration }) => {
       this.miningMultiplier = multiplier;
@@ -515,5 +534,26 @@
     color: #333;
     font-weight: bold;
   }
+
+  .token-balance-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5em;
+  margin: 10px 0;
+  color: #333;
+}
+
+.token-balance-text {
+  font-size: 1.3em;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.token-icon {
+  width: 30px;
+  height: auto;
+}
+
   </style>
   

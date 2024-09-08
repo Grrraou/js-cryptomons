@@ -26,6 +26,15 @@ export const goals = [
     ],
     reward: 'Unlock the Litecoin mine'
   },
+  {
+    index: 'centralize_decentralization',
+    name: 'Centralize decentralization',
+    description: 'This makes no sens ? yeah i know...',
+    costs: [
+      { token: 'ltc', value: 25 },
+    ],
+    reward: 'Unlock Swap'
+  },
 
 
 

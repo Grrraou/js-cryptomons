@@ -23,7 +23,7 @@ const routes = [
     beforeEnter: (to, from, next) => {
       const isGoalUnlocked = localStorage.getItem('goal_grandma_bitcoin_unlocked') === 'true';
       if (isGoalUnlocked) {
-        next(); // Allow access to Vault
+        next(); 
       } else {
         alert('You need to Convince Grandma to Buy Bitcoin before accessing the Vault.');
         next('/goals'); // Redirect to Goals page if the goal is not unlocked
@@ -32,7 +32,19 @@ const routes = [
   },
   { path: '/battle', name: 'Battle', component: BattlePage },
   { path: '/inventory', name: 'Inventory', component: InventoryPage },
-  { path: '/swap', name: 'Swap', component: SwapPage },
+  { 
+    path: '/swap', 
+    name: 'Swap', 
+    component: SwapPage, 
+    beforeEnter: (to, from, next) => {
+      const isGoalUnlocked = localStorage.getItem('goal_centralize_decentralization_unlocked') === 'true';
+      if (isGoalUnlocked) {
+        next(); 
+      } else {
+        alert('You need to Centralize decentralization before accessing the swap.');
+        next('/goals'); // Redirect to Goals page if the goal is not unlocked
+      }
+    }, },
   { path: '/goals', name: 'Goals', component: GoalsPage },
   { path: '/achievements', name: 'Achievements', component: AchievementsPage },
   { path: '/stats', name: 'Stats', component: StatsPage },

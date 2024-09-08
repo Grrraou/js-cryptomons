@@ -27,8 +27,11 @@
           <li>
             <router-link to="/inventory">📦 Inventory</router-link>
           </li>
-          <li>
+          <li v-if="isSwapUnlocked">
             <router-link to="/swap">🔄 Swap</router-link>
+          </li>
+          <li v-else>
+            <router-link to="/swap" class="forbidden-link">🚫 Swap</router-link>
           </li>
           <li>
             <router-link to="/goals">🎯 Goals</router-link>
@@ -53,7 +56,8 @@ export default {
   name: 'SideMenu',
   data() {
     return {
-      isVaultUnlocked: false, // Track the vault goal unlock status
+      isVaultUnlocked: false,
+      isSwapUnlocked: false, // Track the vault goal unlock status
       intervalId: null, // Track the interval ID to clear it later
     };
   },
@@ -62,21 +66,30 @@ export default {
       // Check if the vault goal is unlocked in localStorage
       this.isVaultUnlocked = localStorage.getItem('goal_grandma_bitcoin_unlocked') === 'true';
     },
+    checkSwapUnlocked() {
+      // Check if the vault goal is unlocked in localStorage
+      this.isSwapUnlocked = localStorage.getItem('goal_centralize_decentralization_unlocked') === 'true';
+    },
     handleStorageChange(event) {
       if (event.key === 'goal_grandma_bitcoin_unlocked') {
         this.checkVaultUnlocked();
+      }
+      if (event.key === 'goal_centralize_decentralization_unlocked') {
+        this.checkSwapUnlocked();
       }
     },
     startPolling() {
       // Poll for changes every second to capture changes made in the same tab
       this.intervalId = setInterval(() => {
         this.checkVaultUnlocked();
+        this.checkSwapUnlocked();
       }, 1000);
     }
   },
   mounted() {
     // Initial check when the component is mounted
     this.checkVaultUnlocked();
+    this.checkSwapUnlocked();
 
     // Listen for changes in localStorage from other tabs
     window.addEventListener('storage', this.handleStorageChange);

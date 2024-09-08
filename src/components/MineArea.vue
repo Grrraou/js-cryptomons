@@ -8,19 +8,23 @@
     </div>
 
     <!-- Statistics and Actions Section -->
+  
     <div class="stats-actions-section">
-      <p class="clicks-display">
-        <span class="clicks-text">{{ clicks }}</span>
-        <img src="@/assets/mines/clickCount.png" class="click-icon" />
-      </p>
-      <p class="level-display">
-        <span class="level-text">{{ level }}</span>
-        <img src="@/assets/mines/upgradeLevel.png" class="level-icon" />
-      </p>
-      <p class="token-balance-display">
-        <span class="token-balance-text">{{ tokenBalance.toFixed(6) }}</span>
-        <img :src="getTokenIcon(token)" class="token-icon" />
-      </p>
+      <div class="statsBox">
+        <p class="clicks-display statDisplay">
+          <span class="clicks-text">{{ clicks }}</span>
+          <img src="@/assets/mines/clickCount.png" class="click-icon" />
+        </p>
+        <p class="level-display statDisplay">
+          <span class="level-text">{{ level }}</span>
+          <img src="@/assets/mines/upgradeLevel.png" class="level-icon" />
+        </p>
+        <p class="token-balance-display statDisplay">
+          <span class="token-balance-text">{{ tokenBalance.toFixed(6) }}</span>
+          <img :src="getTokenIcon(token)" class="token-icon" />
+        </p>
+      </div>
+      
       <div class="action-container">
         <button class="mine-button" @click="mineManually($event)">
           <img src="@/assets/mines/miningButton.png" alt="Mine Logo" class="button-logo" />
@@ -379,6 +383,14 @@
     margin-top: 10px;
   }
 
+  .statsBox {
+    display: flex;
+  }
+
+  .statDisplay {
+    margin: 0 15px !important;
+  }
+
   .logs {
     padding: 0 20px;
     float: right;
@@ -405,13 +417,13 @@
     margin-right: 10px;
   }
 
-  .click-icon, .level-icon {
+  .click-icon, .level-icon, .token-icon {
     width: 40px;
     height: auto;
     transition: transform 0.3s ease;
   }
 
-  .clicks-display:hover .click-icon, .level-display:hover .level-icon {
+  .clicks-display:hover .click-icon, .level-display:hover .level-icon, .token-balance-display:hover .token-icon {
     transform: scale(2);
   }
 

@@ -109,6 +109,15 @@ export const goals = [
     ],
     reward: 'Unlock Monero mine'
   },
+  {
+    index: 'zero_knowledge_master',
+    name: 'Zero-Knowledge Master',
+    description: 'Hide your ass like you were doing illegal stuff !',
+    costs: [
+      { token: 'cryptodollar', value: 75000 },
+    ],
+    reward: 'Unlock Zcash mine'
+  },
 
 
 

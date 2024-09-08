@@ -10,6 +10,7 @@ export const tokens = [
   { index: 'doge', name: 'Dogecoin', cryptodollar: 0.2 },
   { index: 'eth', name: 'Ethereum', cryptodollar: 2 },
   { index: 'zec', name: 'Zcash', cryptodollar: 2 },
+  { index: 'bch', name: 'Bitcoin Cash', cryptodollar: 0.2 },
  /*  { index: 'sol', name: 'Solana', cryptodollar: 1 },
   { index: 'xmr', name: 'Monero', cryptodollar: 0.5 },
   

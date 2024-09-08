@@ -7,6 +7,7 @@ export const mines = [
   { index: 'dash_mine', name: 'Dash (Darkcoin)', token: 'dash', requirement: 'fork_bitcoin_plug_paypal' },
   { index: 'xmr_mine', name: 'Monero', token: 'xmr', requirement: 'work_for_lazarus_group' },
   { index: 'zec_mine', name: 'Zcash', token: 'zec', requirement: 'zero_knowledge_master' },
+  { index: 'bch_mine', name: 'Bitcoin Cash', token: 'bch', requirement: 'prove_size_matter' },
   
  /* { index: 'ore_mine', name: 'Ore', token: 'ore', requirement: null }, */
 ];

@@ -118,6 +118,15 @@ export const goals = [
     ],
     reward: 'Unlock Zcash mine'
   },
+  {
+    index: 'prove_size_matter',
+    name: 'Prove that the size does matter',
+    description: 'Yes it does !',
+    costs: [
+      { token: 'cryptodollar', value: 150000 },
+    ],
+    reward: 'Unlock Bitcoin Cash mine'
+  },
 
 
 

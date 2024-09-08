@@ -1,6 +1,7 @@
 
 export const heroes = [
-  { name: 'Bitcomon', image: require('@/assets/heroes/bitcomon.png'), requirement: 'halving_bitcoin', assignedArea: null },
+  { index: 'bitcomon', name: 'Bitcomon', image: require('@/assets/heroes/bitcomon.png'), requirement: 'halving_bitcoin', assignedArea: null },
+  { index: 'dogemon', name: 'Dogemon', image: require('@/assets/heroes/bitcomon.png'), requirement: 'sponsorize_nascar_driver', assignedArea: null },
   /* { name: 'Etheremon', image: require('@/assets/heroes/etheremon.png'), requirement: 'halving_bitcoin', assignedArea: null },
   { name: 'Solanamon', image: require('@/assets/heroes/solanamon.png'), requirement: 'halving_bitcoin', assignedArea: null },
   { name: 'Solanamon2', image: require('@/assets/heroes/solanamon.png'), requirement: 'halving_bitcoin', assignedArea: null },

@@ -7,9 +7,10 @@ export const tokens = [
   { index: 'xrp', name: 'Ripple', cryptodollar: 1 },
   { index: 'ppc', name: 'Peercoin', cryptodollar: 1 },
   { index: 'eth', name: 'Ethereum', cryptodollar: 2 },
+  { index: 'doge', name: 'Dogecoin', cryptodollar: 0.2 },
  /*  { index: 'sol', name: 'Solana', cryptodollar: 1 },
   { index: 'xmr', name: 'Monero', cryptodollar: 0.5 },
-  { index: 'doge', name: 'Dogecoin', cryptodollar: 0.2 },
+  
   { index: 'ore', name: 'Ore', cryptodollar: 0.1 }, */
 ];
 

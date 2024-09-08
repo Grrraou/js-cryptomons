@@ -11,7 +11,7 @@
             draggable="true"
             @dragstart="dragStart(hero)"
           >
-            <img :src="hero.image" :alt="hero.name" class="hero-image" />
+            <img :src="getHeroPicture(hero.index)" :alt="hero.name" class="hero-image" />
             <p class="hero-name">{{ hero.name }}</p>
           </div>
         </div>
@@ -46,6 +46,15 @@ export default {
     },
   },
   methods: {
+    getHeroPicture(heroIndex) { 
+        try {
+          // Try to load the background image based on the areaIndex
+          return require(`@/assets/heroes/${heroIndex}.png`);
+        } catch (error) {
+          // If the specific background image isn't found, use the default background image
+          return require('@/assets/heroes/default.png');
+        }
+    },
     dragStart(hero) {
       event.dataTransfer.setData('heroData', JSON.stringify(hero));
     },

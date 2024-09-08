@@ -53,6 +53,27 @@ export const goals = [
     ],
     reward: 'Unlock Staking'
   },
+  {
+    index: 'play_million_doge_disco',
+    name: 'Play Million Doge Disco',
+    description: 'Disco stu would enjoy',
+    costs: [
+      { token: 'cryptodollar', value: 5000 },
+    ],
+    reward: 'Unlock Dogecoin mine !'
+  },
+
+
+
+  {
+    index: 'sponsorize_nascar_driver',
+    name: 'Sponsorize a NASCAR driver',
+    description: 'Why ? Because we can.',
+    costs: [
+      { token: 'doge', value: 5000 },
+    ],
+    reward: 'Unlock Dogemon'
+  },
 
 
 

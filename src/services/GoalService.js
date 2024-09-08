@@ -99,6 +99,16 @@ export const goals = [
     ],
     reward: 'Unlock Monero mine'
   },
+  {
+    index: 'hack_a_dao',
+    name: 'Hack a DAO',
+    description: 'All those coins are so unsecure, grab them all !',
+    costs: [
+      { token: 'cryptodollar', value: 35000 },
+      { token: 'ppc', value: 820 },
+    ],
+    reward: 'Unlock Monero mine'
+  },
 
 
 

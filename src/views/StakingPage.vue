@@ -2,9 +2,8 @@
     <div class="staking-page game-container">
       <h1 class="page-title">Crypto Staking</h1>
       <p>Stake your crypto assets here.</p>
-      <div class="staking-list">
+      <div class="staking-list" v-for="staking in filteredStaking" :key="staking.index">
         <StakingWidget
-          v-for="staking in stakings"
           :key="staking.index"
           :staking="staking"
         />
@@ -26,6 +25,20 @@
         stakings,
       };
     },
+    computed: {
+      filteredStaking() {
+      return this.stakings.filter(staking => {
+        // Check if the mine has a requirement
+        console.log(staking.requirement)
+        if (staking.requirement) {
+          // Check if the required goal is unlocked in localStorage
+          return localStorage.getItem(`goal_${staking.requirement}_unlocked`) === 'true';
+        }
+        // If no requirement, always show the area
+        return true;
+      });
+    },
+    }
   };
   </script>
   

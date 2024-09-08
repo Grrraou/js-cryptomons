@@ -252,6 +252,16 @@ export const goals = [
     ],
     reward: 'Unlock the Uniswap Underground'
   },
+  {
+    index: 'swap_whatever_in_large_amounts',
+    name: 'Swap whatever in large amounts',
+    description: 'We don\'t care we\'re just here for the airdrop',
+    costs: [
+      { token: 'cryptodollar', value: 500000 },
+      { token: 'uni', value: 500000 },
+    ],
+    reward: 'Unlock the Uniswap Underground'
+  },
 
 
 

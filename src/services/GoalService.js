@@ -146,6 +146,15 @@ export const goals = [
     ],
     reward: 'Unlock Bitcoin EOS staking'
   },
+  {
+    index: 'read_ada_lovelace_wikipedia_page',
+    name: 'Read Ada Lovelace wikipedia page',
+    description: 'There is no girl on the internet',
+    costs: [
+      { token: 'cryptodollar', value: 550000 },
+    ],
+    reward: 'Unlock Bitcoin Cardano staking'
+  },
 
 
 

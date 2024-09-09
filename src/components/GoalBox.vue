@@ -1,10 +1,10 @@
 <template>
     <div :style="backgroundStyle" class="goal-box">
       <div class="goal-header">
-        <div>
-          <h3>{{ goal.name }}</h3>
-          <p>{{ goal.description }}</p>
-          <p>🏅 {{ goal.reward }}</p>
+        <div class="goal-info">
+          <h3 class="goal-name">{{ goal.name }}</h3>
+          <p class="goal-description">{{ goal.description }}</p>
+          <p class="goal-reward">🏅 {{ goal.reward }}</p>
         </div>
         <div>
           <img :src="getBackgroundImage()" class="goal-logo">
@@ -62,7 +62,7 @@
       },
       backgroundStyle() {
         return {
-          backgroundImage: `linear-gradient(to bottom, rgba(255, 255, 255, 0.8), rgba(240, 240, 240, 0.8)), url('${this.getBackgroundImage()}')`,
+          backgroundImage: `linear-gradient(to bottom, rgba(255, 255, 255, 0.5), rgba(240, 240, 240, 0.5)), url('${this.getBackgroundImage()}')`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
         };
@@ -156,11 +156,12 @@
     display: flex;
     justify-content: center;  /* Aligns content horizontally */
     align-items: center;
+    color: #444;
   }
 
   .goal-logo {
-    max-width: 80px;
-    max-height: 80px;
+    width: 80px;
+    height: 80px;
     border: 3px solid #ffa500;
     border-radius: 33%;
     margin-left: 15px;
@@ -173,7 +174,6 @@
   
   .goal-header p {
     font-size: 16px;
-    font-style: italic;
   }
   
   .goal-costs {
@@ -242,6 +242,24 @@
   .unlocked-description {
     font-size: 16px;
     color: #333;
+  }
+
+  .goal-info {
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 15px;
+    padding: 10px;
+    font-weight: bold;
+  }
+
+  .goal-name {
+    text-decoration: underline;
+    text-transform: uppercase;
+  }
+
+  .goal-reward {
+    font-style: italic;
+    color: #177EB2;
+    font-weight: bold;
   }
   </style>
   

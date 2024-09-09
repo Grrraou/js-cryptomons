@@ -3,7 +3,7 @@
       <div class="achievement-content">
         <h3>{{ title }}</h3>
         <h3 style="display: none;">{{ storageKey }}</h3>
-        <h3>{{ target }}</h3>
+        <!-- <h3>{{ target }}</h3> -->
         <p v-if="!isUnlocked">Locked</p>
         <p v-else>Unlocked!</p>
       </div>

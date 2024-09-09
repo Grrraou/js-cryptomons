@@ -105,7 +105,7 @@ export const goals = [
     description: 'All those coins are so unsecure, grab them all !',
     costs: [
       { token: 'cryptodollar', value: 35000 },
-      { token: 'ppc', value: 820 },
+      { token: 'eth', value: 820 },
     ],
     reward: 'Unlock Ethereum mine'
   },

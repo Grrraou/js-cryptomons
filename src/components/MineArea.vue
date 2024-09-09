@@ -2,7 +2,8 @@
   <div class="clicker-area" :style="backgroundStyle" @dragover.prevent @drop="handleDrop">
     <!-- Title and Logo Section -->
     <div class="title-section">
-      <img :src="getLogoPath(areaIndex)" alt="Bitcoin Mine Logo" class="logo-image" />
+      <h3 class="mine-name">{{ mine.name }}</h3>
+      <img :src="MineManager.getMineLogo(mine.index)" alt="Bitcoin Mine Logo" class="logo-image" />
       <div class="logs"></div>
     </div>
 
@@ -20,18 +21,18 @@
         </p>
         <p class="token-balance-display statDisplay">
           <span class="token-balance-text">{{ tokenBalance.toFixed(6) }}</span>
-          <img :src="getTokenIcon(token)" class="token-icon" />
+          <img :src="TokenManager.getTokenIcon(mine.token)" class="token-icon" />
         </p>
       </div>
       
       <div class="action-container">
-        <button class="mine-button" @click="mineManually($event)">
+        <button class="mine-button" @click="MineManager.mineTokens($event, mine.index, this)">
           <img src="@/assets/mines/miningButton.png" alt="Mine Logo" class="button-logo" />
           Mine!
         </button>
-        <button  class="upgrade-button" @click="upgradeClickPower" :disabled="!canUpgrade">
+        <button  class="upgrade-button" @click="MineManager.upgrade(mine.index, this)" :disabled="!MineManager.canUpgrade(mine.index)">
           <img src="@/assets/mines/upgradeButton.png" alt="Mine Logo" class="button-logo" />
-          Upgrade (Cost: {{ upgradeCost(level) }} {{ token }})
+          Upgrade (Cost: {{ MineManager.getUpgradeCost(mine.index) }} {{ mine.token }})
         </button>
       </div>
     </div>
@@ -42,7 +43,7 @@
       <p v-if="assignedHeroes.length === 0" class="no-heroes">No workers assigned</p>
       <div v-if="assignedHeroes.length > 0" class="heroes-in-area">
         <div v-for="(hero, index) in assignedHeroes" :key="index" class="hero-container">
-          <img :src="getHeroPicture(hero.index)" :alt="hero.name" class="hero-image" draggable="true" @dragstart="dragStart(hero)" />
+          <img :src="HeroManager.getHeroPicture(hero.index)" :alt="hero.name" class="hero-image" draggable="true" @dragstart="dragStart(hero)" />
           <p class="hero-name">{{ hero.name }}</p>
         </div>
       </div>
@@ -52,85 +53,41 @@
 
 
   
-  <script>
+<script>
   import eventBus from '@/eventBus.js';
-  import { miningSounds } from '@/services/MineService';
-  import { currentBuff } from '@/services/ItemService';
+  import HeroManager from '@/services/HeroManager';
+  import TokenManager from '@/services/TokenManager';
+  import MineManager from '@/services/MineManager';
+  import StorageManager from '@/services/StorageManager';
 
   export default {
     props: {
-      areaIndex: String,
-      areaName: String,
-      token: String,
-      initialClicks: Number,
-      initialLevel: Number,
-      initialClickPower: Number,
-      initialAutoClickerLevel: Number,
+      mine: Object,
       assignedHeroes: Array,
     },
     data() {
       return {
-        clicks: this.initialClicks || 0,
-        level: this.initialLevel || 1,
-        clickPower: this.initialClickPower || 1,
-        autoClickerLevel: this.initialAutoClickerLevel || 1,
-        manualMiningMultiplier: 1,
-        tokenBalance: 0, 
+        tokenBalance: TokenManager.getBalance(this.mine.token), 
+        clicks: MineManager.getClicks(this.mine.index),
+        level: MineManager.getUpgradeLevel(this.mine.index),
+      };
+    },
+    setup() {
+      return {
+        HeroManager,
+        TokenManager,
+        MineManager,
+        StorageManager,
       };
     },
     methods: {
-      getHeroPicture(heroIndex) { 
-        try {
-          // Try to load the background image based on the areaIndex
-          return require(`@/assets/heroes/${heroIndex}.png`);
-        } catch (error) {
-          // If the specific background image isn't found, use the default background image
-          return require('@/assets/heroes/default.png');
-        }
-    },
-      getTokenIcon(token) {
-        try {
-          return require(`@/assets/tokens/${token}.png`);
-        } catch (error) {
-          return require('@/assets/tokens/default.png');
-        }
-      },
-      getLogoPath(index) {
-        try {
-          return require(`@/assets/mines/${index}.png`);
-        } catch (error) {
-          // If the image doesn't exist, fall back to the default image
-          return require('@/assets/mines/default.png');
-        }
-      },
-      mineManually(event) {
-        this.clicks += 1;
-        this.saveState();
-        this.mineTokens(event);
-      },
-      mineAutomatically(event) {
-        this.mineTokens(event);
-      },
-      upgradeClickPower() {
-        const cost = this.upgradeCost(this.level);
-        const storedAmmount = localStorage.getItem(`token_${this.token}`);
-        if (storedAmmount >= cost) {
-          const newAmount = storedAmmount - cost;
-          localStorage.setItem(`token_${this.token}`, newAmount);
-          this.level++;
-          this.saveState();
-        }
-      },
-      upgradeCost(level) {
-        return level * (10 * level);
-      },
       startAutoClicker(heroCount) {  
         if (this.autoClickerInterval) 
           clearInterval(this.autoClickerInterval);
         
         if (heroCount > 0) {
           this.autoClickerInterval = setInterval(() => {
-            this.mineAutomatically(heroCount);
+            MineManager.mineTokens(null, this.mine.index, this);
           }, 1000);
         } else {
           clearInterval(this.autoClickerInterval);
@@ -143,7 +100,7 @@
           if (!heroData) return;
   
           const hero = JSON.parse(heroData);
-          this.$emit('assign-hero', hero, this.areaIndex);
+          this.$emit('assign-hero', hero, this.mine.index);
         } catch (error) {
           console.error('Error during drop:', error);
         }
@@ -151,147 +108,17 @@
       dragStart(hero) {
         event.dataTransfer.setData('heroData', JSON.stringify(hero));
       },
-      saveState() {
-        localStorage.setItem(`clicks_area_${this.areaIndex}`, this.clicks.toString());
-        localStorage.setItem(`level_area_${this.areaIndex}`, this.level.toString());
-        localStorage.setItem(`clickPower_area_${this.areaIndex}`, this.clickPower.toString());
-        localStorage.setItem(`autoClickerLevel_area_${this.areaIndex}`, this.autoClickerLevel.toString());
-      },
       updateTokenBalance() {
-        this.tokenBalance = parseFloat(localStorage.getItem(`token_${this.token}`)) || 0;
-      },
-      mineTokens(event) {
-        if (window.location.pathname === '/mines') {
-          const randomIndex = Math.floor(Math.random() * miningSounds.length); // Use miningSounds.length here
-          const miningSound = miningSounds[randomIndex]; // Access the sound from the imported miningSounds array
-          miningSound.volume = 0.5;
-          miningSound.play();
-        }
-
-        let tokenIndex = `token_${this.token}`;
-        let currentAmount = parseFloat(localStorage.getItem(tokenIndex)) || 0;
-        let minedAmount = (Math.random() * (this.level + 1) * (0.0009 - 0.000001) + 0.000001);
         
-
-        let tokenIndexTotal = `total_token_${this.token}`;
-        let currentAmountTotal = parseFloat(localStorage.getItem(tokenIndexTotal)) || 0;
-        
-        
-        let x, y;
-
-        if (event.clientX) {
-          // Use event coordinates if available
-          const manualMiningBuff = currentBuff.find(buff => buff.buffType === 'miningMultiplier' && Date.now() < buff.expiration);
-          const manualMutliplier = manualMiningBuff?.multiplier || 1;
-          minedAmount = minedAmount * manualMutliplier;
-          x = event.clientX;
-          y = event.clientY;
-          this.showFlyingText(this.token, minedAmount.toFixed(6), x, y);
-        } else {
-          // Use the component's coordinates
-          this.showAreaLog(this.token, minedAmount.toFixed(6));
-        }
-
-        localStorage.setItem(tokenIndex, currentAmount + minedAmount);
-        localStorage.setItem(tokenIndexTotal, currentAmountTotal + minedAmount);
-        this.updateTokenBalance();
-        //if (this.$route.name === 'Mines' && x && y)
-          //this.showFlyingText(minedAmount.toFixed(6), x, y);
-      },
-      showFlyingText(token, amount, x, y) {
-        const textElement = document.createElement('div');
-
-        const imgElement = document.createElement('img');
-        imgElement.src = this.getTokenIcon(token); 
-  /*       imgElement.src = require(`@/assets/tokens/${token}.png`); // Replace with the actual image path */
-        imgElement.style.width = '16px'; // Set the image size
-        imgElement.style.height = '16px'; 
-        imgElement.style.marginLeft = '8px';
-
-        textElement.innerText = `+${amount}`;
-        
-        // Apply initial styles directly with JavaScript
-        textElement.style.position = 'fixed';
-        textElement.style.left = `${x}px`;
-        textElement.style.top = `${y}px`;
-        textElement.style.fontSize = '24px';
-        textElement.style.fontWeight = 'bold';
-        textElement.style.color = 'green';
-        textElement.style.opacity = '1'; // Start fully visible
-        textElement.style.pointerEvents = 'none'; // Ensure it doesn't interfere with user interactions
-        textElement.style.transition = 'transform 2s ease-out, opacity 2s ease-out'; // Smooth transition for both transform and opacity
-        textElement.style.zIndex = '9999'; // Ensure it appears on top of other elements
-
-        // Append the element to the document body
-        textElement.appendChild(imgElement);
-        document.body.appendChild(textElement);
-
-        // Force a reflow to ensure the initial styles are applied before starting the animation
-        textElement.offsetHeight; // Trigger a reflow
-
-        // Apply the transformation to move the text up and fade it out
-        textElement.style.transform = 'translateY(-50px)';
-        textElement.style.opacity = '0';
-
-        // Automatically remove the element after the animation ends
-        setTimeout(() => {
-          if (textElement && textElement.parentElement) {
-            textElement.parentElement.removeChild(textElement);
-          }
-        }, 2000); // Match with the duration of the animation
-      },
-      showAreaLog(token, text) {
-        if (this.$el) {
-          const logsDiv = this.$el.querySelector('.logs');
-          if (logsDiv) {
-            // Create a new text node
-            const textNode = document.createTextNode(text);
-
-            const imgElement = document.createElement('img');
-            imgElement.src = require(`@/assets/tokens/${token}.png`); // Replace with the actual image path
-            imgElement.style.width = '16px'; // Set the image size
-            imgElement.style.height = '16px'; 
-            imgElement.style.marginLeft = '8px';
-
-            // Create a new paragraph element and append the text node to it
-            const newParagraph = document.createElement('p');
-            newParagraph.style.fontSize = '24px';
-            newParagraph.style.fontWeight = 'bold';
-            newParagraph.style.color = 'green';
-            newParagraph.style.opacity = '1'; // Start fully visible
-            newParagraph.style.pointerEvents = 'none'; // Ensure it doesn't interfere with user interactions
-            newParagraph.style.transition = 'transform 2s ease-out, opacity 2s ease-out'; // Smooth transition for both transform and opacity
-            newParagraph.style.zIndex = '9999'; // Ensure it appears on top of other elements
-
-            
-            newParagraph.appendChild(textNode);
-            newParagraph.appendChild(imgElement);
-
-            // Append the new paragraph to the .logs div
-            logsDiv.appendChild(newParagraph);
-
-            // Automatically remove the element after the animation ends
-            setTimeout(() => {
-              if (newParagraph && newParagraph.parentElement) {
-                newParagraph.parentElement.removeChild(newParagraph);
-              }
-            }, 800); // Match with the duration of the animation
-          }
-        } else {
-          console.error('Element is not available');
-          return { x: 0, y: 0 }; // Fallback values
-        }
       },
     },
     mounted() {
     // Listen for the custom event from the global event bus
-    eventBus.on('trigger-start-auto-clicker', ({ areaIndex, heroCount }) => {
-      if (areaIndex === this.areaIndex) {
+    eventBus.on('trigger-start-auto-clicker', ({ mineIndex, heroCount }) => {
+      if (mineIndex === this.mine.index) {
         this.startAutoClicker(heroCount);
       }
     });
-
-    this.updateTokenBalance();
 
      // Listen for the potion effect to double mining power
      eventBus.on('manual-mining-boost', ({ multiplier, duration }) => {
@@ -308,23 +135,10 @@
     eventBus.off('trigger-start-auto-clicker');
   },
     computed: {
-      canUpgrade() {
-        let stored = localStorage.getItem(`token_${this.token}`);
-        return stored >= this.upgradeCost(this.level);
-      },
       backgroundStyle() {
-        let backgroundUrl;
-        
-        try {
-          // Try to load the background image based on the areaIndex
-          backgroundUrl = require(`@/assets/mines/${this.areaIndex}_bg.png`);
-        } catch (error) {
-          // If the specific background image isn't found, use the default background image
-          backgroundUrl = require('@/assets/mines/default_mine_bg.png');
-        }
+        let backgroundUrl = MineManager.getBackgroundImage(this.mine.index);
 
         return {
-          //backgroundImage: `url(${backgroundUrl})`,
           background: `linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), 
               url(${backgroundUrl}) center/cover no-repeat`,
           backgroundSize: 'cover',
@@ -336,6 +150,10 @@
   </script>
   
   <style scoped>
+  .mine-name {
+    color: #444;
+    margin-right: 15px;
+  }
   /* Main area wrapper */
   .clicker-area {
     margin: 10px auto;

@@ -6,17 +6,11 @@
         <h1 class="page-title">Mines</h1>
 
         <div class="areas-grid">
-          <div class="area-wrapper" v-for="area in filteredAreas" :key="area.index">
+          <div class="area-wrapper" v-for="mine in mines" :key="mine.index">
             <MineArea
               ref="mineArea"
-              :areaIndex="area.index"
-              :areaName="area.name"
-              :token="area.token"
-              :initialClicks="getStoredValue(`clicks_area_${area.index}`, 0)"
-              :initialLevel="getStoredValue(`level_area_${area.index}`, 1)"
-              :initialClickPower="getStoredValue(`clickPower_area_${area.index}`, 1)"
-              :initialAutoClickerLevel="getStoredValue(`autoClickerLevel_area_${area.index}`, 0)"
-              :assignedHeroes="getHeroesForArea(area.index)"
+              :mine="mine"
+              :assignedHeroes="getHeroesForArea(mine.index)"
               @assign-hero="assignHero"
               @remove-hero="removeHero"
             />
@@ -31,9 +25,9 @@
 </template>
 
 <script>
+import MineManager from '@/services/MineManager';
 import MineArea from '@/components/MineArea.vue';
 import HeroList from '@/components/HeroList.vue';
-import { mines } from '@/services/MineService.js';
 import { heroes } from '@/services/HeroService.js';
 import eventBus from '@/eventBus.js';
 
@@ -44,56 +38,42 @@ export default {
   },
   data() {
     return {
-      areas: mines,
+      mines: MineManager.getFilteredList(),
       heroes: heroes,
     };
   },
   computed: {
-    filteredAreas() {
-      return this.areas.filter(area => {
-        // Check if the mine has a requirement
-        if (area.requirement) {
-          // Check if the required goal is unlocked in localStorage
-          return localStorage.getItem(`goal_${area.requirement}_unlocked`) === 'true';
-        }
-        // If no requirement, always show the area
-        return true;
-      });
-    },
   },
   methods: {
-    getStoredValue(key, defaultValue) {
-      const storedValue = localStorage.getItem(key);
-      return storedValue !== null ? parseInt(storedValue, 10) : defaultValue;
-    },
     getHeroesForArea(areaIndex) {
       return this.heroes.filter(hero => hero.assignedArea === areaIndex);
     },
-    assignHero(hero, areaIndex) {
+    assignHero(hero, mineIndex) {
       this.removeHero(hero);
       const heroIndex = this.heroes.findIndex(h => h.name === hero.name);
       if (heroIndex !== -1) {
-        this.heroes[heroIndex].assignedArea = areaIndex;
+        this.heroes[heroIndex].assignedArea = mineIndex;
 
         // Calculate the updated number of assigned heroes
-        const updatedHeroCount = this.getHeroesForArea(areaIndex).length;
+        const updatedHeroCount = this.getHeroesForArea(mineIndex).length;
+        console.log(hero)
 
         // Emit the event with the updated hero count
-        eventBus.emit('trigger-start-auto-clicker', { areaIndex, heroCount: updatedHeroCount });
+        eventBus.emit('trigger-start-auto-clicker', { mineIndex, heroCount: updatedHeroCount });
       }
     },
     removeHero(hero) {
       const heroIndex = this.heroes.findIndex(h => h.name === hero.name);
       if (heroIndex !== -1) {
-        const areaIndex = this.heroes[heroIndex].assignedArea;
+        const mineIndex = this.heroes[heroIndex].assignedArea;
         this.heroes[heroIndex].assignedArea = null;
 
-        if (areaIndex !== null) {
+        if (mineIndex !== null) {
           // Calculate the updated number of assigned heroes after removal
-          const updatedHeroCount = this.getHeroesForArea(areaIndex).length;
+          const updatedHeroCount = this.getHeroesForArea(mineIndex).length;
 
           // Emit the event with the updated hero count
-          eventBus.emit('trigger-start-auto-clicker', { areaIndex, heroCount: updatedHeroCount });
+          eventBus.emit('trigger-start-auto-clicker', { mineIndex, heroCount: updatedHeroCount });
         }
       }
     },

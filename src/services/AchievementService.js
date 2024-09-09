@@ -11,42 +11,47 @@ export const achievements = [
     description: "Start your journey with a modest 10 clicks in the Bitcoin mine.",
     target: 10,
     storageKey: "clicks_area_btc_mine",
-    loot: 'good_new_btc'
+    loot: 'good_new_btc',
   },
   {
     key: "clicks_area_btc_mine_100",
     title: "Bitcoin Enthusiast - 100 Clicks",
     description: "Reach a milestone of 100 clicks and show your dedication to Bitcoin mining.",
     target: 100,
-    storageKey: "clicks_area_btc_mine"
+    storageKey: "clicks_area_btc_mine",
+    loot: 'good_new_btc',
   },
   {
     key: "clicks_area_btc_mine_1000",
     title: "Bitcoin Powerhouse - 1000 Clicks",
     description: "Dominate the Bitcoin mine with 1000 clicks, proving your mining prowess.",
     target: 1000,
-    storageKey: "clicks_area_btc_mine"
+    storageKey: "clicks_area_btc_mine",
+    loot: 'mining_slot_btc',
   },
   {
     key: "upgrade_area_btc_mine_10",
     title: "Bitcoin Architect - 10 Upgrades",
     description: "Build your Bitcoin empire with 10 crucial upgrades.",
     target: 10,
-    storageKey: "level_area_btc_mine"
+    storageKey: "level_area_btc_mine",
+    loot: 'good_new_btc',
   },
   {
     key: "upgrade_area_btc_mine_100",
     title: "Bitcoin Mogul - 100 Upgrades",
     description: "Elevate your Bitcoin mining operation with 100 strategic upgrades.",
     target: 100,
-    storageKey: "level_area_btc_mine"
+    storageKey: "level_area_btc_mine",
+    loot: 'mining_slot_btc',
   },
   {
     key: "upgrade_area_btc_mine_1000",
     title: "Bitcoin Overlord - 1000 Upgrades",
     description: "Achieve legendary status by upgrading your Bitcoin mine 1000 times.",
     target: 1000,
-    storageKey: "level_area_btc_mine"
+    storageKey: "level_area_btc_mine",
+    loot: 'mining_slot_btc',
   },
   {
     key: "clicks_area_xmr_mine_10",

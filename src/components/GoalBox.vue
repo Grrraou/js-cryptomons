@@ -14,10 +14,6 @@
       <!-- Costs section: Show only if the goal is not unlocked -->
       <div v-if="!isGoalUnlocked" class="goal-costs">
         <div v-for="(cost, index) in goal.costs" :key="index" class="cost">
-          <div class="cost-details">
-            <img :src="getTokenIcon(cost.token)" class="token-icon" alt="Token Icon" />
-            <p>{{ cost.token.toUpperCase() }}: {{ cost.value }} required</p>
-          </div>
           <div v-if="hasPaidCost(cost.token, cost.value)">
             <p class="paid-message">✅ Paid</p>
           </div>
@@ -27,7 +23,10 @@
             :disabled="!canPayCost(cost.token, cost.value)"
             class="pay-button"
           >
-            Pay {{ cost.value }} {{ cost.token.toUpperCase() }}
+          <div class="cost-details">
+            
+            <p>{{ cost.value }} <img :src="getTokenIcon(cost.token)" class="token-icon" alt="Token Icon" /></p>
+          </div>
           </button>
         </div>
       </div>
@@ -160,8 +159,8 @@
   }
 
   .goal-logo {
-    width: 80px;
-    height: 80px;
+    width: 160px;
+    height: 160px;
     border: 3px solid #ffa500;
     border-radius: 33%;
     margin-left: 15px;
@@ -187,6 +186,14 @@
     display: flex;
     align-items: center;
     gap: 10px;
+    font-weight: bold;
+    font-size: 20px;
+  }
+
+  .cost-details img {
+    width: 20px;
+    height: 20px;
+    margin-bottom: -2px;
   }
   
   .token-icon {
@@ -198,11 +205,9 @@
     background-color: #4caf50;
     border: none;
     color: white;
-    padding: 8px 12px;
+    padding: 0px 10px;
     border-radius: 5px;
-    font-size: 14px;
     cursor: pointer;
-    margin-top: 5px;
     transition: background-color 0.3s ease;
   }
   
@@ -227,11 +232,12 @@
     margin-top: 5px;
   }
   
-  .goal-unlocked-message {
+  .goal-unlocked-message, .goal-costs {
     text-align: center;
     padding: 20px;
     background-color: rgba(240, 240, 240, 0.8);
     border-radius: 10px;
+    border: 2px solid #444;
   }
   
   .unlocked-text {
@@ -247,8 +253,9 @@
   .goal-info {
     background-color: rgba(255, 255, 255, 0.7);
     border-radius: 15px;
-    padding: 10px;
+    padding: 15px;
     font-weight: bold;
+    border: 2px solid #444;
   }
 
   .goal-name {

@@ -132,6 +132,7 @@ class MineManager {
 
             UXManager.showFlyingText(minedAmount.toFixed(6), tokenIcon, x, y);
             ref.clicks += 1;
+            StorageManager.update(`clicks_area_${mineIndex}`, ref.clicks);
         } else {
             // @todo amount should be updated via heros count
             UXManager.showAreaLog(ref, minedAmount.toFixed(6), tokenIcon);

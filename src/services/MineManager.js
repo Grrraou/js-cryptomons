@@ -85,9 +85,9 @@ class MineManager {
         }
     }
 
-    getRandomMiningSound() {
-        const randomIndex = Math.floor(Math.random() * this.miningSounds.length); // Use miningSounds.length here
-        const miningSound = this.miningSounds[randomIndex]; // Access the sound from the imported miningSounds array
+    playMiningSound(miningSoundIndex = null) {
+        miningSoundIndex = miningSoundIndex !== null ? miningSoundIndex : Math.floor(Math.random() * this.miningSounds.length);
+        const miningSound = this.miningSounds[miningSoundIndex];
         miningSound.volume = 0.5;
         miningSound.play();
     }
@@ -96,7 +96,7 @@ class MineManager {
         const mine = this.getItem(mineIndex);
 
         if (window.location.pathname === '/mines') {
-          this.getRandomMiningSound();
+          this.playMiningSound();
         }
 
         let tokenIndex = `token_${mine.token}`;

@@ -10,7 +10,25 @@ class MineManager {
         this.mines = minesEnum;
         this.miningSounds = miningSoundsEnum;
         this.assetPath = require.context('@/assets/mines', false, /\.png$/);
+        this.autoClickerIntervals = {};
     }
+
+    startAutoClicker(mineIndex, callback, heroCount) {
+        if (this.autoClickerIntervals[mineIndex]) clearInterval(this.autoClickerIntervals[mineIndex]);
+      
+        if (heroCount > 0) {
+            this.autoClickerIntervals[mineIndex] = setInterval(() => {
+            callback();
+          }, 1000);
+        }
+      }
+
+      stopAutoClicker(mineIndex) {
+        if (this.autoClickerIntervals[mineIndex]) {
+          clearInterval(this.autoClickerIntervals[mineIndex]);
+          delete this.autoClickerIntervals[mineIndex];
+        }
+      }
 
     getList() {
         return this.mines;

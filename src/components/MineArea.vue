@@ -86,7 +86,10 @@
     },
     methods: {
       startAutoClicker(heroCount) {  
-        if (this.autoClickerInterval) 
+        MineManager.startAutoClicker(this.mine.index, () => {
+        MineManager.mineTokens(null, this.mine.index, this);
+      }, heroCount);
+        /* if (this.autoClickerInterval) 
           clearInterval(this.autoClickerInterval);
         
         if (heroCount > 0) {
@@ -96,7 +99,7 @@
         } else {
           clearInterval(this.autoClickerInterval);
           this.autoClickerInterval = null; // Reset the interval variable
-        }
+        } */
       },
       handleHeroDrop(event) {
         try {
@@ -132,8 +135,11 @@
     });
   },
   beforeUnmount() {
-    // Clean up the event listener when the component is destroyed
+    if (this.autoClickerInterval) {
+      clearInterval(this.autoClickerInterval);
+    }
     eventBus.off('trigger-start-auto-clicker');
+    eventBus.off('miningMultiplierBuff');
   },
   computed: {
     backgroundStyle() {

@@ -16,17 +16,13 @@
         <div class="heroes-area">
             <h3>Assigned Heroes</h3>
             <div class="heroes-grid">
-            <div
+            <HeroThumb
                 v-for="hero in heroes"
                 :key="hero.name"
+                :hero="hero"
                 class="hero"
-                draggable="true"
-                @dragstart="dragStart(hero)"
                 @dragend="removeHeroFromBattle(hero)"
-            >
-                <img :src="getHeroPicture(hero.index)" :alt="hero.name" class="hero-image" />
-                <p>{{ hero.name }}</p>
-            </div>
+            />
             </div>
             <div class="drop-area" @drop="onDrop" @dragover.prevent>
             Drop heroes here to assign
@@ -39,8 +35,12 @@
   <script>
   import eventBus from '@/eventBus.js';
   import { items } from '@/services/ItemService';
+  import HeroThumb from './HeroThumb.vue';
   
   export default {
+    components: {
+      HeroThumb,
+    },
     props: {
       battle: {
         type: Object,
@@ -91,9 +91,6 @@
           const hero = JSON.parse(heroData);
           this.$emit('hero-dropped', hero, this.battleIndex);
         }
-      },
-      dragStart(hero) {
-        event.dataTransfer.setData('heroData', JSON.stringify(hero));
       },
       removeHeroFromBattle(hero) {
         this.$emit('remove-hero', hero);

@@ -42,10 +42,10 @@
       <p class="workers-heading">Workers in this Area:</p>
       <p v-if="assignedHeroes.length === 0" class="no-heroes">No workers assigned</p>
       <div v-if="assignedHeroes.length > 0" class="heroes-in-area">
-        <div v-for="(hero, index) in assignedHeroes" :key="index" class="hero-container">
-          <img :src="HeroManager.getHeroPicture(hero.index)" :alt="hero.name" class="hero-image" draggable="true" @dragstart="dragStart(hero)" />
-          <p class="hero-name">{{ hero.name }}</p>
-        </div>
+        <HeroThumb v-for="(hero, index) in assignedHeroes" 
+          :key="index" 
+          :hero="hero"
+          class="hero-container"/>
       </div>
     </div>
   </div>
@@ -59,8 +59,12 @@
   import TokenManager from '@/services/TokenManager';
   import MineManager from '@/services/MineManager';
   import StorageManager from '@/services/StorageManager';
+  import HeroThumb from './HeroThumb.vue';
 
   export default {
+    components: {
+      HeroThumb,
+    },
     props: {
       mine: Object,
       assignedHeroes: Array,
@@ -104,9 +108,6 @@
         } catch (error) {
           console.error('Error during drop:', error);
         }
-      },
-      dragStart(hero) {
-        event.dataTransfer.setData('heroData', JSON.stringify(hero));
       },
       updateTokenBalance() {
         

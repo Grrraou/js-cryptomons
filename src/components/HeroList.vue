@@ -4,17 +4,16 @@
     <div class="hero-container" @dragover.prevent @drop="handleHeroDrop">
       <div class="hero-list-container">
         <div v-if="availableHeroes.length > 0" class="hero-grid">
-          <div
+          <HeroThumb
             class="hero"
             v-for="(hero, index) in availableHeroes"
             :key="index"
+            :hero="hero"
             draggable="true"
-            @dragstart="dragStart(hero)"
-          >
-            <img :src="getHeroPicture(hero.index)" :alt="hero.name" class="hero-image" />
-            <p class="hero-name">{{ hero.name }}</p>
+          />
+            <!-- <img :src="getHeroPicture(hero.index)" :alt="hero.name" class="hero-image" />
+            <p class="hero-name">{{ hero.name }}</p> -->
           </div>
-        </div>
         <p v-else class="no-heroes">No heroes available</p>
       </div>
     </div>
@@ -26,7 +25,13 @@
 
   
 <script>
+import HeroThumb from './HeroThumb.vue';
+
+
 export default {
+  components: {
+    HeroThumb,
+  },
   props: {
     heroes: Array,
   },
@@ -46,18 +51,6 @@ export default {
     },
   },
   methods: {
-    getHeroPicture(heroIndex) { 
-        try {
-          // Try to load the background image based on the areaIndex
-          return require(`@/assets/heroes/${heroIndex}.png`);
-        } catch (error) {
-          // If the specific background image isn't found, use the default background image
-          return require('@/assets/heroes/default.png');
-        }
-    },
-    dragStart(hero) {
-      event.dataTransfer.setData('heroData', JSON.stringify(hero));
-    },
     handleHeroDrop(event) {
       try {
         const heroData = event.dataTransfer.getData('heroData');
@@ -121,37 +114,6 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-.hero {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 10px;
-  padding: 10px;
-  background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
-  border-radius: 10px;
-  cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.hero:hover {
-  transform: scale(1.05); /* Slight zoom on hover */
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Enhanced shadow on hover */
-}
-
-.hero-image {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%; /* Circular hero image */
-  margin-bottom: 10px;
-  border: 3px solid #ffa500; /* Border around hero image */
-}
-
-.hero-name {
-  font-size: 16px;
-  font-weight: bold;
-  color: #333;
 }
 
 .no-heroes {

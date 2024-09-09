@@ -75,7 +75,7 @@
 
     <!-- Swap Result -->
     <div v-if="swapResult" class="swap-result">
-      <p>You will receive approximately:<br>{{ swapResult }} <img :src="require(`@/assets/tokens/${toToken.index}.png`)" class="token-icon">{{ toToken.index.toUpperCase() }}</p>
+      <p>You will receive approximately:<br>{{ swapResult }} <img :src="require(`@/assets/tokens/${toToken.index}.png`)" class="token-icon"></p>
     </div>
 
   </div>

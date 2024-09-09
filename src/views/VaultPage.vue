@@ -2,14 +2,53 @@
   <div class="vault-page game-container">
     <h1 class="page-title">Crypto Vault</h1>
     <p>Total Value of Assets in Cryptocredits: {{ getTotalAssetsValue() }}</p>
+
+    <!-- Filter and Sort UI -->
+    <div class="filter-sort">
+      <input
+        v-model="filterText"
+        type="text"
+        placeholder="Filter by token name or index"
+        class="filter-input"
+      />
+      <select v-model="sortOption" class="sort-select">
+        <option value="default">Sort by Default</option>
+        <option value="amount">Sort by Current Amount</option>
+        <option value="price">Sort by Price</option>
+        <option value="totalValue">Sort by Total Value</option>
+      </select>
+    </div>
+
+    <!-- Token List -->
     <div class="vault-list">
-      <!-- Use filteredTokens instead of tokens -->
       <div v-for="token in filteredTokens" :key="token.index" class="vault-item">
-        <h2><img class="tokenSymbol" :src="getTokenIcon(token.index)"> {{ token.name }}</h2>
-        <p><strong>Current Amount:</strong> {{ getTokenValue(token.index) }}</p>
-        <p><strong>Total Obtained:</strong> {{ getTotalTokenValue(token.index) }}</p>
-        <p><strong>Price per {{ token.name }}:</strong> {{ getCryptodollarValue(token.index) }} <img class="token-icon" src="@/assets/tokens/cryptodollar.png"></p>
-        <p><strong>Total Value in Cryptocredits:</strong> {{ getTotalCryptodollarValue(token.index) }}</p>
+        <h2>
+          <img class="tokenSymbol" :src="getTokenIcon(token.index)"> 
+          {{ token.name }}
+        </h2>
+        
+        <!-- Current Amount with dynamic class binding for highlighting -->
+        <p :class="{'highlight-amount': sortOption === 'amount'}">
+          <span class='label'>Current Amount:</span> 
+          <br>
+          <span class="tokenSum">{{ getTokenValue(token.index) }} <img class="token-icon" :src="getTokenIcon(token.index)"></span>
+        </p>
+
+        <!-- <p><strong>Total Obtained:</strong> {{ getTotalTokenValue(token.index) }}</p> -->
+
+        <!-- Price per token with dynamic class binding for highlighting -->
+        <p :class="{'highlight-price': sortOption === 'price'}">
+          <span class='label'>Price per {{ token.name }}:</span>
+          <br>
+          <span class="tokenSum">{{ getCryptodollarValue(token.index) }} <img class="token-icon" src="@/assets/tokens/cryptodollar.png"></span>
+        </p>
+        
+        <!-- Total Value in Cryptocredits with dynamic class binding for highlighting -->
+        <p :class="{'highlight-total-value': sortOption === 'totalValue'}">
+          <span class='label'>Total Value in Cryptocredits:</span>
+          <br>
+          <span class="tokenSum">{{ getTotalCryptodollarValue(token.index) }} <img class="token-icon" src="@/assets/tokens/cryptodollar.png"></span>
+        </p>
       </div>
     </div>
   </div>
@@ -24,28 +63,57 @@ export default {
     return {
       tokens,
       intervalId: null,
+      filterText: '', // For filtering tokens
+      sortOption: 'default', // Default sort option
     };
   },
   computed: {
     filteredTokens() {
-      return this.tokens.filter(token => parseFloat(this.getTotalTokenValue(token.index)) > 0);
+      // Filter tokens based on filterText and amount > 0
+      let filtered = this.tokens.filter(token => {
+        const tokenAmount = parseFloat(localStorage.getItem(`token_${token.index}`)) || 0;
+        
+        // Include only tokens where the amount > 0 and matches the filterText
+        return (
+          tokenAmount > 0 &&
+          (token.name.toLowerCase().includes(this.filterText.toLowerCase()) ||
+          token.index.toLowerCase().includes(this.filterText.toLowerCase()))
+        );
+      });
+
+      // Sort based on sortOption
+      if (this.sortOption === 'amount') {
+        filtered.sort((a, b) => {
+          return parseFloat(this.getTokenValue(b.index)) - parseFloat(this.getTokenValue(a.index));
+        });
+      } else if (this.sortOption === 'price') {
+        filtered.sort((a, b) => {
+          return parseFloat(this.getCryptodollarValue(b.index)) - parseFloat(this.getCryptodollarValue(a.index));
+        });
+      } else if (this.sortOption === 'totalValue') {
+        filtered.sort((a, b) => {
+          return parseFloat(this.getTotalCryptodollarValue(b.index)) - parseFloat(this.getTotalCryptodollarValue(a.index));
+        });
+      }
+
+      // If sortOption is 'default', return the tokens in their original order
+      return filtered;
     },
   },
   methods: {
     getTokenIcon(token) {
-        try {
-          return require(`@/assets/tokens/${token}.png`);
-        } catch (error) {
-          return require('@/assets/tokens/default.png');
-        }
-      },
+      try {
+        return require(`@/assets/tokens/${token}.png`);
+      } catch (error) {
+        return require('@/assets/tokens/default.png');
+      }
+    },
     getTokenValue(index) {
       const value = parseFloat(localStorage.getItem(`token_${index}`));
       return !isNaN(value) ? value.toFixed(6) : '0.000000';
     },
     getTotalTokenValue(index) {
       const value = parseFloat(localStorage.getItem(`token_${index}`));
-      
       return !isNaN(value) ? value.toFixed(6) : '0.000000';
     },
     getCryptodollarValue(index) {
@@ -81,15 +149,64 @@ export default {
     clearInterval(this.intervalId);
   },
 };
-
 </script>
 
 <style scoped>
+.tokenSum {
+  white-space: nowrap; /* Prevents text from wrapping */
+  overflow: hidden;    /* Hides any overflow if the content is too long */
+  text-overflow: ellipsis;
+}
+.label {
+  font-size: 12px;
+}
+/* Highlight Styles */
+.highlight-amount {
+  background-color: #fff4e5; /* Light orange background for amount */
+  font-weight: bold;
+  color: #ff8c00; /* Orange color for text */
+}
+
+.highlight-price {
+  background-color: #e5f4ff; /* Light blue background for price */
+  font-weight: bold;
+  color: #007bff; /* Blue color for text */
+}
+
+.highlight-total-value {
+  background-color: #e5ffe5; /* Light green background for total value */
+  font-weight: bold;
+  color: #28a745; /* Green color for text */
+}
+
+/* Filter and Sort */
+.filter-sort {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.filter-input {
+  padding: 10px;
+  width: 60%;
+  border: 2px solid #ffa500;
+  border-radius: 8px;
+  font-size: 1.2em;
+}
+
+.sort-select {
+  padding: 10px;
+  border: 2px solid #ffa500;
+  border-radius: 8px;
+  font-size: 1.2em;
+}
+
 .token-icon {
-    width: 16px;
-    height: auto;
-    transition: transform 0.3s ease;
-  }
+  width: 16px;
+  height: auto;
+  transition: transform 0.3s ease;
+}
+
 .page-title {
   position: relative;
   font-size: 28px;
@@ -127,7 +244,7 @@ export default {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   display: inline-flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   font-size: 1.3em;
   font-weight: bold;
   color: #444;

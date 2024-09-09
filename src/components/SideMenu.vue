@@ -7,7 +7,7 @@
       <div class="totalAssets">
         {{ totalAssetsValue }} <img class="token-icon" src="@/assets/tokens/cryptodollar.png">
       </div>
-      <nav>
+      <nav class="main-menu-nav">
         <ul>
           <li>
             <router-link to="/">🏠 Home</router-link>
@@ -162,8 +162,12 @@ export default {
 </script>
 
 <style scoped>
+.main-menu-nav {
+  font-size: 20px;
+}
 .totalAssets {
   font-weight: bold;
+  font-size: 20px;
 }
 .token-icon {
     width: 16px;

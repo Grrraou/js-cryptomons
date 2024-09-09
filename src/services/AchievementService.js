@@ -1,4 +1,5 @@
 import { useToast } from "vue-toastification";
+import { addToInventory } from "./ItemService";
 
 const toast = useToast();
 let checkInterval = null;
@@ -9,7 +10,8 @@ export const achievements = [
     title: "Bitcoin Tinkerer - 10 Clicks",
     description: "Start your journey with a modest 10 clicks in the Bitcoin mine.",
     target: 10,
-    storageKey: "clicks_area_btc_mine"
+    storageKey: "clicks_area_btc_mine",
+    loot: 'good_new_btc'
   },
   {
     key: "clicks_area_btc_mine_100",
@@ -58,7 +60,8 @@ export const achievements = [
     title: "Monero Seeker - 100 Clicks",
     description: "Gather 100 clicks and delve deeper into Monero mining.",
     target: 100,
-    storageKey: "clicks_area_xmr_mine"
+    storageKey: "clicks_area_xmr_mine",
+    loot: 'good_new_btc'
   },
   {
     key: "clicks_area_xmr_mine_1000",
@@ -144,9 +147,14 @@ export const startAchievementTracking = () => {
       
       // Check if the value meets the target and if the achievement is not already unlocked
       if (value >= achievement.target && !localStorage.getItem(achievement.key)) {
+        let successText = `${achievement.title} unlocked!`;
         achievementSound.play();
+        if (achievement.loot) {
+          addToInventory(achievement.loot)
+        }
+        
         localStorage.setItem(achievement.key, "true"); // Mark achievement as unlocked
-        toast.success(`${achievement.title} unlocked!`);
+        toast.success(successText);
 
       }
     });

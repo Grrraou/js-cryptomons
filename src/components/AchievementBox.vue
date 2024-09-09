@@ -1,9 +1,9 @@
 <template>
     <div class="achievement-box" :class="{ unlocked: isUnlocked }" :style="backgroundStyle">
       <div class="achievement-content">
-        <h3>{{ title }}</h3>
-        <h3 style="display: none;">{{ storageKey }}</h3>
-        <!-- <h3>{{ target }}</h3> -->
+        <h3>{{ achievement.title }}</h3>
+        <p>{{ achievement.description }}</p>
+        <p v-if="achievement.loot">{{ achievement.loot }}</p>
         <p v-if="!isUnlocked">Locked</p>
         <p v-else>Unlocked!</p>
       </div>
@@ -13,15 +13,15 @@
   <script>
   export default {
     props: {
+      achievement: {
+        type: Object,
+        required: true,
+      },
       indexKey: {
         type: String,
         required: true,
       },
       storageKey: {
-        type: String,
-        required: true,
-      },
-      title: {
         type: String,
         required: true,
       },

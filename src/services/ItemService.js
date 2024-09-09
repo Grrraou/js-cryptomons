@@ -94,3 +94,12 @@ export const items = [
       localStorage.setItem('playerInventory', JSON.stringify(playerInventory));
     }
   }
+
+  export function addToInventory(itemIndex) {
+    const item = items.find(item => item.index === itemIndex);
+    if (item) {
+      let playerInventory = JSON.parse(localStorage.getItem('playerInventory')) || [];
+      playerInventory.push(item);
+      localStorage.setItem('playerInventory', JSON.stringify(playerInventory));
+    }
+  }

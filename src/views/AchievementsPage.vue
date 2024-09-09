@@ -5,8 +5,8 @@
       v-for="achievement in achievements"
       :key="achievement.key"
       :indexKey="achievement.key"
+      :achievement="achievement"
       :storageKey="achievement.storageKey"
-      :title="achievement.title"
       :target="achievement.target"
     />
   </div>

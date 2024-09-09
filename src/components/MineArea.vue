@@ -182,9 +182,7 @@
         if (event.clientX) {
           // Use event coordinates if available
           const manualMiningBuff = currentBuff.find(buff => buff.buffType === 'miningMultiplier' && Date.now() < buff.expiration);
-          console.log(manualMiningBuff);
           const manualMutliplier = manualMiningBuff?.multiplier || 1;
-          console.log(manualMutliplier);
           minedAmount = minedAmount * manualMutliplier;
           x = event.clientX;
           y = event.clientY;

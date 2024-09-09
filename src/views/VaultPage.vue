@@ -205,6 +205,7 @@ export default {
   width: 16px;
   height: auto;
   transition: transform 0.3s ease;
+  margin-bottom: -2px;
 }
 
 .page-title {

@@ -1,5 +1,5 @@
 
-export const mines = [
+export const minesEnum = [
   { index: 'btc_mine', name: 'Bitcoin', token: 'btc', requirement: null },
   { index: 'nmc_mine', name: 'Namecoin', token: 'nmc', requirement: 'decentralize_dns' },
   { index: 'ltc_mine', name: 'Litecoin', token: 'ltc', requirement: 'gold_deserve_silver' },
@@ -12,7 +12,7 @@ export const mines = [
  /* { index: 'ore_mine', name: 'Ore', token: 'ore', requirement: null }, */
 ];
 
-export const miningSounds = [
+export const miningSoundsEnum = [
   new Audio(require('@/assets/sounds/mining.mp3')),
   new Audio(require('@/assets/sounds/mining2.wav')),
   new Audio(require('@/assets/sounds/mining3.wav')),

@@ -1,21 +1,23 @@
 import StorageManager from "./StorageManager";
-import { mines } from "./MineService";
+import { minesEnum } from "./MineEnum";
 import TokenManager from "./TokenManager";
-import { miningSounds } from "./MineService";
+import { miningSoundsEnum } from "./MineEnum";
 import { currentBuff } from "./ItemService";
 import UXManager from "./UXManager";
 
 class MineManager {
     constructor() {
+        this.mines = minesEnum;
+        this.miningSounds = miningSoundsEnum;
         this.assetPath = require.context('@/assets/mines', false, /\.png$/);
     }
 
     getList() {
-        return mines;
+        return this.mines;
     }
 
     getFilteredList() {
-        return mines.filter(mine => {
+        return this.mines.filter(mine => {
             // Check if the mine has a requirement
             if (mine.requirement) {
               // Check if the required goal is unlocked in localStorage
@@ -27,7 +29,7 @@ class MineManager {
     }
 
     getItem(mineIndex) {
-        return mines.find(mine => mine.index === mineIndex);
+        return this.mines.find(mine => mine.index === mineIndex);
     }
 
     getMineLogo(mineIndex) {
@@ -83,14 +85,18 @@ class MineManager {
         }
     }
 
+    getRandomMiningSound() {
+        const randomIndex = Math.floor(Math.random() * this.miningSounds.length); // Use miningSounds.length here
+        const miningSound = this.miningSounds[randomIndex]; // Access the sound from the imported miningSounds array
+        miningSound.volume = 0.5;
+        miningSound.play();
+    }
+
     mineTokens(event, mineIndex, ref) {
         const mine = this.getItem(mineIndex);
 
         if (window.location.pathname === '/mines') {
-          const randomIndex = Math.floor(Math.random() * miningSounds.length); // Use miningSounds.length here
-          const miningSound = miningSounds[randomIndex]; // Access the sound from the imported miningSounds array
-          miningSound.volume = 0.5;
-          miningSound.play();
+          this.getRandomMiningSound();
         }
 
         let tokenIndex = `token_${mine.token}`;

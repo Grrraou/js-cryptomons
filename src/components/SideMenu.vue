@@ -88,7 +88,7 @@ export default {
         const cryptodollarValue = parseFloat(localStorage.getItem(`cryptodollar_value_${token.index}`)) || 0;
         total += tokenAmount * cryptodollarValue;
       });
-      this.totalAssetsValue = total.toFixed(6);
+      this.totalAssetsValue = total.toFixed(2);
     },
     checkStakingUnlocked() {
       // Check if the vault goal is unlocked in localStorage
@@ -162,10 +162,14 @@ export default {
 </script>
 
 <style scoped>
+.totalAssets {
+  font-weight: bold;
+}
 .token-icon {
     width: 16px;
     height: auto;
     transition: transform 0.3s ease;
+    margin-bottom: -2px;
   }
 .logo-container {
   display: flex;

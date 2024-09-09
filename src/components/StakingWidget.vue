@@ -1,6 +1,6 @@
 <template>
   <div class="staking-widget" :style="backgroundStyle">
-    <h3>{{ staking.name }} Staking</h3>
+    <div style="display: flex;justify-content: center;"><h3>{{ staking.name }} Staking</h3><div class="logs"></div></div>
     <p><strong>Staked Amount:</strong> {{ stakedAmount }} <img :src="getTokenIcon(staking.token)" class="token-icon" :title="staking.token"></p>
     <p><strong>Stored Amount:</strong> {{ storedAmount }} <img :src="getTokenIcon(staking.token)" class="token-icon" :title="staking.token"></p>
     <p><strong>APR:</strong> {{ staking.apr * 100 }}%</p>
@@ -103,10 +103,54 @@ export default {
         if (increment > 0) {
           this.storedAmount += increment;
           localStorage.setItem(this.storedKey, this.storedAmount.toFixed(6));
+          this.showAreaLog(this.staking.token, increment);
         }
         this.updateDisplay(); // Update display every 10 seconds (along with earnings)
       }, 10000); // Update every 10 seconds
     },
+    showAreaLog(token, text) {
+        if (this.$el) {
+          const logsDiv = this.$el.querySelector('.logs');
+          if (logsDiv) {
+            // Create a new text node
+            const textNode = document.createTextNode(text);
+
+            const imgElement = document.createElement('img');
+            imgElement.src = require(`@/assets/tokens/${token}.png`); // Replace with the actual image path
+            imgElement.style.width = '16px'; // Set the image size
+            imgElement.style.height = '16px'; 
+            imgElement.style.marginLeft = '8px';
+
+            // Create a new paragraph element and append the text node to it
+            const newParagraph = document.createElement('p');
+            newParagraph.style.fontSize = '20px';
+            newParagraph.style.margin = '0 20px 8px';
+            newParagraph.style.fontWeight = 'bold';
+            newParagraph.style.color = 'green';
+            newParagraph.style.opacity = '1'; // Start fully visible
+            newParagraph.style.pointerEvents = 'none'; // Ensure it doesn't interfere with user interactions
+            newParagraph.style.transition = 'transform 2s ease-out, opacity 2s ease-out'; // Smooth transition for both transform and opacity
+            newParagraph.style.zIndex = '9999'; // Ensure it appears on top of other elements
+
+            
+            newParagraph.appendChild(textNode);
+            newParagraph.appendChild(imgElement);
+
+            // Append the new paragraph to the .logs div
+            logsDiv.appendChild(newParagraph);
+
+            // Automatically remove the element after the animation ends
+            setTimeout(() => {
+              if (newParagraph && newParagraph.parentElement) {
+                newParagraph.parentElement.removeChild(newParagraph);
+              }
+            }, 1400); // Match with the duration of the animation
+          }
+        } else {
+          console.error('Element is not available');
+          return { x: 0, y: 0 }; // Fallback values
+        }
+      },
   },
   mounted() {
     this.loadAmounts();
@@ -147,7 +191,7 @@ export default {
   margin: 10px auto;
   padding: 20px;
   width: 90%;
-  border: 2px solid #ffa500;
+  border: 4px solid #ffa500;
   border-radius: 15px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   background-color: #fdfdfd;
@@ -163,7 +207,7 @@ export default {
 }
 
 .staking-widget:hover {
-  border: 6px solid #ffa500;
+  border: 4px solid #5EC15E;
 }
 
 .staking-widget h3 {

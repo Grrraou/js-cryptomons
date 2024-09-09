@@ -237,7 +237,7 @@ export default {
   margin: 10px;
   padding: 20px;
   width: 10%;
-  border: 2px solid #ffa500;
+  border: 4px solid #ffa500;
   border-radius: 15px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   background-color: #fdfdfd;
@@ -245,14 +245,13 @@ export default {
   display: inline-flex;
   flex-direction: column;
   align-items: flex-start;
-  font-size: 1.3em;
   font-weight: bold;
   color: #444;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
 }
 
 .vault-item:hover {
-  border: 6px solid #ffa500;
+  border: 4px solid #5EC15E;
 }
 
 .vault-item h2 {

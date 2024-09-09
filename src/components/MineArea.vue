@@ -343,7 +343,7 @@
     margin: 10px auto;
     padding: 20px;
     width: 90%;
-    border: 2px solid #ffa500;
+    border: 4px solid #ffa500;
     border-radius: 15px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     background-color: #fdfdfd;
@@ -359,7 +359,7 @@
   }
 
   .clicker-area:hover {
-    border: 6px solid #ffa500;
+    border: 4px solid #5EC15E;
   }
 
   

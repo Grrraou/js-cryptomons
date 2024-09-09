@@ -87,6 +87,8 @@ import ItemThumb from './ItemThumb.vue';
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
+    justify-content: flex-start;
+    width: 100%;
     padding: 10px;
     overflow-y: auto;
     height: 100%;

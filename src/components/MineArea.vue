@@ -87,7 +87,7 @@
     methods: {
       startAutoClicker(heroCount) {  
         MineManager.startAutoClicker(this.mine.index, () => {
-        MineManager.mineTokens(null, this.mine.index, this);
+          MineManager.mineTokens(null, this.mine.index, this);
       }, heroCount);
         /* if (this.autoClickerInterval) 
           clearInterval(this.autoClickerInterval);
@@ -117,6 +117,7 @@
       },
     },
     mounted() {
+      this.startAutoClicker(this.assignedHeroes.length);
     // Listen for the custom event from the global event bus
     eventBus.on('trigger-start-auto-clicker', ({ mineIndex, heroCount }) => {
       if (mineIndex === this.mine.index) {

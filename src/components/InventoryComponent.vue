@@ -20,8 +20,8 @@
   <script>
   // Import the eventBus to listen for updates
   import eventBus from '@/eventBus';
+import ItemManager from '@/services/ItemManager';
   // Import the items from ItemService
-  import { items as itemDefinitions } from '@/services/ItemService';
   
   export default {
     data() {
@@ -58,7 +58,7 @@
         // Map over the inventory and find the matching item in ItemService.js
         this.items = inventory.map(item => {
           // Find the item by its index
-          const originalItem = itemDefinitions.find(defItem => defItem.index === item.index);
+          const originalItem = ItemManager.getItem(item.index);
   
           // If found, restore its effect function
           if (originalItem && originalItem.effect) {

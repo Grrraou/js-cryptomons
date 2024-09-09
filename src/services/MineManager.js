@@ -2,8 +2,8 @@ import StorageManager from "./StorageManager";
 import { minesEnum } from "./MineEnum";
 import TokenManager from "./TokenManager";
 import { miningSoundsEnum } from "./MineEnum";
-import { currentBuff } from "./ItemService";
 import UXManager from "./UXManager";
+import ItemManager from "./ItemManager";
 
 class MineManager {
     constructor() {
@@ -99,19 +99,16 @@ class MineManager {
           this.playMiningSound();
         }
 
-        let tokenIndex = `token_${mine.token}`;
-        let currentAmount = parseFloat(localStorage.getItem(tokenIndex)) || 0;
+        const tokenIndex = `token_${mine.token}`;
+        const currentAmount = parseFloat(localStorage.getItem(tokenIndex)) || 0;
         let minedAmount = (Math.random() * (this.getUpgradeLevel(mine.index) + 1) * (0.0009 - 0.000001) + 0.000001);
-        
-
-        
         const tokenIcon = TokenManager.getTokenIcon(mine.token);
         
         // Use event coordinates if available
         if (event && event.clientX) {
             const x = event.clientX;
             const y = event.clientY;
-            const manualMiningBuff = currentBuff.find(buff => buff.buffType === 'miningMultiplier' && Date.now() < buff.expiration);
+            const manualMiningBuff = ItemManager.currentBuff.find(buff => buff.buffType === 'miningMultiplier' && Date.now() < buff.expiration);
             const manualMutliplier = manualMiningBuff?.multiplier || 1;
             minedAmount = minedAmount * manualMutliplier;
 
@@ -124,10 +121,7 @@ class MineManager {
 
         const newBalance = currentAmount + minedAmount;
         TokenManager.addToBalance(mine.token, minedAmount);
-
         ref.tokenBalance = newBalance;
-        //if (this.$route.name === 'Mines' && x && y)
-          //this.showFlyingText(minedAmount.toFixed(6), x, y);
       }
 }
 

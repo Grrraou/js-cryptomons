@@ -1,5 +1,5 @@
 
-export const heroes = [
+export const heroesEnum = [
   { index: 'bitcomon', name: 'Bitcomon', requirement: 'halving_bitcoin', assignedArea: null },
   { index: 'dogemon', name: 'Dogemon', requirement: 'sponsorize_nascar_driver', assignedArea: null },
   { index: 'etheremon', name: 'Etheremon', requirement: 'rejected_by_bitcoin_community', assignedArea: null },

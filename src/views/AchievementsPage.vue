@@ -14,7 +14,7 @@
 
 <script>
 import AchievementBox from '@/components/AchievementBox.vue';
-import { achievements } from '@/services/AchievementService.js';
+import AchievementManager from '@/services/AchievementManager';
 
 export default {
   components: {
@@ -22,7 +22,7 @@ export default {
   },
   data() {
     return {
-      achievements,
+      achievements: AchievementManager.getAchievements(),
     };
   },
 };

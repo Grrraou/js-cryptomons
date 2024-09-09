@@ -14,17 +14,6 @@
             :battleIndex="index"
           />
         </div>
-     <!--    <div v-for="battle in filteredBattlefields" :key="area.index" :style="getBackgroundStyle(index)">
-          <BattleField
-            :battle="battle"
-            :currentCreatures="currentCreatures[index]"
-            :heroes="getHeroesForBattle(index)"
-            @creature-click="damageCreature"
-            @hero-dropped="assignHeroToBattle"
-            @remove-hero="removeHeroFromBattle"
-            :battleIndex="index"
-          />
-        </div> -->
       </div>
       <HeroList
         class="hero-list"
@@ -37,9 +26,10 @@
   <script>
   import BattleField from '@/components/BattleField.vue';
   import HeroList from '@/components/HeroList.vue';
+  import eventBus from '@/eventBus';
   import { getBattleData, generateCreature } from '@/services/BattleService.js';
-  import { heroes as initialHeroes } from '@/services/HeroService.js'; // Correct import
   import BattleManager from '@/services/BattleManager.js';
+  import HeroManager from '@/services/HeroManager';
   
   export default {
     components: {
@@ -49,7 +39,7 @@
     data() {
       return {
         battleData: [],
-        heroes: initialHeroes,
+        heroes: HeroManager.getHeroes(),
         currentCreatures: [],
       };
     },
@@ -88,6 +78,7 @@
       },
       removeHero(hero) {
         const heroIndex = this.heroes.findIndex(h => h.name === hero.name);
+        console.log(heroIndex);
         if (heroIndex !== -1) {
           this.heroes[heroIndex].assignedArea = null;
         }
@@ -97,6 +88,8 @@
         const heroIndex = this.heroes.findIndex(h => h.name === hero.name);
         if (heroIndex !== -1) {
           this.heroes[heroIndex].assignedArea = battleIndex;
+          const areaIndex = battleIndex;
+          eventBus.emit('assign-hero', ({ hero, areaIndex }));
         }
       },
       removeHeroFromBattle(hero) {

@@ -26,17 +26,6 @@ export default {
     dragStart(event, hero) {
       event.dataTransfer.setData('heroData', JSON.stringify(hero));
     },
-    handleHeroDrop(event) {
-      try {
-        const heroData = event.dataTransfer.getData('heroData');
-        if (!heroData) return; // No valid data passed
-
-        const hero = JSON.parse(heroData);
-        this.$emit('remove-hero', hero); // Notify parent to remove hero from the area
-      } catch (error) {
-        console.error('Error parsing hero data on drop to hero list:', error);
-      }
-    },
   },
 };
 </script>

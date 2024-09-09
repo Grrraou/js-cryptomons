@@ -24,7 +24,7 @@
                 @dragend="removeHeroFromBattle(hero)"
             />
             </div>
-            <div class="drop-area" @drop="onDrop" @dragover.prevent>
+            <div class="drop-area" @drop="handleHeroDrop" @dragover.prevent>
             Drop heroes here to assign
             </div>
         </div>
@@ -32,10 +32,10 @@
     </div>
   </template>
   
-  <script>
+<script>
   import eventBus from '@/eventBus.js';
-  import { items } from '@/services/ItemService';
   import HeroThumb from './HeroThumb.vue';
+  import ItemManager from '@/services/ItemManager';
   
   export default {
     components: {
@@ -55,7 +55,7 @@
         required: true,
       },
       battleIndex: { 
-        type: String, 
+        type: Number, 
         required: true 
       },
     },
@@ -75,17 +75,17 @@
         }
     },
       creatureClicked() {
-        let manualDamageAmount = 1;
+        let manualDamageAmount = 50;
         const playerEquipement = JSON.parse(localStorage.getItem('playerEquipement')) || {};
         const weapon = playerEquipement.Weapon;
         if (weapon) {
-          const weaponObject = items.find(item => item.index === weapon.index)
+          const weaponObject = ItemManager.getItem(weapon.index);
           manualDamageAmount += weaponObject.effect();
         }
 
         this.$emit('creature-click', this.battleIndex, manualDamageAmount);
       },
-      onDrop(event) {
+      handleHeroDrop(event) {
         const heroData = event.dataTransfer.getData('heroData');
         if (heroData) {
           const hero = JSON.parse(heroData);
@@ -166,29 +166,6 @@
     display: flex;
     gap: 10px;
     flex-wrap: wrap;
-  }
-  
-  .hero {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 10px;
-    padding: 10px;
-    background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
-    border-radius: 10px;
-    cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-  
-  .hero-image {
-    width: 80px;
-    height: 80px;
-    text-align: center;
-    cursor: grab;
-    border-radius: 50%;
-    margin-bottom: 10px;
-    border: 3px solid #ffa500;
-    cursor: grab;
   }
   
   .drop-area {

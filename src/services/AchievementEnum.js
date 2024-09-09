@@ -1,10 +1,5 @@
-import { useToast } from "vue-toastification";
-import { addToInventory } from "./ItemService";
 
-const toast = useToast();
-let checkInterval = null;
-
-export const achievements = [
+export const achievementsEnum = [
   {
     key: "clicks_area_btc_mine_10",
     title: "Bitcoin Tinkerer - 10 Clicks",
@@ -139,36 +134,3 @@ export const achievements = [
     storageKey: "level_area_doge_mine"
   },
 ];
-
-
-export const startAchievementTracking = () => {
-  const achievementSound = new Audio(require('@/assets/sounds/achievement.wav'));
-  achievementSound.volume = 0.5;
-  if (checkInterval) return; // Prevent multiple intervals
-
-  checkInterval = setInterval(() => {
-    achievements.forEach((achievement) => {
-      const value = parseInt(localStorage.getItem(achievement.storageKey), 10) || 0;
-      
-      // Check if the value meets the target and if the achievement is not already unlocked
-      if (value >= achievement.target && !localStorage.getItem(achievement.key)) {
-        let successText = `${achievement.title} unlocked!`;
-        achievementSound.play();
-        if (achievement.loot) {
-          addToInventory(achievement.loot)
-        }
-        
-        localStorage.setItem(achievement.key, "true"); // Mark achievement as unlocked
-        toast.success(successText);
-
-      }
-    });
-  }, 1000); // Check every second
-};
-
-export const stopAchievementTracking = () => {
-  if (checkInterval) {
-    clearInterval(checkInterval);
-    checkInterval = null;
-  }
-};

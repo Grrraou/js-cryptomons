@@ -28,8 +28,8 @@
 import MineManager from '@/services/MineManager';
 import MineArea from '@/components/MineArea.vue';
 import HeroList from '@/components/HeroList.vue';
-import { heroes } from '@/services/HeroService.js';
 import eventBus from '@/eventBus.js';
+import HeroManager from '@/services/HeroManager';
 
 export default {
   components: {
@@ -39,7 +39,7 @@ export default {
   data() {
     return {
       mines: MineManager.getFilteredList(),
-      heroes: heroes,
+      heroes: HeroManager.getHeroes(),
     };
   },
   computed: {
@@ -56,10 +56,12 @@ export default {
 
         // Calculate the updated number of assigned heroes
         const updatedHeroCount = this.getHeroesForArea(mineIndex).length;
-        console.log(hero)
+        this.heroes = HeroManager.getHeroes();
 
         // Emit the event with the updated hero count
         eventBus.emit('trigger-start-auto-clicker', { mineIndex, heroCount: updatedHeroCount });
+        const areaIndex = mineIndex;
+        eventBus.emit('assign-hero', ({ hero, areaIndex }));
       }
     },
     removeHero(hero) {

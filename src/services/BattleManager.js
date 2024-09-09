@@ -1,9 +1,9 @@
 // services/BattleManager.js
 import eventBus from '@/eventBus.js';
+import HeroManager from './HeroManager';
 import { generateCreature } from '@/services/BattleService.js';
-import { heroes } from '@/services/HeroService.js';
-import { items } from './ItemService';
 import { useToast } from 'vue-toastification';
+import ItemManager from './ItemManager';
 
 class BattleManager {
   constructor() {
@@ -43,7 +43,7 @@ class BattleManager {
       const playerEquipement = JSON.parse(localStorage.getItem('playerEquipement')) || {};
         const chest = playerEquipement.Chest;
         if (chest) {
-          const chestObject = items.find(item => item.index === chest.index)
+          const chestObject = ItemManager.getItem(chest.index);
           heroesDamage += chestObject.effect();
         }
       if (assignedHeroes.length > 0) {
@@ -80,16 +80,16 @@ class BattleManager {
       creature.health -= amount;
       if (creature.health <= 0) {
         // Loot a random item from the items array
-        const lootItem = items.find(item => item.index === creature.loot.index);
+        const lootItem = ItemManager.getItem(creature.loot.index);
         let ratio = creature.loot.ratio;
         // get Head bonus
         const playerEquipement = JSON.parse(localStorage.getItem('playerEquipement')) || {};
         const head = playerEquipement.Head;
         if (head) {
-          const headObject = items.find(item => item.index === head.index)
+          const headObject = ItemManager.getItem(head.index);
           ratio = ratio + (ratio * headObject.effect());
         }
-
+        /** DEBUG */ ratio += 5;
         if (Math.random() <= ratio) {
           // Retrieve the player's inventory from localStorage
           let playerInventory = JSON.parse(localStorage.getItem('playerInventory')) || [];
@@ -111,7 +111,7 @@ class BattleManager {
   }
 
   getHeroesForBattle(index) {
-    return heroes.filter(hero => hero.assignedArea === index); // Adjusted to get heroes for a specific battlefield
+    return HeroManager.getHeroes().filter(hero => hero.assignedArea === index); // Adjusted to get heroes for a specific battlefield
   }
 
   saveState() {

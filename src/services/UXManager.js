@@ -1,8 +1,16 @@
-
+import { useToast } from "vue-toastification";
 
 class UXManager {
     constructor() {
-          
+          this.toast = useToast();
+    }
+
+    showSuccess(text) {
+      this.toast.success(text);
+    }
+
+    showError(text) {
+      this.toast.error(text);
     }
 
     showFlyingText(text, image = null, x = null, y = null) {

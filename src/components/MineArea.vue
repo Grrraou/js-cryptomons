@@ -1,5 +1,5 @@
 <template>
-  <div class="clicker-area" :style="backgroundStyle" @dragover.prevent @drop="handleDrop">
+  <div class="clicker-area" :style="backgroundStyle" @dragover.prevent @drop="handleHeroDrop">
     <!-- Title and Logo Section -->
     <div class="title-section">
       <h3 class="mine-name">{{ mine.name }}</h3>
@@ -98,7 +98,7 @@
           this.autoClickerInterval = null; // Reset the interval variable
         }
       },
-      handleDrop(event) {
+      handleHeroDrop(event) {
         try {
           const heroData = event.dataTransfer.getData('heroData');
           if (!heroData) return;
@@ -122,7 +122,7 @@
     });
 
      // Listen for the potion effect to double mining power
-     eventBus.on('manual-mining-boost', ({ multiplier, duration }) => {
+     eventBus.on('miningMultiplierBuff', ({ multiplier, duration }) => {
       this.miningMultiplier = multiplier;
 
       // Reset the multiplier back to 1 after the duration expires
@@ -135,22 +135,22 @@
     // Clean up the event listener when the component is destroyed
     eventBus.off('trigger-start-auto-clicker');
   },
-    computed: {
-      backgroundStyle() {
-        let backgroundUrl = MineManager.getBackgroundImage(this.mine.index);
+  computed: {
+    backgroundStyle() {
+      let backgroundUrl = MineManager.getBackgroundImage(this.mine.index);
 
-        return {
-          background: `linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), 
-              url(${backgroundUrl}) center/cover no-repeat`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-        };
-      },
+      return {
+        background: `linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), 
+            url(${backgroundUrl}) center/cover no-repeat`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      };
     },
-  };
-  </script>
+  },
+};
+</script>
   
-  <style scoped>
+<style scoped>
   .mine-name {
     color: #444;
     margin-right: 15px;
@@ -178,8 +178,6 @@
   .clicker-area:hover {
     border: 4px solid #5EC15E;
   }
-
-  
 
   /* Title and logo section */
   .title-section {
@@ -359,39 +357,24 @@
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
   }
 
-  .hero-image {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    margin-bottom: 5px;
-    border: 2px solid #ffa500;
-  }
-
-  .hero-name {
-    font-size: 1.1em;
-    color: #333;
-    font-weight: bold;
-  }
-
   .token-balance-display {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5em;
-  margin: 10px 0;
-  color: #333;
-}
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5em;
+    margin: 10px 0;
+    color: #333;
+  }
 
-.token-balance-text {
-  font-size: 1.3em;
-  font-weight: bold;
-  margin-right: 10px;
-}
+  .token-balance-text {
+    font-size: 1.3em;
+    font-weight: bold;
+    margin-right: 10px;
+  }
 
-.token-icon {
-  width: 30px;
-  height: auto;
-}
-
-  </style>
+  .token-icon {
+    width: 30px;
+    height: auto;
+  }
+</style>
   

@@ -3,10 +3,10 @@
 
     <div class="hero-container" @dragover.prevent @drop="handleHeroDrop">
       <div class="hero-list-container">
-        <div v-if="availableHeroes.length > 0" class="hero-grid">
+        <div v-if="heroes.length > 0" class="hero-grid">
           <HeroThumb
             class="hero"
-            v-for="(hero, index) in availableHeroes"
+            v-for="(hero, index) in heroes"
             :key="index"
             :hero="hero"
             draggable="true"
@@ -20,48 +20,59 @@
   </div>
 </template>
 
-
-
-
-  
 <script>
+import HeroManager from '@/services/HeroManager';
 import HeroThumb from './HeroThumb.vue';
+import eventBus from '@/eventBus';
 
 
 export default {
   components: {
     HeroThumb,
   },
-  props: {
-    heroes: Array,
+  data() {
+    return {
+      heroes: HeroManager.getAvailableHeroes(),
+    };
   },
   computed: {
-    availableHeroes() {
-      const unlockedHeroes = this.heroes.filter(hero => {
-        // Check if the mine has a requirement
-        if (hero.requirement) {
-          // Check if the required goal is unlocked in localStorage
-          return localStorage.getItem(`goal_${hero.requirement}_unlocked`) === 'true';
-        }
-        // If no requirement, always show the area
-        return true;
-      });
-      //console.log(unlockedHeroes);
-      return unlockedHeroes.filter(hero => hero.assignedArea === null);
-    },
+
   },
   methods: {
     handleHeroDrop(event) {
       try {
         const heroData = event.dataTransfer.getData('heroData');
         if (!heroData) return; // No valid data passed
-
+        console.log('heroDrop')
         const hero = JSON.parse(heroData);
         this.$emit('remove-hero', hero); // Notify parent to remove hero from the area
+        this.heroes = HeroManager.getAvailableHeroes();
       } catch (error) {
         console.error('Error parsing hero data on drop to hero list:', error);
       }
     },
+/*     removeHero(hero) {
+      const heroIndex = this.heroes.findIndex(h => h.name === hero.name);
+      if (heroIndex !== -1) {
+        const mineIndex = this.heroes[heroIndex].assignedArea;
+        this.heroes[heroIndex].assignedArea = null;
+
+        if (mineIndex !== null) {
+          // Calculate the updated number of assigned heroes after removal
+          const updatedHeroCount = this.getHeroesForArea(mineIndex).length;
+
+          // Emit the event with the updated hero count
+          eventBus.emit('trigger-start-auto-clicker', { mineIndex, heroCount: updatedHeroCount });
+        }
+      }
+    }, */
+  },
+  mounted() {
+    // Listen for the custom event from the global event bus
+    eventBus.on('assign-hero', ({ hero, areaIndex }) => {
+      console.log(`${hero.index} assigned to ${areaIndex}`);
+      this.heroes = HeroManager.getAvailableHeroes();
+    })
   },
 };
 </script>

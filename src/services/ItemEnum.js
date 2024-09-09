@@ -57,9 +57,9 @@ export const itemsEnum = [
         effect: function () {
              ItemManager.startBuff({
                 type: 'miningMultiplier',
-                msg: '2x Mining efficiency for 2 minutes',
+                source: 'manual-mining-potion',
                 multiplier: 2000,
-                expiration: Date.now() + 120000, // 2 minutes from now
+                expiration: 120000, // 2 minutes from now
             })
         },
     },

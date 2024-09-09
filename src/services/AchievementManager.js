@@ -15,7 +15,7 @@ class AchievementManager {
     }
 
     getAchievement(achievementIndex) {
-        return this.getAchievement().find(achievement => { return achievement.index === achievementIndex })
+        return this.getAchievements().find(achievement => { return achievement.index === achievementIndex; })
     }
 
     startAchievementTracking() {

@@ -75,12 +75,10 @@
         }
     },
       creatureClicked() {
-        let manualDamageAmount = 50;
-        const playerEquipement = JSON.parse(localStorage.getItem('playerEquipement')) || {};
-        const weapon = playerEquipement.Weapon;
+        let manualDamageAmount = 1;
+        const weapon = ItemManager.getEquipedItem('Weapon');
         if (weapon) {
-          const weaponObject = ItemManager.getItem(weapon.index);
-          manualDamageAmount += weaponObject.effect();
+          manualDamageAmount += weapon.effect();
         }
 
         this.$emit('creature-click', this.battleIndex, manualDamageAmount);

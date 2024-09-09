@@ -37,18 +37,16 @@ class BattleManager {
   }
 
   handleHeroAttacks() {
-    this.battleData.forEach((battle, index) => {
-      const assignedHeroes = this.getHeroesForBattle(index);
+    this.battleData.forEach((battle, battleFieldIndex) => {
+      const assignedHeroes = HeroManager.getHeroesByArea(battleFieldIndex);
       let heroesDamage = 1;
-      const playerEquipement = JSON.parse(localStorage.getItem('playerEquipement')) || {};
-        const chest = playerEquipement.Chest;
-        if (chest) {
-          const chestObject = ItemManager.getItem(chest.index);
-          heroesDamage += chestObject.effect();
-        }
+      const chest = ItemManager.getEquipedItem('Chest');
+      if (chest) {
+          heroesDamage += chest.effect();
+      }
       if (assignedHeroes.length > 0) {
-        const damage = assignedHeroes.length * heroesDamage;
-        this.damageCreature(index, damage);
+          const damage = assignedHeroes.length * heroesDamage;
+          this.damageCreature(battleFieldIndex, damage);
       }
     });
   }
@@ -83,22 +81,13 @@ class BattleManager {
         const lootItem = ItemManager.getItem(creature.loot.index);
         let ratio = creature.loot.ratio;
         // get Head bonus
-        const playerEquipement = JSON.parse(localStorage.getItem('playerEquipement')) || {};
-        const head = playerEquipement.Head;
+        const head = ItemManager.getEquipedItem('Head');
         if (head) {
-          const headObject = ItemManager.getItem(head.index);
-          ratio = ratio + (ratio * headObject.effect());
+          ratio = ratio + (ratio * head.effect());
         }
         /** DEBUG */ ratio += 5;
         if (Math.random() <= ratio) {
-          // Retrieve the player's inventory from localStorage
-          let playerInventory = JSON.parse(localStorage.getItem('playerInventory')) || [];
-
-          // Add the random item to the inventory
-          playerInventory.push(lootItem);
-
-          // Save the updated inventory back to localStorage
-          localStorage.setItem('playerInventory', JSON.stringify(playerInventory));
+          ItemManager.addToInventory(lootItem.index)
           const toast = useToast();
           toast.success(`looted ${lootItem.name}!`);
         }
@@ -110,8 +99,8 @@ class BattleManager {
     }
   }
 
-  getHeroesForBattle(index) {
-    return HeroManager.getHeroes().filter(hero => hero.assignedArea === index); // Adjusted to get heroes for a specific battlefield
+  getHeroesForBattle(BattleFieldIndex) {
+    return HeroManager.getHeroes().filter(hero => hero.assignedArea === BattleFieldIndex);
   }
 
   saveState() {

@@ -13,6 +13,10 @@ class HeroManager {
       return this.getHeroes().find(hero => { return hero.index === heroIndex });
     }
 
+    getHeroesByArea(areaIndex) {
+      return this.getHeroes().filter(hero => hero.assignedArea === areaIndex);
+    }
+
     getAvailableHeroes() {
       return this.getHeroes().filter(hero => {
         return this.isHeroUnlocked(hero.index) && !this.isHeroAssigned(hero.index);

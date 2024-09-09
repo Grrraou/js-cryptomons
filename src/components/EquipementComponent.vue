@@ -8,15 +8,14 @@
         @dragenter.prevent
       >
         <p>Head</p>
-        <div
+        <ItemThumb
           class="equip-slot"
           :class="{ occupied: equippedItems.Head }"
+          :item="equippedItems.Head"
           v-if="equippedItems.Head"
           draggable="true"
           @dragstart="dragItem(equippedItems.Head, 'Head', $event)"
-        >
-          <p>{{ equippedItems.Head.name }}</p>
-        </div>
+        />
       </div>
   
       <!-- Chest Slot -->
@@ -27,15 +26,14 @@
         @dragenter.prevent
       >
         <p>Chest</p>
-        <div
+        <ItemThumb
           class="equip-slot"
           :class="{ occupied: equippedItems.Chest }"
+          :item="equippedItems.Chest"
           v-if="equippedItems.Chest"
           draggable="true"
           @dragstart="dragItem(equippedItems.Chest, 'Chest', $event)"
-        >
-          <p>{{ equippedItems.Chest.name }}</p>
-        </div>
+        />
       </div>
   
       <!-- Weapon Slot -->
@@ -46,106 +44,65 @@
         @dragenter.prevent
       >
         <p>Weapon</p>
-        <div
+        <ItemThumb
           class="equip-slot"
           :class="{ occupied: equippedItems.Weapon }"
+          :item="equippedItems.Weapon"
           v-if="equippedItems.Weapon"
           draggable="true"
           @dragstart="dragItem(equippedItems.Weapon, 'Weapon', $event)"
-        >
-          <p>{{ equippedItems.Weapon.name }}</p>
-        </div>
+        />
       </div>
     </div>
   </template>
   
-  <script>
-  import eventBus from '@/eventBus';
+<script>
+import eventBus from '@/eventBus';
+import ItemManager from '@/services/ItemManager';
+import ItemThumb from './ItemThumb.vue';
   
-  export default {
+export default {
+    components: {
+        ItemThumb,
+    },
     data() {
       return {
-        equippedItems: {
-          Head: null,
-          Chest: null,
-          Weapon: null,
-        },
+        equippedItems: ItemManager.getEquipement(),
       };
     },
     methods: {
       dragItem(item, slotType, event) {
         event.dataTransfer.setData('item', JSON.stringify(item));
+        event.dataTransfer.setData('itemIndex', item.index);
         event.dataTransfer.setData('slotType', slotType);
       },
-  
       handleDrop(slotType, event) {
         event.preventDefault();
         const itemData = event.dataTransfer.getData('item');
+        const inventoryIndex = event.dataTransfer.getData('inventoryIndex');
         const item = JSON.parse(itemData);
   
         if (item && item.type === slotType) {
-          if (this.equippedItems[slotType]) {
-            this.moveToInventory(this.equippedItems[slotType]);
-          }
-          this.equippedItems[slotType] = item;
-          this.removeFromInventory(item);
-          this.saveEquipment();
+          ItemManager.equipItem(item.index, item.type);
+          ItemManager.removeFromInventory(inventoryIndex);
         } else {
           console.error(`Cannot equip ${item.name} in the ${slotType} slot (type mismatch).`);
         }
       },
-  
-      moveToInventory(item) {
-        let playerInventory = JSON.parse(localStorage.getItem('playerInventory')) || [];
-        playerInventory.push(item);
-        localStorage.setItem('playerInventory', JSON.stringify(playerInventory));
-        eventBus.emit('inventory-updated');
-      },
-  
-      removeFromInventory(item) {
-        let playerInventory = JSON.parse(localStorage.getItem('playerInventory')) || [];
-        const itemIndex = playerInventory.findIndex(invItem => invItem.index === item.index);
-        if (itemIndex !== -1) {
-          playerInventory.splice(itemIndex, 1);
-          localStorage.setItem('playerInventory', JSON.stringify(playerInventory));
-          eventBus.emit('inventory-updated');
-        }
-      },
-  
-      saveEquipment() {
-        localStorage.setItem('playerEquipement', JSON.stringify(this.equippedItems));
-      },
-  
-      loadEquipment() {
-        const savedEquipment = JSON.parse(localStorage.getItem('playerEquipement')) || {};
-        this.equippedItems = { ...this.equippedItems, ...savedEquipment };
-      },
-  
-      removeFromEquipment(slotType) {
-        if (this.equippedItems[slotType]) {
-          this.equippedItems[slotType] = null;
-          this.saveEquipment();
-          eventBus.emit('equipment-updated');
-        }
-      },
     },
-  
     mounted() {
-      this.loadEquipment();
+      eventBus.on('equipment-updated', () => {
+        this.equippedItems = { ...this.equippedItems, ...ItemManager.getEquipement() };
+      });
       eventBus.on('inventory-item-sold', (slotType) => {
-        this.removeFromEquipment(slotType);
+        ItemManager.unequipItem(slotType)
       });
       eventBus.on('inventory-item-dropped', (slotType) => {
-        this.removeFromEquipment(slotType);
+        ItemManager.unequipItem(slotType)
       });
     },
-  
-    beforeUnmount() {
-      eventBus.off('inventory-item-sold', this.removeFromEquipment);
-      eventBus.off('inventory-item-dropped', this.removeFromEquipment);
-    }
-  };
-  </script>
+};
+</script>
   
   <style scoped>
   .equipement-container {

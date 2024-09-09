@@ -8,6 +8,7 @@
   <script>
   // Import the eventBus to communicate between components
   import eventBus from '@/eventBus';
+import ItemManager from '@/services/ItemManager';
   
   export default {
     methods: {
@@ -15,6 +16,7 @@
         event.preventDefault();
   
         const itemData = event.dataTransfer.getData('item');
+        const inventoryIndex = event.dataTransfer.getData('inventoryIndex');
         const slotType = event.dataTransfer.getData('slotType'); // Retrieve the equipment slot (if any)
         const item = JSON.parse(itemData);
   
@@ -29,14 +31,8 @@
           }
   
           // Remove the item from the inventory if it's in there
-          let playerInventory = JSON.parse(localStorage.getItem('playerInventory')) || [];
-          const itemIndex = playerInventory.findIndex(invItem => invItem.index === item.index);
-  
-          if (itemIndex !== -1) {
-            playerInventory.splice(itemIndex, 1);
-            localStorage.setItem('playerInventory', JSON.stringify(playerInventory));
-            eventBus.emit('inventory-updated'); // Notify the InventoryComponent to update
-          }
+          ItemManager.removeFromInventory(inventoryIndex);
+
         } else {
           console.error('Item data is invalid or has no value.');
         }

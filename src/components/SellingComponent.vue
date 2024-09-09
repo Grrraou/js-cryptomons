@@ -9,6 +9,7 @@
   // Import the eventBus to communicate between components
   import eventBus from '@/eventBus';
 import ItemManager from '@/services/ItemManager';
+import TokenManager from '@/services/TokenManager';
   
   export default {
     methods: {
@@ -21,7 +22,7 @@ import ItemManager from '@/services/ItemManager';
         const item = JSON.parse(itemData);
   
         if (item && item.value) {
-          const currentCryptodollar = parseFloat(localStorage.getItem('token_cryptodollar')) || 0;
+          const currentCryptodollar = TokenManager.getBalance('cryptodollar') || 0;
           const newCryptodollar = currentCryptodollar + item.value;
           localStorage.setItem('token_cryptodollar', newCryptodollar.toFixed(2));
   

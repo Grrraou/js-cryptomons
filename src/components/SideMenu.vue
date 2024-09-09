@@ -64,6 +64,7 @@
 </template>
 
 <script>
+import TokenManager from '@/services/TokenManager';
 import { tokens } from '@/services/TokenService';
 
 export default {
@@ -82,13 +83,8 @@ export default {
   },
   methods: {
     updateTotalAssetsValue() {
-      let total = 0;
-      this.tokens.forEach(token => {
-        const tokenAmount = parseFloat(localStorage.getItem(`token_${token.index}`)) || 0;
-        const cryptodollarValue = parseFloat(localStorage.getItem(`cryptodollar_value_${token.index}`)) || 0;
-        total += tokenAmount * cryptodollarValue;
-      });
-      this.totalAssetsValue = total.toFixed(2);
+
+      this.totalAssetsValue = TokenManager.getToalAssetsValue().toFixed(2);
     },
     checkStakingUnlocked() {
       // Check if the vault goal is unlocked in localStorage

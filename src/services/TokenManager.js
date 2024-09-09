@@ -1,9 +1,15 @@
 
 import StorageManager from "./StorageManager";
+import { tokens } from "./TokenService";
 
 class TokenManager {
     constructor() {
         this.assetPath = require.context('@/assets/tokens', false, /\.png$/);
+        this.tokens = tokens;
+    }
+
+    getTokens() {
+        return this.tokens;
     }
 
     getTokenIcon(tokenIndex) {
@@ -40,6 +46,16 @@ class TokenManager {
 
     updateTokenPrice(tokenIndex, newValue) {
         StorageManager.update(`cryptodollar_value_${tokenIndex}`, newValue.toFixed(6));
+    }
+
+    getToalAssetsValue() {
+        let total = 0;
+        this.getTokens().forEach(token => {
+          const tokenAmount = this.getBalance(token.index) || 0;
+          const cryptodollarValue = this.getTokenPrice(token.index) || 0;
+          total += tokenAmount * cryptodollarValue;
+        });
+        return total;
     }
 }
 

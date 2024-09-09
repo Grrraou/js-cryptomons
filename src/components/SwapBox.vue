@@ -25,6 +25,13 @@
         </template>
       </v-select>
 
+      <!-- Swap Button (Switch From and To Tokens) -->
+      <div class="swap-tokens-button-container">
+        <button class="swap-tokens-button" @click="switchTokens">
+          <img src="@/assets/swap/swapButton.png" alt="Switch Tokens" class="swap-icon" />
+        </button>
+      </div>
+
       <!-- To Token -->
       <label for="to-token">To:</label>
       <v-select
@@ -75,9 +82,9 @@
     <div v-if="swapResult" class="swap-result">
       <p>You will receive approximately:<br>{{ swapResult }} <img :src="require(`@/assets/tokens/${toToken.index}.png`)" class="token-icon"></p>
     </div>
-
   </div>
 </template>
+
 
 <script>
 import vSelect from 'vue3-select';
@@ -137,6 +144,31 @@ export default {
       this.fromTokenBalance = TokenManager.getBalance(this.fromToken.index) || 0;
       this.toTokenBalance = TokenManager.getBalance(this.toToken.index) || 0;
       this.calculatePotentialSwap();
+    },
+    switchTokens() {
+      // Swap fromToken and toToken
+      const tempToken = this.fromToken;
+      this.fromToken = this.toToken;
+      this.toToken = tempToken;
+
+      // After switching, update the balances
+      this.updateBalances();
+    },
+    updateCryptodollarValues() {
+      let fromTokenValue = parseFloat(localStorage.getItem(`cryptodollar_value_${this.fromToken.index}`)) || 0;
+      let toTokenValue = parseFloat(localStorage.getItem(`cryptodollar_value_${this.toToken.index}`)) || 0;
+
+      const impactFactor = this.amount / (this.amount + 10); // Calculate impact factor
+      fromTokenValue = fromTokenValue * (1 - impactFactor);
+      toTokenValue = toTokenValue * (1 + impactFactor);
+
+      // Update prices if the tokens are not 'cryptodollar'
+      if (this.fromToken.index !== 'cryptodollar') {
+        TokenManager.updateTokenPrice(this.fromToken.index, fromTokenValue);
+      }
+      if (this.toToken.index !== 'cryptodollar') {
+        TokenManager.updateTokenPrice(this.toToken.index, toTokenValue);
+      }
     },
     calculatePotentialSwap() {
       const fromTokenValue = TokenManager.getTokenPrice(this.fromToken.index);
@@ -285,4 +317,27 @@ export default {
   height: 50px;
   margin-right: 8px;
 }
+
+.swap-tokens-button-container {
+  display: flex;
+  justify-content: center;
+  margin: 10px 0;
+}
+
+.swap-tokens-button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.swap-icon {
+  width: 32px;
+  height: 32px;
+  transition: transform 0.3s ease;
+}
+
+.swap-tokens-button:hover .swap-icon {
+  transform: rotate(180deg);
+}
+
 </style>

@@ -15,7 +15,6 @@ import './assets/styles/main.css';
 import 'vue3-select/dist/vue3-select.css';
 import BattleManager from '@/services/BattleManager.js';
 import { getBattleData } from '@/services/BattleService.js';
-import { startStakingUpdates } from '@/services/StakingService';
 
 export default {
   components: {
@@ -24,7 +23,6 @@ export default {
   created() {
     const battleData = getBattleData();
     BattleManager.init(battleData, BattleManager.loadState());
-    startStakingUpdates();
   }
 };
 </script>

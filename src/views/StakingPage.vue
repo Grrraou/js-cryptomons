@@ -11,9 +11,9 @@
     </div>
   </template>
   
-  <script>
-  import { stakings } from '@/services/StakingService.js'; // Ensure the path is correct
-  import StakingWidget from '@/components/StakingWidget.vue'; // Ensure the path is correct
+<script>
+import StakingWidget from '@/components/StakingWidget.vue';
+import StakingManager from '@/services/StakingManager';
   
   export default {
     name: 'StakingPage',
@@ -22,14 +22,13 @@
     },
     data() {
       return {
-        stakings,
+        stakings: StakingManager.getStakings(),
       };
     },
     computed: {
       filteredStaking() {
       return this.stakings.filter(staking => {
         // Check if the mine has a requirement
-        console.log(staking.requirement)
         if (staking.requirement) {
           // Check if the required goal is unlocked in localStorage
           return localStorage.getItem(`goal_${staking.requirement}_unlocked`) === 'true';

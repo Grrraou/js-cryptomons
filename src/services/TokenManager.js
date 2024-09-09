@@ -18,7 +18,6 @@ class TokenManager {
     }
 
     addToBalance(tokenIndex, amount) {
-        console.log(tokenIndex + ' - ' + amount)
         const storedAmmount = this.getBalance(tokenIndex);
         const newAmount = parseFloat(storedAmmount + amount);
         StorageManager.update(`token_${tokenIndex}`, newAmount);

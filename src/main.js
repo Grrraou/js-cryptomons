@@ -5,9 +5,9 @@ import router from './router';
 import Toast, { POSITION } from 'vue-toastification';
 import 'vue-toastification/dist/index.css';
 import { initCryptodollarValues } from './services/TokenService';
-import { startStakingUpdates } from './services/StakingService';
 import AchievementManager from './services/AchievementManager';
 import ItemManager from './services/ItemManager';
+import StakingManager from './services/StakingManager';
 
 createApp(App).use(router).use(Toast, {
   position: POSITION.TOP_RIGHT,
@@ -17,4 +17,4 @@ createApp(App).use(router).use(Toast, {
 AchievementManager.startAchievementTracking();
 initCryptodollarValues();
 ItemManager.initInventory();
-startStakingUpdates();
+StakingManager.startStakingUpdates();

@@ -7,20 +7,19 @@
       <v-select
         v-model="fromToken"
         :options="filteredTokensFrom"
-        @input="updateBalances"
         :reduce="token => token"
         :get-option-label="getOptionLabel"
         placeholder="Select or search token"
       >
         <template #option="option">
           <div class="option-content">
-            <img :src="getTokenLogo(option.index)" alt="Token Logo" class="token-logo" />
+            <img :src="TokenManager.getTokenIcon(option.index)" alt="Token Logo" class="token-logo" />
             <span class="option-label">{{ getTokenLabel(option) }}</span>
           </div>
         </template>
         <template #single-label="props">
           <div class="option-content">
-            <img :src="getTokenLogo(props.option.index)" alt="Token Logo" class="token-logo" />
+            <img :src="TokenManager.getTokenIcon(props.option.index)" alt="Token Logo" class="token-logo" />
             <span class="option-label">{{ getTokenLabel(props.option) }}</span>
           </div>
         </template>
@@ -31,20 +30,19 @@
       <v-select
         v-model="toToken"
         :options="filteredTokensTo"
-        @input="updateBalances"
         :reduce="token => token"
         :get-option-label="getOptionLabel"
         placeholder="Select or search token"
       >
         <template #option="option">
           <div class="option-content">
-            <img :src="getTokenLogo(option.index)" alt="Token Logo" class="token-logo" />
+            <img :src="TokenManager.getTokenIcon(option.index)" alt="Token Logo" class="token-logo" />
             <span class="option-label">{{ getTokenLabel(option) }}</span>
           </div>
         </template>
         <template #single-label="props">
           <div class="option-content">
-            <img :src="getTokenLogo(props.option.index)" alt="Token Logo" class="token-logo" />
+            <img :src="TokenManager.getTokenIcon(props.option.index)" alt="Token Logo" class="token-logo" />
             <span class="option-label">{{ getTokenLabel(props.option) }}</span>
           </div>
         </template>
@@ -83,12 +81,18 @@
 
 <script>
 import vSelect from 'vue3-select';
+import TokenManager from '@/services/TokenManager';
 import { tokens } from '../services/TokenService';
 
 export default {
   components: {
     vSelect,
   },
+  setup() {
+      return {
+        TokenManager,
+      };
+    },
   data() {
     return {
       fromToken: tokens[0],
@@ -104,40 +108,39 @@ export default {
     filteredTokensFrom() {
       return this.tokens
         .filter(token => token.index !== this.toToken.index)
-        .sort((a, b) => this.getTokenBalance(b.index) - this.getTokenBalance(a.index));
+        .sort((a, b) => TokenManager.getBalance(b.index) - TokenManager.getBalance(a.index));
     },
     filteredTokensTo() {
       return this.tokens
         .filter(token => token.index !== this.fromToken.index)
-        .sort((a, b) => this.getTokenBalance(b.index) - this.getTokenBalance(a.index));
+        .sort((a, b) => TokenManager.getBalance(b.index) - TokenManager.getBalance(a.index));
     },
+  },
+  watch: {
+    // Watch for changes to the token selections and update balances
+    fromToken() {
+      this.updateBalances();
+    },
+    toToken() {
+      this.updateBalances();
+    }
   },
   methods: {
     getOptionLabel(token) {
       return `${token.name} (${token.index.toUpperCase()})`;
     },
     getTokenLabel(token) {
-      const balance = this.getTokenBalance(token.index);
+      const balance = TokenManager.getBalance(token.index);
       return `${token.name} (${token.index.toUpperCase()}) - Balance: ${balance}`;
     },
-    getTokenLogo(tokenIndex) {
-      try {
-        return require(`@/assets/tokens/${tokenIndex}.png`);
-      } catch (error) {
-        return require('@/assets/tokens/default.png');
-      }
-    },
     updateBalances() {
-      this.fromTokenBalance = parseFloat(localStorage.getItem(`token_${this.fromToken.index}`)) || 0;
-      this.toTokenBalance = parseFloat(localStorage.getItem(`token_${this.toToken.index}`)) || 0;
+      this.fromTokenBalance = TokenManager.getBalance(this.fromToken.index) || 0;
+      this.toTokenBalance = TokenManager.getBalance(this.toToken.index) || 0;
       this.calculatePotentialSwap();
     },
-    getTokenBalance(tokenIndex) {
-      return parseFloat(localStorage.getItem(`token_${tokenIndex}`)) || 0;
-    },
     calculatePotentialSwap() {
-      const fromTokenValue = parseFloat(localStorage.getItem(`cryptodollar_value_${this.fromToken.index}`)) || 0;
-      const toTokenValue = parseFloat(localStorage.getItem(`cryptodollar_value_${this.toToken.index}`)) || 0;
+      const fromTokenValue = TokenManager.getTokenPrice(this.fromToken.index);
+      const toTokenValue = TokenManager.getTokenPrice(this.toToken.index);
 
       if (this.amount > 0 && fromTokenValue > 0 && toTokenValue > 0) {
         const fromTokenValueInDollar = this.amount * fromTokenValue;
@@ -165,32 +168,11 @@ export default {
       swapSound.play().then(() => {
         alert(`Swapped ${this.amount} ${this.fromToken.index.toUpperCase()} to ${this.swapResult} ${this.toToken.index.toUpperCase()}`);
 
-        const newFromTokenAmount = this.fromTokenBalance - this.amount;
-        const newToTokenAmount = this.toTokenBalance + parseFloat(this.swapResult);
-
-        localStorage.setItem(`token_${this.fromToken.index}`, newFromTokenAmount);
-        localStorage.setItem(`token_${this.toToken.index}`, newToTokenAmount);
-
+        TokenManager.removeToBalance(this.fromToken.index, this.amount);
+        TokenManager.addToBalance(this.toToken.index, parseFloat(this.swapResult));
         this.updateCryptodollarValues();
-
         window.location.reload();
       });
-    },
-    updateCryptodollarValues() {
-      let fromTokenValue = parseFloat(localStorage.getItem(`cryptodollar_value_${this.fromToken.index}`)) || 0;
-      let toTokenValue = parseFloat(localStorage.getItem(`cryptodollar_value_${this.toToken.index}`)) || 0;
-
-      const impactFactor = this.amount / (this.amount + 10);
-
-      fromTokenValue = fromTokenValue * (1 - impactFactor);
-      toTokenValue = toTokenValue * (1 + impactFactor);
-
-      if (this.fromToken.index !== 'cryptodollar') {
-        localStorage.setItem(`cryptodollar_value_${this.fromToken.index}`, fromTokenValue.toFixed(6));
-      }
-      if (this.toToken.index !== 'cryptodollar') {
-        localStorage.setItem(`cryptodollar_value_${this.toToken.index}`, toTokenValue.toFixed(6));
-      }
     },
   },
   mounted() {
@@ -198,6 +180,7 @@ export default {
   },
 };
 </script>
+
 
 <style scoped>
 .token-icon {

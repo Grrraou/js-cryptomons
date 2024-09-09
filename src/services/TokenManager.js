@@ -1,3 +1,4 @@
+
 import StorageManager from "./StorageManager";
 
 class TokenManager {
@@ -31,6 +32,14 @@ class TokenManager {
         const storedAmmount = this.getBalance(tokenIndex);
         const newAmount = parseFloat(storedAmmount - amount);
         StorageManager.update(tokenIndex, newAmount);
+    }
+
+    getTokenPrice(tokenIndex) {
+        return StorageManager.getFloat(`cryptodollar_value_${tokenIndex}`) || 0;
+    }
+
+    updateTokenPrice(tokenIndex, newValue) {
+        StorageManager.update(`cryptodollar_value_${tokenIndex}`, newValue.toFixed(6));
     }
 }
 

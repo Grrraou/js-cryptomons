@@ -80,7 +80,11 @@
 
     <!-- Swap Result -->
     <div v-if="swapResult" class="swap-result">
-      <p>You will receive approximately:<br>{{ swapResult }} <img :src="require(`@/assets/tokens/${toToken.index}.png`)" class="token-icon"></p>
+      <p><span style="color: #444;">You will receive approximately:</span><br>{{ swapResult }} <img :src="require(`@/assets/tokens/${toToken.index}.png`)" class="token-icon"></p>
+    </div>
+    <div v-else class="swap-result">
+      <p><img :src="TokenManager.getTokenIcon(fromToken.index)" class="token-icon"> = {{ TokenManager.getTokenPrice(fromToken.index) }}<img :src="TokenManager.getTokenIcon('cryptodollar')" class="token-icon"></p>
+      <p><img :src="TokenManager.getTokenIcon(toToken.index)" class="token-icon"> = {{ TokenManager.getTokenPrice(toToken.index) }}<img :src="TokenManager.getTokenIcon('cryptodollar')" class="token-icon"></p>
     </div>
   </div>
 </template>
@@ -89,7 +93,6 @@
 <script>
 import vSelect from 'vue3-select';
 import TokenManager from '@/services/TokenManager';
-import { tokens } from '../services/TokenService';
 
 export default {
   components: {
@@ -102,10 +105,10 @@ export default {
     },
   data() {
     return {
-      fromToken: tokens[0],
-      toToken: tokens[1],
+      fromToken: TokenManager.getTokens()[1],
+      toToken: TokenManager.getTokens()[0],
       amount: 0,
-      tokens,
+      tokens: TokenManager.getTokens(),
       swapResult: null,
       fromTokenBalance: 0,
       toTokenBalance: 0,

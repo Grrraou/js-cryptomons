@@ -4,10 +4,14 @@ import HeroManager from './HeroManager';
 import { generateCreature } from '@/services/BattleService.js';
 import { useToast } from 'vue-toastification';
 import ItemManager from './ItemManager';
+import { monstersEnum } from '@/services/BattleService.js';
 
 class BattleManager {
   constructor() {
     this.battleData = [];
+    this.monsters = monstersEnum;
+    this.monstersAssetPath = require.context('@/assets/monsters', false, /\.png$/);
+
     this.currentCreatures = [];
     this.heroAttackInterval = null;
     this.attackSounds = [
@@ -16,6 +20,10 @@ class BattleManager {
       new Audio(require('@/assets/sounds/slash3.wav')),
       new Audio(require('@/assets/sounds/slash4.wav')),
     ];
+  }
+
+  getMonsters() {
+    return this.monsters;
   }
 
   init(battleData, initialCreatures) {
@@ -114,6 +122,15 @@ class BattleManager {
     } else {
       this.currentCreatures = this.battleData.map(() => generateCreature());
       this.saveState();
+    }
+  }
+
+
+  getMonsterPortrait(monsterIndex) {
+    try {
+      return this.monstersAssetPath(`./${monsterIndex}.png`);
+    } catch (e) {
+      return this.monstersAssetPath('./default.png');
     }
   }
 }

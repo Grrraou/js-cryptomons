@@ -1,3 +1,5 @@
+import BattleManager from './BattleManager';
+
 // services/BattleService.js
 export function getBattleData() {
     return [
@@ -24,7 +26,7 @@ export function getBattleData() {
     ];
   }
   
-export const monsters = [
+export const monstersEnum = [
     { index: 'fisc_gobelin', name: 'Fisc Goblin', description: 'He want your money', power: 1, loot: {index: 'manual-mining-potion', ratio: 0.01} },
     { index: 'scammer_troll', name: 'Scammer Troll', description: 'Don\'t trust everyone', power: 2, loot: {index: 'iron-helmet', ratio: 0.0002} },
     { index: 'pump_and_dump_dragon', name: 'Pump-and-Dump Dragon', description: 'Master of market manipulation', power: 3, loot: {index: 'steel-chestplate', ratio: 0.0002} },
@@ -71,18 +73,10 @@ export const monsters = [
 
 
 export function generateCreature() {
-    const randomIndex = Math.floor(Math.random() * monsters.length);
-    const selectedMonster = monsters[randomIndex];
-  
-    let portrait;
-    try {
-      // Attempt to load the specific monster image
-      portrait = require(`@/assets/monsters/${selectedMonster.index}.png`);
-    } catch (e) {
-      // Fallback to the default image if the specific image doesn't exist
-      portrait = require('@/assets/monsters/default.png');
-    }
-  
+    const randomIndex = Math.floor(Math.random() * BattleManager.getMonsters().length);
+    const selectedMonster = BattleManager.getMonsters()[randomIndex];
+    const portrait = BattleManager.getMonsterPortrait(selectedMonster.index);
+
     return {
       ...selectedMonster,
       health: selectedMonster.power * 100, // Example health calculation based on power

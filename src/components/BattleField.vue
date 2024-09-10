@@ -13,7 +13,7 @@
             <p v-else>No monster</p>
         </div>
     
-        <div class="heroes-area">
+        <div class="heroes-area" @drop="handleHeroDrop" @dragover.prevent>
             <h3>Assigned Heroes</h3>
             <div class="heroes-grid">
             <HeroThumb
@@ -21,10 +21,10 @@
                 :key="hero.name"
                 :hero="hero"
                 class="hero"
-                @dragend="removeHeroFromBattle(hero)"
+                
             />
             </div>
-            <div class="drop-area" @drop="handleHeroDrop" @dragover.prevent>
+            <div class="drop-area">
             Drop heroes here to assign
             </div>
         </div>
@@ -84,11 +84,20 @@
         this.$emit('creature-click', this.battleIndex, manualDamageAmount);
       },
       handleHeroDrop(event) {
-        const heroData = event.dataTransfer.getData('heroData');
-        if (heroData) {
+       /*  try {
+          const heroData = event.dataTransfer.getData('heroData');
+          if (!heroData) return;
+  
           const hero = JSON.parse(heroData);
-          this.$emit('hero-dropped', hero, this.battleIndex);
-        }
+          this.$emit('assign-hero', hero, this.mine.index);
+        } catch (error) {
+          console.error('Error during drop:', error);
+        } */
+        const heroData = event.dataTransfer.getData('heroData');
+        if (!heroData) return;
+        
+        const hero = JSON.parse(heroData);
+        this.$emit('hero-dropped', hero, this.battleIndex);
       },
       removeHeroFromBattle(hero) {
         this.$emit('remove-hero', hero);
@@ -155,6 +164,7 @@
   .heroes-area {
     display: flex;
     flex-direction: column;
+    width: 100%;
     gap: 10px;
     color: #444;
     text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.7); /* Dark shadow for contrast */

@@ -49,7 +49,7 @@ export const goals = [
     name: 'Discover the Proof of stake',
     description: 'How dare you mining crypto when you can just stake !?',
     costs: [
-      { token: 'xrp', value: 100 },
+      { token: 'ppc', value: 100 },
     ],
     reward: 'Unlock Staking'
   },

@@ -1,11 +1,11 @@
 
 import StorageManager from "./StorageManager";
-import { tokens } from "./TokenService";
+import { tokensEnum } from "./TokenEnum";
 
 class TokenManager {
     constructor() {
         this.assetPath = require.context('@/assets/tokens', false, /\.png$/);
-        this.tokens = tokens;
+        this.tokens = tokensEnum;
     }
 
     getTokens() {
@@ -22,6 +22,13 @@ class TokenManager {
 
     getBalance(tokenIndex) {
         return StorageManager.getFloat(`token_${tokenIndex}`, 0);
+    }
+
+    getBalanceInCryptodollar(tokenIndex) {
+        const tokenAmount = this.getBalance(tokenIndex);
+        const cryptodollarValue = this.getTokenPrice(tokenIndex);
+        const totalValue = tokenAmount * cryptodollarValue;
+        return !isNaN(totalValue) ? totalValue.toFixed(2) : 0;
     }
 
     addToBalance(tokenIndex, amount) {
@@ -56,6 +63,16 @@ class TokenManager {
           total += tokenAmount * cryptodollarValue;
         });
         return total;
+    }
+
+    initCryptodollarValues() {
+        
+        this.getTokens().forEach((token) => {
+            const key = `cryptodollar_value_${token.index}`;
+            if (StorageManager.getFloat(key) === 0) {
+                StorageManager.update(key, token.cryptodollar);
+            }
+        });
     }
 }
 

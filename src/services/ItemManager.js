@@ -89,7 +89,7 @@ class ItemManager {
         }
   
         // Remove the item from the inventory
-        let inventory = this.getInventory();
+        let inventory = this.getInventory(true);
         inventory.splice(itemIndex, 1);
         localStorage.setItem('playerInventory', JSON.stringify(inventory));
         eventBus.emit('inventory-updated');

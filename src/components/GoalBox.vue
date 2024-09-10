@@ -107,7 +107,7 @@
 
             this.$forceUpdate(); // Force UI update after paying
         }
-        },
+      },
       getTokenIcon(token) {
         try {
           return require(`@/assets/tokens/${token}.png`);

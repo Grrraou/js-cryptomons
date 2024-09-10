@@ -65,13 +65,12 @@
 
 <script>
 import TokenManager from '@/services/TokenManager';
-import { tokens } from '@/services/TokenService';
 
 export default {
   name: 'SideMenu',
   data() {
     return {
-      tokens,
+      tokens: TokenManager.getTokens(),
       totalAssetsValue: 0,
       isStakingUnlocked: false,
       isVaultUnlocked: false,

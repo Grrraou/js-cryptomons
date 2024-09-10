@@ -78,6 +78,7 @@
       },
       removeHero(hero) {
         const heroIndex = this.heroes.findIndex(h => h.name === hero.name);
+
         if (heroIndex !== -1) {
           this.heroes[heroIndex].assignedArea = null;
         }

@@ -1,5 +1,5 @@
 
-export const tokens = [
+export const tokensEnum = [
   { index: 'cryptodollar', name: 'Crypto Dollar', cryptodollar: 1 },
   { index: 'btc', name: 'Bitcoin', cryptodollar: 10 },//2009
   { index: 'nmc', name: 'Namecoin', cryptodollar: 5 },//2011
@@ -26,12 +26,3 @@ export const tokens = [
   
   //{ index: 'ore', name: 'Ore', cryptodollar: 0.1 },
 ];
-
-export function initCryptodollarValues() {
-  tokens.forEach((token) => {
-    const key = `cryptodollar_value_${token.index}`;
-    if (localStorage.getItem(key) === null) {
-      localStorage.setItem(key, token.cryptodollar);
-    }
-  });
-}

@@ -1,7 +1,7 @@
 <template>
   <div class="vault-page game-container">
     <h1 class="page-title">Crypto Vault</h1>
-    <p>Total Value of Assets in Cryptocredits: {{ getTotalAssetsValue() }}</p>
+    <p>Total Value of Assets in Cryptocredits: {{ TokenManager.getToalAssetsValue().toFixed(2) }}</p>
 
     <!-- Filter and Sort UI -->
     <div class="filter-sort">
@@ -21,47 +21,33 @@
 
     <!-- Token List -->
     <div class="vault-list">
-      <div v-for="token in filteredTokens" :key="token.index" class="vault-item">
-        <h2>
-          <img class="tokenSymbol" :src="getTokenIcon(token.index)"> 
-          {{ token.name }}
-        </h2>
-        
-        <!-- Current Amount with dynamic class binding for highlighting -->
-        <p :class="{'highlight-amount': sortOption === 'amount'}">
-          <span class='label'>Current Amount:</span> 
-          <br>
-          <span class="tokenSum">{{ getTokenValue(token.index) }} <img class="token-icon" :src="getTokenIcon(token.index)"></span>
-        </p>
-
-        <!-- <p><strong>Total Obtained:</strong> {{ getTotalTokenValue(token.index) }}</p> -->
-
-        <!-- Price per token with dynamic class binding for highlighting -->
-        <p :class="{'highlight-price': sortOption === 'price'}">
-          <span class='label'>Price per {{ token.name }}:</span>
-          <br>
-          <span class="tokenSum">{{ getCryptodollarValue(token.index) }} <img class="token-icon" src="@/assets/tokens/cryptodollar.png"></span>
-        </p>
-        
-        <!-- Total Value in Cryptocredits with dynamic class binding for highlighting -->
-        <p :class="{'highlight-total-value': sortOption === 'totalValue'}">
-          <span class='label'>Total Value in Cryptocredits:</span>
-          <br>
-          <span class="tokenSum">{{ getTotalCryptodollarValue(token.index) }} <img class="token-icon" src="@/assets/tokens/cryptodollar.png"></span>
-        </p>
-      </div>
+      <TokenThumb v-for="token in filteredTokens" 
+        :key="token.index" 
+        :token="token"
+        :sortOption="sortOption"
+        class="vault-item" 
+      />
     </div>
   </div>
 </template>
 
 <script>
-import { tokens } from '@/services/TokenService';
+import TokenThumb from '@/components/TokenThumb.vue';
+import TokenManager from '@/services/TokenManager';
 
 export default {
   name: 'VaultPage',
+  setup() {
+      return {
+        TokenManager,
+      };
+  },
+  components: {
+    TokenThumb,
+  },
   data() {
     return {
-      tokens,
+      tokens: TokenManager.getTokens(),
       intervalId: null,
       filterText: '', // For filtering tokens
       sortOption: 'default', // Default sort option
@@ -71,8 +57,7 @@ export default {
     filteredTokens() {
       // Filter tokens based on filterText and amount > 0
       let filtered = this.tokens.filter(token => {
-        const tokenAmount = parseFloat(localStorage.getItem(`token_${token.index}`)) || 0;
-        
+        const tokenAmount = TokenManager.getBalance(token.index);
         // Include only tokens where the amount > 0 and matches the filterText
         return (
           tokenAmount > 0 &&
@@ -84,15 +69,15 @@ export default {
       // Sort based on sortOption
       if (this.sortOption === 'amount') {
         filtered.sort((a, b) => {
-          return parseFloat(this.getTokenValue(b.index)) - parseFloat(this.getTokenValue(a.index));
+          return TokenManager.getBalance(b.index) - TokenManager.getBalance(a.index);
         });
       } else if (this.sortOption === 'price') {
         filtered.sort((a, b) => {
-          return parseFloat(this.getCryptodollarValue(b.index)) - parseFloat(this.getCryptodollarValue(a.index));
+          return TokenManager.getTokenPrice(b.index) - TokenManager.getTokenPrice(a.index);
         });
       } else if (this.sortOption === 'totalValue') {
         filtered.sort((a, b) => {
-          return parseFloat(this.getTotalCryptodollarValue(b.index)) - parseFloat(this.getTotalCryptodollarValue(a.index));
+          return parseFloat(TokenManager.getBalanceInCryptodollar(b.index)) - parseFloat(TokenManager.getBalanceInCryptodollar(a.index));
         });
       }
 
@@ -101,44 +86,10 @@ export default {
     },
   },
   methods: {
-    getTokenIcon(token) {
-      try {
-        return require(`@/assets/tokens/${token}.png`);
-      } catch (error) {
-        return require('@/assets/tokens/default.png');
-      }
-    },
-    getTokenValue(index) {
-      const value = parseFloat(localStorage.getItem(`token_${index}`));
-      return !isNaN(value) ? value.toFixed(6) : '0.000000';
-    },
-    getTotalTokenValue(index) {
-      const value = parseFloat(localStorage.getItem(`token_${index}`));
-      return !isNaN(value) ? value.toFixed(6) : '0.000000';
-    },
-    getCryptodollarValue(index) {
-      const value = parseFloat(localStorage.getItem(`cryptodollar_value_${index}`));
-      return !isNaN(value) ? value.toFixed(6) : '0.000000';
-    },
-    getTotalCryptodollarValue(index) {
-      const tokenAmount = parseFloat(localStorage.getItem(`token_${index}`));
-      const cryptodollarValue = parseFloat(localStorage.getItem(`cryptodollar_value_${index}`));
-      const totalValue = tokenAmount * cryptodollarValue;
-      return !isNaN(totalValue) ? totalValue.toFixed(6) : '0.000000';
-    },
-    getTotalAssetsValue() {
-      let total = 0;
-      this.tokens.forEach(token => {
-        const tokenAmount = parseFloat(localStorage.getItem(`token_${token.index}`)) || 0;
-        const cryptodollarValue = parseFloat(localStorage.getItem(`cryptodollar_value_${token.index}`)) || 0;
-        total += tokenAmount * cryptodollarValue;
-      });
-      return total.toFixed(6);
-    },
     updateData() {
       // Trigger reactivity by simply updating a dummy data property
       this.$forceUpdate();
-    }
+    },
   },
   mounted() {
     // Set up a periodic check to update the data every 2 seconds
@@ -152,32 +103,7 @@ export default {
 </script>
 
 <style scoped>
-.tokenSum {
-  white-space: nowrap; /* Prevents text from wrapping */
-  overflow: hidden;    /* Hides any overflow if the content is too long */
-  text-overflow: ellipsis;
-}
-.label {
-  font-size: 12px;
-}
-/* Highlight Styles */
-.highlight-amount {
-  background-color: #fff4e5; /* Light orange background for amount */
-  font-weight: bold;
-  color: #ff8c00; /* Orange color for text */
-}
 
-.highlight-price {
-  background-color: #e5f4ff; /* Light blue background for price */
-  font-weight: bold;
-  color: #007bff; /* Blue color for text */
-}
-
-.highlight-total-value {
-  background-color: #e5ffe5; /* Light green background for total value */
-  font-weight: bold;
-  color: #28a745; /* Green color for text */
-}
 
 /* Filter and Sort */
 .filter-sort {
@@ -199,13 +125,6 @@ export default {
   border: 2px solid #ffa500;
   border-radius: 8px;
   font-size: 1.2em;
-}
-
-.token-icon {
-  width: 16px;
-  height: auto;
-  transition: transform 0.3s ease;
-  margin-bottom: -2px;
 }
 
 .page-title {
@@ -238,34 +157,9 @@ export default {
   margin: 10px;
   padding: 20px;
   width: 10%;
-  border: 4px solid #ffa500;
-  border-radius: 15px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  background-color: #fdfdfd;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
   display: inline-flex;
   flex-direction: column;
   align-items: flex-start;
-  font-weight: bold;
-  color: #444;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
 }
 
-.vault-item:hover {
-  border: 4px solid #5EC15E;
-}
-
-.vault-item h2 {
-  margin: 0 0 10px;
-  font-size: 22px;
-}
-
-.vault-item p {
-  font-size: 18px;
-  margin: 5px 0;
-}
-
-.tokenSymbol {
-  width: 16px;
-}
 </style>

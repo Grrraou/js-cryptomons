@@ -3,7 +3,7 @@
     <div class="game-container">
       <!-- Left side: Clicker Areas -->
       <div class="areas-container">
-        <h1 class="page-title">Mines</h1>
+        <h1 class="page-title">Mines <InfoBubble /></h1>
 
         <div class="areas-grid">
           <div class="area-wrapper" v-for="mine in mines" :key="mine.index">
@@ -28,6 +28,7 @@
 import MineManager from '@/services/MineManager';
 import MineArea from '@/components/MineArea.vue';
 import HeroList from '@/components/HeroList.vue';
+import InfoBubble from '@/components/InfoBubble.vue';
 import eventBus from '@/eventBus.js';
 import HeroManager from '@/services/HeroManager';
 
@@ -35,6 +36,7 @@ export default {
   components: {
     MineArea,
     HeroList,
+    InfoBubble,
   },
   data() {
     return {
@@ -102,6 +104,9 @@ export default {
   letter-spacing: 1px; /* Slight letter spacing for elegance */
   text-transform: uppercase; /* Uppercase letters for a more formal look */
   border-bottom: 2px solid #ffa500; /* Add a subtle underline for emphasis */
+  display:flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .clicker-game {

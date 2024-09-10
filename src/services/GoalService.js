@@ -170,6 +170,7 @@ export const goals = [
     description: 'and build and build and build and build and build and build and build',
     costs: [
       { token: 'cryptodollar', value: 10000000 },
+      { token: 'bnb', value: 100000 },
     ],
     reward: 'Unlock the Battlefield'
   },
@@ -260,7 +261,7 @@ export const goals = [
       { token: 'cryptodollar', value: 500000 },
       { token: 'uni', value: 500000 },
     ],
-    reward: 'Unlock the Uniswap Underground'
+    reward: 'Unlock the Unimon'
   },
 
 

@@ -44,6 +44,13 @@ class StorageManager {
         return JSON.parse(storedValue) || defaultValue;
     }
 
+    getBool(key, defaultValue = false) {
+        const storedValue = this.storage.getItem(key);
+        return Boolean(storedValue) &&  storedValue !== '0' 
+            ? Boolean(storedValue) 
+            : defaultValue;
+    }
+
     update(key, value) {
         localStorage.setItem(key, value);
     }

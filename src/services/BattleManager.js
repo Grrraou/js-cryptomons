@@ -1,18 +1,17 @@
-// services/BattleManager.js
 import eventBus from '@/eventBus.js';
 import HeroManager from './HeroManager';
-import { generateCreature } from '@/services/BattleService.js';
 import { useToast } from 'vue-toastification';
 import ItemManager from './ItemManager';
-import { monstersEnum } from '@/services/BattleService.js';
+import { monstersEnum, battlefieldsEnum } from '@/services/BattleEnum.js';
+import StorageManager from './StorageManager';
 
 class BattleManager {
   constructor() {
-    this.battleData = [];
+    this.battlefields = battlefieldsEnum;
     this.monsters = monstersEnum;
     this.monstersAssetPath = require.context('@/assets/monsters', false, /\.png$/);
-
-    this.currentCreatures = [];
+    this.battlefieldsAssetPath = require.context('@/assets/battlefields', false, /\.png$/);
+    this.currentMonsters = [];
     this.heroAttackInterval = null;
     this.attackSounds = [
       new Audio(require('@/assets/sounds/slash.ogg')),
@@ -26,12 +25,34 @@ class BattleManager {
     return this.monsters;
   }
 
-  init(battleData, initialCreatures) {
-    this.battleData = battleData || [];
-    this.currentCreatures = initialCreatures || this.battleData.map(() => generateCreature());
+  getBattlefields() {
+    return this.battlefields;
+  }
 
-    // Start the battle logic
+  initCurrentMonsters() {
+    this.currentMonsters = this.getCurrentMonsters() || this.battlefields.map(() => this.generateMonsters());
+    this.updateCurrentMonsters();
     this.startAutoBattle();
+  }
+
+  generateMonsters() {
+    const randomIndex = Math.floor(Math.random() * this.getMonsters().length);
+    const selectedMonster = this.getMonsters()[randomIndex];
+    const portrait = this.getMonsterPortrait(selectedMonster.index);
+
+    return {
+      ...selectedMonster,
+      health: selectedMonster.power * 100,
+      portrait: portrait,
+    };
+  }
+
+  getCurrentMonsters() {
+    return StorageManager.getArray("battlefield_current_monsters");
+  }
+
+  updateCurrentMonsters() {
+    StorageManager.update("battlefield_current_monsters", JSON.stringify(this.currentMonsters));
   }
 
   startAutoBattle() {
@@ -45,7 +66,7 @@ class BattleManager {
   }
 
   handleHeroAttacks() {
-    this.battleData.forEach((battle, battleFieldIndex) => {
+    this.battlefields.forEach((battle, battleFieldIndex) => {
       const assignedHeroes = HeroManager.getHeroesByArea(battleFieldIndex);
       let heroesDamage = 1;
       const chest = ItemManager.getEquipedItem('Chest');
@@ -60,15 +81,15 @@ class BattleManager {
   }
 
   checkAndRespawnMonsters() {
-    if (!this.currentCreatures) {
-      console.error('currentCreatures is not initialized');
+    if (!this.currentMonsters) {
+      console.error('currentMonsters is not initialized');
       return;
     }
 
-    this.currentCreatures.forEach((creature, index) => {
+    this.currentMonsters.forEach((creature, index) => {
       if (!creature || creature.health <= 0) {
-        this.currentCreatures[index] = generateCreature();
-        eventBus.emit('monster-updated', { battleIndex: index, creature: this.currentCreatures[index] });
+        this.currentMonsters[index] = this.generateMonsters();
+        eventBus.emit('monster-updated', { battleIndex: index, creature: this.currentMonsters[index] });
       }
     });
   }
@@ -81,29 +102,35 @@ class BattleManager {
       slashSound.play();
     }
       
-    const creature = this.currentCreatures[index];
-    if (creature && typeof creature.health === 'number' && !isNaN(creature.health)) {
-      creature.health -= amount;
-      if (creature.health <= 0) {
-        // Loot a random item from the items array
-        const lootItem = ItemManager.getItem(creature.loot.index);
-        let ratio = creature.loot.ratio;
-        // get Head bonus
-        const head = ItemManager.getEquipedItem('Head');
-        if (head) {
-          ratio = ratio + (ratio * head.effect());
-        }
-        /** DEBUG */ ratio += 5;
-        if (Math.random() <= ratio) {
-          ItemManager.addToInventory(lootItem.index)
-          const toast = useToast();
-          toast.success(`looted ${lootItem.name}!`);
-        }
-        
-
-        this.currentCreatures[index] = generateCreature();
+    const creature = this.currentMonsters[index];
+    creature.health -= amount;
+    if (creature.health <= 0) {
+      // Loot a random item from the items array
+      const lootItem = ItemManager.getItem(creature.loot.index);
+      let ratio = creature.loot.ratio;
+      // get Head bonus
+      const head = ItemManager.getEquipedItem('Head');
+      if (head) {
+        ratio = ratio + (ratio * head.effect());
       }
-      eventBus.emit('monster-updated', { battleIndex: index, creature: this.currentCreatures[index] });
+      /** DEBUG */ ratio += 5;
+      if (Math.random() <= ratio) {
+        ItemManager.addToInventory(lootItem.index)
+        const toast = useToast();
+        toast.success(`looted ${lootItem.name}!`);
+      }
+      
+      this.currentMonsters[index] = this.generateMonsters();
+    }
+    eventBus.emit('monster-updated', { battleIndex: index, creature: this.currentMonsters[index] });
+    this.updateCurrentMonsters();
+  }
+
+  getBackgroundImage(battlefieldIndex) {
+    try {
+        return this.battlefieldsAssetPath(`./${battlefieldIndex}_bg.png`);
+    } catch (error) {
+        return this.battlefieldsAssetPath('./default.png');
     }
   }
 
@@ -112,15 +139,16 @@ class BattleManager {
   }
 
   saveState() {
-    localStorage.setItem('currentCreatures', JSON.stringify(this.currentCreatures));
+    this.updateCurrentMonsters();
+    //localStorage.setItem('currentCreatures', JSON.stringify(this.currentMonsters));
   }
 
   loadState() {
-    const storedCreatures = JSON.parse(localStorage.getItem('currentCreatures'));
-    if (storedCreatures && storedCreatures.length === this.battleData.length) {
-      this.currentCreatures = storedCreatures;
+    const storedCreatures = this.getCurrentMonsters();
+    if (storedCreatures && storedCreatures.length === this.battlefields.length) {
+      this.currentMonsters = storedCreatures;
     } else {
-      this.currentCreatures = this.battleData.map(() => generateCreature());
+      this.currentMonsters = this.battlefields.map(() => this.generateMonsters());
       this.saveState();
     }
   }

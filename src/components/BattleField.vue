@@ -33,11 +33,12 @@
   </template>
   
 <script>
-  import eventBus from '@/eventBus.js';
-  import HeroThumb from './HeroThumb.vue';
-  import ItemManager from '@/services/ItemManager';
+import eventBus from '@/eventBus.js';
+import HeroThumb from './HeroThumb.vue';
+import ItemManager from '@/services/ItemManager';
+import BattleManager from '@/services/BattleManager';
   
-  export default {
+export default {
     components: {
       HeroThumb,
     },
@@ -65,15 +66,6 @@
       };
     },
     methods: {
-      getHeroPicture(heroIndex) { 
-        try {
-          // Try to load the background image based on the areaIndex
-          return require(`@/assets/heroes/${heroIndex}.png`);
-        } catch (error) {
-          // If the specific background image isn't found, use the default background image
-          return require('@/assets/heroes/default.png');
-        }
-    },
       creatureClicked() {
         let manualDamageAmount = 1;
         const weapon = ItemManager.getEquipedItem('Weapon');
@@ -84,15 +76,6 @@
         this.$emit('creature-click', this.battleIndex, manualDamageAmount);
       },
       handleHeroDrop(event) {
-       /*  try {
-          const heroData = event.dataTransfer.getData('heroData');
-          if (!heroData) return;
-  
-          const hero = JSON.parse(heroData);
-          this.$emit('assign-hero', hero, this.mine.index);
-        } catch (error) {
-          console.error('Error during drop:', error);
-        } */
         const heroData = event.dataTransfer.getData('heroData');
         if (!heroData) return;
         
@@ -103,6 +86,7 @@
         this.$emit('remove-hero', hero);
       },
       updateCreature({ battleIndex, creature }) {
+        BattleManager.updateCurrentMonsters();
         if (this.battleIndex === battleIndex) {
           this.localCreature = { ...creature };
         }
@@ -114,8 +98,8 @@
     beforeUnmount() {
       eventBus.off('monster-updated', this.updateCreature);
     }
-  };
-  </script>
+};
+</script>
 
   <style scoped>
     .battlefieldContainer {

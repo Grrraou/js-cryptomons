@@ -6,7 +6,7 @@
         <div v-for="(battle, index) in battleData" :key="battle.index" class="battlefield-block" :style="getBackgroundStyle(index)">
           <BattleField
             :battle="battle"
-            :currentCreatures="currentCreatures[index]"
+            :currentCreatures="BattleManager.getCurrentMonsters()[index]"
             :heroes="getHeroesForBattle(index)"
             @creature-click="damageCreature"
             @hero-dropped="assignHeroToBattle"
@@ -17,7 +17,7 @@
       </div>
       <HeroList
         class="hero-list"
-        :heroes="availableHeroes"
+        :heroes="HeroManager.getAvailableHeroes()"
         @remove-hero="removeHero"
       />
     </div>
@@ -27,8 +27,8 @@
   import BattleField from '@/components/BattleField.vue';
   import HeroList from '@/components/HeroList.vue';
   import eventBus from '@/eventBus';
-  import { getBattleData, generateCreature } from '@/services/BattleService.js';
   import BattleManager from '@/services/BattleManager.js';
+import GoalManager from '@/services/GoalManager';
   import HeroManager from '@/services/HeroManager';
   
   export default {
@@ -39,38 +39,28 @@
     data() {
       return {
         battleData: [],
-        heroes: HeroManager.getHeroes(),
-        currentCreatures: [],
+        heroes: HeroManager.getAvailableHeroes(),
+      };
+    },
+    setup() {
+      return {
+        BattleManager,
+        HeroManager,
       };
     },
     computed: {
-    availableHeroes() {
-        return this.heroes.filter(hero => hero.assignedArea === null);
-      },
     },
     created() {
-      this.battleData = getBattleData().filter(battlefield => {
-        // Check if the mine has a requirement
+      this.battleData = BattleManager.getBattlefields().filter(battlefield => {
         if (battlefield.requirement) {
-          // Check if the required goal is unlocked in localStorage
-          return localStorage.getItem(`goal_${battlefield.requirement}_unlocked`) === 'true';
+          return GoalManager.isGoalReached(`goal_${battlefield.requirement}_unlocked`);
         }
-        // If no requirement, always show the area
         return true;
       });
-      BattleManager.init(this.battleData, this.loadCreaturesFromStorage());
-      this.currentCreatures = BattleManager.currentCreatures;
     },
     methods: {
-      loadCreaturesFromStorage() {
-        const storedCreatures = JSON.parse(localStorage.getItem('currentCreatures'));
-        if (storedCreatures && storedCreatures.length === this.battleData.length) {
-          return storedCreatures;
-        } else {
-          return this.battleData.map(() => generateCreature());
-        }
-      },
       damageCreature(battleIndex, amount) {
+        // Can't replace for some reasons
         BattleManager.damageCreature(battleIndex, amount);
       },
       getHeroesForBattle(battleIndex) {
@@ -95,32 +85,19 @@
       removeHeroFromBattle(hero) {
         this.removeHero(hero);
       },
-      getBackgroundStyle(battleIndex) {
-        let backgroundUrl;
-        try {
-            // Use the battleIndex to dynamically load the background image
-            backgroundUrl = require(`@/assets/battlefields/${battleIndex}_bg.png`);
-        } catch (error) {
-            // Fallback to a default background if the image is not found
-            backgroundUrl = require('@/assets/battlefields/defaultBG.png');
-        }
-
+      getBackgroundStyle(battlefieldIndex) {
+        let backgroundUrl = BattleManager.getBackgroundImage(battlefieldIndex);
         return {
             background: `linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), 
                 url(${backgroundUrl}) center/cover no-repeat`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
         };
-        },
+      },
     },
   };
   </script>
   
-  <style scoped>
-  /* Your existing styles */
-  </style>
-  
-
   <style scoped>
 .page-title {
   position: relative;

@@ -1,8 +1,6 @@
-import BattleManager from './BattleManager';
 
 // services/BattleService.js
-export function getBattleData() {
-    return [
+export const battlefieldsEnum = [
         { index: 'binance_barricade', name: 'Binance Barricade', requirement: null },
         { index: 'kraken_abyss', name: 'Kraken\'s Abyss', requirement: 'buy_uwucrew_and_digidaigaku' },
         { index: 'uniswap_underground', name: 'Uniswap Underground', requirement: 'fill_a_pool_with_cash_money' },
@@ -23,8 +21,7 @@ export function getBattleData() {
         { id: 18, name: 'Optimism Outpost', description: 'An outpost where hope and strategy combine to win the day.' },
         { id: 19, name: 'Yearn Yard', description: 'A yard filled with traps and surprises where the clever prevail.' },
         { id: 20, name: 'Gnosis Gorge', description: 'A narrow gorge where knowledge and cunning are the keys to victory.' } */
-    ];
-  }
+];
   
 export const monstersEnum = [
     { index: 'fisc_gobelin', name: 'Fisc Goblin', description: 'He want your money', power: 1, loot: {index: 'manual-mining-potion', ratio: 0.01} },
@@ -70,17 +67,3 @@ export const monstersEnum = [
     { index: 'altcoin_ogre', name: 'Altcoin Ogre', description: 'Lumbers through the market, causing chaos', power: 3 },
     { index: 'proof_of_work_wyvern', name: 'Proof-of-Work Wyvern', description: 'Demands immense energy for its hoard', power: 5 }, */
 ];
-
-
-export function generateCreature() {
-    const randomIndex = Math.floor(Math.random() * BattleManager.getMonsters().length);
-    const selectedMonster = BattleManager.getMonsters()[randomIndex];
-    const portrait = BattleManager.getMonsterPortrait(selectedMonster.index);
-
-    return {
-      ...selectedMonster,
-      health: selectedMonster.power * 100, // Example health calculation based on power
-      portrait: portrait,
-    };
-  }
-  

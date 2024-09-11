@@ -44,6 +44,11 @@ class StorageManager {
         return JSON.parse(storedValue) || defaultValue;
     }
 
+    getObject(key, defaultValue = {}) {
+        const storedValue = this.storage.getItem(key);
+        return JSON.parse(storedValue) || defaultValue;
+    }
+
     getBool(key, defaultValue = false) {
         const storedValue = this.storage.getItem(key);
         return Boolean(storedValue) &&  storedValue !== '0' 
@@ -52,7 +57,14 @@ class StorageManager {
     }
 
     update(key, value) {
-        localStorage.setItem(key, value);
+        this.storage.setItem(key, value);
+    }
+
+    clear(key = null) {
+        if (key) {
+            this.storage.removeItem(key);
+        }
+        this.storage.clear();
     }
 }
 

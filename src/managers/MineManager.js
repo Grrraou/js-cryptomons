@@ -1,9 +1,9 @@
-import StorageManager from "./StorageManager";
-import { minesEnum } from "./MineEnum";
-import TokenManager from "./TokenManager";
-import { miningSoundsEnum } from "./MineEnum";
-import UXManager from "./UXManager";
-import ItemManager from "./ItemManager";
+import StorageManager from "@/managers/StorageManager";
+import { minesEnum, miningSoundsEnum } from "@/enums/MineEnum";
+import TokenManager from "@/managers/TokenManager";
+import UXManager from "@/managers/UXManager";
+import ItemManager from "@/managers/ItemManager";
+import GoalManager from "./GoalManager";
 
 class MineManager {
     constructor() {
@@ -36,12 +36,9 @@ class MineManager {
 
     getFilteredList() {
         return this.mines.filter(mine => {
-            // Check if the mine has a requirement
             if (mine.requirement) {
-              // Check if the required goal is unlocked in localStorage
-              return StorageManager.get(`goal_${mine.requirement}_unlocked`) === 'true';
+                return GoalManager.isGoalReached(mine.requirement);
             }
-            // If no requirement, always show the area
             return true;
           });
     }
@@ -116,9 +113,8 @@ class MineManager {
         if (window.location.pathname === '/mines') {
           this.playMiningSound();
         }
-
-        const tokenIndex = `token_${mine.token}`;
-        const currentAmount = parseFloat(localStorage.getItem(tokenIndex)) || 0;
+        
+        const currentAmount = TokenManager.getBalance(mine.token);
         let minedAmount = (Math.random() * (this.getUpgradeLevel(mine.index) + 1) * (0.0009 - 0.000001) + 0.000001);
         const tokenIcon = TokenManager.getTokenIcon(mine.token);
         

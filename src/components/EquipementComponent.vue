@@ -54,12 +54,12 @@
         />
       </div>
     </div>
-  </template>
+</template>
   
 <script>
 import eventBus from '@/eventBus';
-import ItemManager from '@/services/ItemManager';
-import ItemThumb from './ItemThumb.vue';
+import ItemManager from '@/managers/ItemManager';
+import ItemThumb from '@/components/ItemThumb.vue';
   
 export default {
     components: {
@@ -104,7 +104,7 @@ export default {
 };
 </script>
   
-  <style scoped>
+<style scoped>
   .equipement-container {
     display: flex;
     justify-content: space-around;
@@ -133,5 +133,5 @@ export default {
   .equip-slot.occupied {
     background-color: #ffeb3b;
   }
-  </style>
+</style>
   

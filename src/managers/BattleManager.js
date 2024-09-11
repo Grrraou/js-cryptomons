@@ -1,9 +1,9 @@
 import eventBus from '@/eventBus.js';
-import HeroManager from './HeroManager';
+import HeroManager from '@/managers/HeroManager';
 import { useToast } from 'vue-toastification';
-import ItemManager from './ItemManager';
-import { monstersEnum, battlefieldsEnum } from '@/services/BattleEnum.js';
-import StorageManager from './StorageManager';
+import ItemManager from '@/managers/ItemManager';
+import { monstersEnum, battlefieldsEnum } from '@/enums/BattleEnum.js';
+import StorageManager from '@/managers/StorageManager';
 
 class BattleManager {
   constructor() {
@@ -61,7 +61,7 @@ class BattleManager {
     this.heroAttackInterval = setInterval(() => {
       this.handleHeroAttacks();
       this.checkAndRespawnMonsters();
-      this.saveState();
+      this.updateCurrentMonsters();
     }, 1000);
   }
 
@@ -138,18 +138,13 @@ class BattleManager {
     return HeroManager.getHeroes().filter(hero => hero.assignedArea === BattleFieldIndex);
   }
 
-  saveState() {
-    this.updateCurrentMonsters();
-    //localStorage.setItem('currentCreatures', JSON.stringify(this.currentMonsters));
-  }
-
   loadState() {
     const storedCreatures = this.getCurrentMonsters();
     if (storedCreatures && storedCreatures.length === this.battlefields.length) {
       this.currentMonsters = storedCreatures;
     } else {
       this.currentMonsters = this.battlefields.map(() => this.generateMonsters());
-      this.saveState();
+      this.updateCurrentMonsters();
     }
   }
 

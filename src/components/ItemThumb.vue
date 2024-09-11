@@ -10,8 +10,7 @@
 </template>
 
 <script>
-import ItemManager from '@/services/ItemManager';
-
+import ItemManager from '@/managers/ItemManager';
 
 export default {
     props: {
@@ -31,16 +30,13 @@ export default {
       };
     },
     methods: {
-    /* dragStart(event, hero) {
-      event.dataTransfer.setData('heroData', JSON.stringify(hero));
-    }, */
-  },
+    },
 };
 </script>
 
 <style scoped>
   .item {
-    position: relative; /* Enable relative positioning for the consume button */
+    position: relative;
     width: 150px;
     height: 100px;
     background-color: #ddd;

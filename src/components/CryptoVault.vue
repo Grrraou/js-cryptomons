@@ -5,7 +5,7 @@
     </div>
   </template>
   
-  <script>
+<script>
   export default {
     name: 'CryptoVault',
     props: {
@@ -20,14 +20,13 @@
     },
     computed: {
       formattedValue() {
-        // You can format the float value here if needed, for example, to two decimal places
         return this.value.toFixed(2);
       },
     },
   };
-  </script>
+</script>
   
-  <style scoped>
+<style scoped>
   .crypto-vault {
     border: 1px solid #ccc;
     padding: 10px;
@@ -46,5 +45,5 @@
     font-weight: bold;
     color: #333;
   }
-  </style>
+</style>
   

@@ -33,7 +33,7 @@
 
 <script>
 import TokenThumb from '@/components/TokenThumb.vue';
-import TokenManager from '@/services/TokenManager';
+import TokenManager from '@/managers/TokenManager';
 
 export default {
   name: 'VaultPage',
@@ -49,16 +49,14 @@ export default {
     return {
       tokens: TokenManager.getTokens(),
       intervalId: null,
-      filterText: '', // For filtering tokens
-      sortOption: 'default', // Default sort option
+      filterText: '',
+      sortOption: 'default',
     };
   },
   computed: {
     filteredTokens() {
-      // Filter tokens based on filterText and amount > 0
       let filtered = this.tokens.filter(token => {
         const tokenAmount = TokenManager.getBalance(token.index);
-        // Include only tokens where the amount > 0 and matches the filterText
         return (
           tokenAmount > 0 &&
           (token.name.toLowerCase().includes(this.filterText.toLowerCase()) ||
@@ -66,7 +64,6 @@ export default {
         );
       });
 
-      // Sort based on sortOption
       if (this.sortOption === 'amount') {
         filtered.sort((a, b) => {
           return TokenManager.getBalance(b.index) - TokenManager.getBalance(a.index);
@@ -81,31 +78,24 @@ export default {
         });
       }
 
-      // If sortOption is 'default', return the tokens in their original order
       return filtered;
     },
   },
   methods: {
     updateData() {
-      // Trigger reactivity by simply updating a dummy data property
       this.$forceUpdate();
     },
   },
   mounted() {
-    // Set up a periodic check to update the data every 2 seconds
     this.intervalId = setInterval(this.updateData, 2000);
   },
   beforeUnmount() {
-    // Clear the interval when the component is destroyed
     clearInterval(this.intervalId);
   },
 };
 </script>
 
 <style scoped>
-
-
-/* Filter and Sort */
 .filter-sort {
   display: flex;
   justify-content: space-between;
@@ -161,5 +151,4 @@ export default {
   flex-direction: column;
   align-items: flex-start;
 }
-
 </style>

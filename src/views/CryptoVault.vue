@@ -3,9 +3,9 @@
       <h3>{{ title }}</h3>
       <p class="value">{{ formattedValue }}</p>
     </div>
-  </template>
+</template>
   
-  <script>
+<script>
   export default {
     name: 'CryptoVault',
     props: {
@@ -20,7 +20,6 @@
     },
     computed: {
       formattedValue() {
-        // You can format the float value here if needed, for example, to two decimal places
         return this.value.toFixed(2);
       },
     },

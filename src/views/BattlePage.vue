@@ -21,15 +21,15 @@
         @remove-hero="removeHero"
       />
     </div>
-  </template>
+</template>
   
-  <script>
-  import BattleField from '@/components/BattleField.vue';
-  import HeroList from '@/components/HeroList.vue';
-  import eventBus from '@/eventBus';
-  import BattleManager from '@/services/BattleManager.js';
-import GoalManager from '@/services/GoalManager';
-  import HeroManager from '@/services/HeroManager';
+<script>
+import BattleField from '@/components/BattleField.vue';
+import HeroList from '@/components/HeroList.vue';
+import eventBus from '@/eventBus';
+import BattleManager from '@/managers/BattleManager.js';
+import GoalManager from '@/managers/GoalManager';
+import HeroManager from '@/managers/HeroManager';
   
   export default {
     components: {
@@ -96,24 +96,24 @@ import GoalManager from '@/services/GoalManager';
       },
     },
   };
-  </script>
+</script>
   
-  <style scoped>
+<style scoped>
 .page-title {
   position: relative;
-  font-size: 28px; /* Slightly larger font size for emphasis */
+  font-size: 28px;
   font-weight: bold;
-  color: #444; /* Keep the white color for contrast */
+  color: #444;
   text-align: center;
   top: 0;
-  margin-bottom: 20px; /* Increase the bottom margin for better spacing */
-  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6); /* Softer, larger shadow for depth */
-  background-color: transparent; /* Remove background color to avoid button-like appearance */
-  padding: 0; /* Remove padding to avoid button-like appearance */
-  border-radius: 0; /* Remove border radius to make it more like a title */
-  letter-spacing: 1px; /* Slight letter spacing for elegance */
-  text-transform: uppercase; /* Uppercase letters for a more formal look */
-  border-bottom: 2px solid #ffa500; /* Add a subtle underline for emphasis */
+  margin-bottom: 20px;
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6);
+  background-color: transparent;
+  padding: 0;
+  border-radius: 0;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border-bottom: 2px solid #ffa500;
 }
 
   .battle-page {
@@ -125,7 +125,7 @@ import GoalManager from '@/services/GoalManager';
     display: flex;
     flex-direction: column;
     flex: 1;
-    gap: 20px; /* Space between each battlefield block */
+    gap: 20px;
   }
 
   .battlefield-block {
@@ -143,13 +143,13 @@ import GoalManager from '@/services/GoalManager';
     background-blend-mode: 'lighten';
     font-size: 1.3em;
     font-weight: bold;
-    color: #ffffff; /* White text color */
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7); /* Dark shadow for contrast */
+    color: #ffffff;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
   }
 
   
   .hero-list {
-    width: 200px; /* Fixed width for the hero list */
+    width: 200px;
     max-height: 80vh;
     overflow-y: auto;
   }

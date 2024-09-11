@@ -3,9 +3,11 @@
       <h3>Import Local Storage</h3>
       <input type="file" @change="importData" />
     </div>
-  </template>
+</template>
   
-  <script>
+<script>
+import StorageManager from '@/managers/StorageManager';
+
   export default {
     name: 'ImportComponent',
     methods: {
@@ -17,9 +19,9 @@
             try {
               const data = JSON.parse(e.target.result);
               if (typeof data === 'object') {
-                localStorage.clear();
+                StorageManager.clear();
                 Object.keys(data).forEach((key) => {
-                  localStorage.setItem(key, data[key]);
+                  StorageManager.update(key, data[key]);
                 });
                 alert('Local storage data has been successfully imported.');
               } else {
@@ -34,11 +36,11 @@
       },
     },
   };
-  </script>
+</script>
   
-  <style scoped>
+<style scoped>
   .import-component {
     margin-bottom: 20px;
   }
-  </style>
+</style>
   

@@ -1,8 +1,8 @@
-import AchievementManager from "./AchievementManager";
-import { itemsEnum } from "./ItemEnum";
-import StorageManager from "./StorageManager";
+import AchievementManager from "@/managers/AchievementManager";
+import { itemsEnum } from "@/enums/ItemEnum";
+import StorageManager from "@/managers/StorageManager";
 import eventBus from "@/eventBus";
-import UXManager from "./UXManager";
+import UXManager from "@/managers/UXManager";
 
 class ItemManager {
     constructor() {

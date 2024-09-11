@@ -11,14 +11,12 @@
   </template>
   
   <script>
+import AchievementManager from '@/managers/AchievementManager';
+
   export default {
     props: {
       achievement: {
         type: Object,
-        required: true,
-      },
-      indexKey: {
-        type: String,
         required: true,
       },
       storageKey: {
@@ -37,17 +35,9 @@
     },
     computed: {
       backgroundStyle() {
-        let backgroundUrl;
-        try {
-          // Try to load the background image based on the areaIndex
-          backgroundUrl = require(`@/assets/achievements/${this.indexKey}_bg.png`);
-        } catch (error) {
-          // If the specific background image isn't found, use the default background image
-          backgroundUrl = require('@/assets/achievements/default_logo.png');
-        }
+        let backgroundUrl = AchievementManager.getBackgroundImage(this.achievement.index);
 
         return {
-          //backgroundImage: `url(${backgroundUrl})`,
           background: `linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.9)), 
               url(${backgroundUrl}) center/cover no-repeat`,
           backgroundSize: 'cover',
@@ -60,16 +50,13 @@
     },
     methods: {
       checkIfUnlocked() {
-        const unlocked = localStorage.getItem(`${this.storageKey}_${this.target}`);
-        if (unlocked) {
-          this.isUnlocked = true;
-        }
+        this.isUnlocked = AchievementManager.isAchievementReached(this.achievement.index);
       },
     },
   };
   </script>
   
-  <style scoped>
+<style scoped>
   .achievement-box {
     margin: 10px;
     padding: 20px;
@@ -84,8 +71,8 @@
     align-items: center;
     font-size: 0.7em;
     font-weight: bold;
-    color: #444; /* White text color */
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7); /* Dark shadow for contrast */
+    color: #444;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
   }
 
   .achievement-box:hover {
@@ -101,5 +88,4 @@
   .achievement-content {
     font-size: 1.2em;
   }
-  </style>
-  
+</style>

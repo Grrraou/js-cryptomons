@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import TokenManager from '@/services/TokenManager';
+import TokenManager from '@/managers/TokenManager';
 
 export default {
     props: {
@@ -81,30 +81,30 @@ export default {
 }
 
 .tokenSum {
-  white-space: nowrap; /* Prevents text from wrapping */
-  overflow: hidden;    /* Hides any overflow if the content is too long */
+  white-space: nowrap;
+  overflow: hidden;
   text-overflow: ellipsis;
 }
 .label {
   font-size: 12px;
 }
-/* Highlight Styles */
+
 .highlight-amount {
-  background-color: #fff4e5; /* Light orange background for amount */
+  background-color: #fff4e5;
   font-weight: bold;
-  color: #ff8c00; /* Orange color for text */
+  color: #ff8c00;
 }
 
 .highlight-price {
-  background-color: #e5f4ff; /* Light blue background for price */
+  background-color: #e5f4ff;
   font-weight: bold;
-  color: #007bff; /* Blue color for text */
+  color: #007bff;
 }
 
 .highlight-total-value {
-  background-color: #e5ffe5; /* Light green background for total value */
+  background-color: #e5ffe5;
   font-weight: bold;
-  color: #28a745; /* Green color for text */
+  color: #28a745;
 }
 
 .token-icon {

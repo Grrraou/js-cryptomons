@@ -12,12 +12,10 @@
     </div>
 </template>
   
-  <script>
-  // Import the eventBus to listen for updates
+<script>
 import eventBus from '@/eventBus';
-import ItemManager from '@/services/ItemManager';
-import ItemThumb from './ItemThumb.vue';
-  // Import the items from ItemService
+import ItemManager from '@/managers/ItemManager';
+import ItemThumb from '@/components/ItemThumb.vue';
   
     export default {
       components: {
@@ -31,7 +29,7 @@ import ItemThumb from './ItemThumb.vue';
       },
     data() {
       return {
-        items: ItemManager.getInventory(), // Inventory items will be loaded from localStorage
+        items: ItemManager.getInventory(),
       };
     },
     methods: {
@@ -41,10 +39,8 @@ import ItemThumb from './ItemThumb.vue';
         event.dataTransfer.setData('slotType', null);
       },
       handleDrop(event) {
-        //const itemData = event.dataTransfer.getData('item');
         const itemIndex = event.dataTransfer.getData('itemIndex');
         const slotType = event.dataTransfer.getData('slotType');
-        //const item = JSON.parse(itemData);
         
         if (slotType !== 'null') {
           ItemManager.addToInventory(itemIndex);
@@ -57,17 +53,12 @@ import ItemThumb from './ItemThumb.vue';
       },
       loadInventory() {
         const inventory = ItemManager.getInventory();
-  
-        // Map over the inventory and find the matching item in ItemService.js
         this.items = inventory.map(item => {
-          // Find the item by its index
           const originalItem = ItemManager.getItem(item.index);
-  
-          // If found, restore its effect function
+
           if (originalItem && originalItem.effect) {
             item.effect = originalItem.effect;
           }
-  
           return item;
         });
       },
@@ -80,9 +71,9 @@ import ItemThumb from './ItemThumb.vue';
       eventBus.off('inventory-updated', this.loadInventory);
     },
   };
-  </script>
+</script>
   
-  <style scoped>
+<style scoped>
   .inventory-container {
     display: flex;
     flex-wrap: wrap;
@@ -96,6 +87,5 @@ import ItemThumb from './ItemThumb.vue';
     border: 2px solid #ccc;
     border-radius: 5px;
   }
-
-  </style>
+</style>
   

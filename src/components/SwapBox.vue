@@ -92,7 +92,7 @@
 
 <script>
 import vSelect from 'vue3-select';
-import TokenManager from '@/services/TokenManager';
+import TokenManager from '@/managers/TokenManager';
 
 export default {
   components: {
@@ -127,7 +127,6 @@ export default {
     },
   },
   watch: {
-    // Watch for changes to the token selections and update balances
     fromToken() {
       this.updateBalances();
     },
@@ -149,23 +148,20 @@ export default {
       this.calculatePotentialSwap();
     },
     switchTokens() {
-      // Swap fromToken and toToken
       const tempToken = this.fromToken;
       this.fromToken = this.toToken;
       this.toToken = tempToken;
 
-      // After switching, update the balances
       this.updateBalances();
     },
     updateCryptodollarValues() {
-      let fromTokenValue = parseFloat(localStorage.getItem(`cryptodollar_value_${this.fromToken.index}`)) || 0;
-      let toTokenValue = parseFloat(localStorage.getItem(`cryptodollar_value_${this.toToken.index}`)) || 0;
+      let fromTokenValue = TokenManager.getTokenPrice(this.fromToken.index);
+      let toTokenValue = TokenManager.getTokenPrice(this.toToken.index);
 
-      const impactFactor = this.amount / (this.amount + 10); // Calculate impact factor
+      const impactFactor = this.amount / (this.amount + 10);
       fromTokenValue = fromTokenValue * (1 - impactFactor);
       toTokenValue = toTokenValue * (1 + impactFactor);
 
-      // Update prices if the tokens are not 'cryptodollar'
       if (this.fromToken.index !== 'cryptodollar') {
         TokenManager.updateTokenPrice(this.fromToken.index, fromTokenValue);
       }
@@ -342,5 +338,4 @@ export default {
 .swap-tokens-button:hover .swap-icon {
   transform: rotate(180deg);
 }
-
 </style>

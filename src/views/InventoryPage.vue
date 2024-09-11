@@ -16,9 +16,9 @@
         <InventoryComponent />
       </div>
     </div>
-  </template>
+</template>
   
-  <script>
+<script>
   import EquipementComponent from '@/components/EquipementComponent.vue';
   import SellingComponent from '@/components/SellingComponent.vue';
   import InventoryComponent from '@/components/InventoryComponent.vue';
@@ -30,25 +30,25 @@
       InventoryComponent,
     },
   };
-  </script>
+</script>
   
-  <style scoped>
+<style scoped>
 
 .page-title {
   position: relative;
-  font-size: 28px; /* Slightly larger font size for emphasis */
+  font-size: 28px;
   font-weight: bold;
-  color: #444; /* Keep the white color for contrast */
+  color: #444;
   text-align: center;
   top: 0;
-  margin-bottom: 20px; /* Increase the bottom margin for better spacing */
-  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6); /* Softer, larger shadow for depth */
-  background-color: transparent; /* Remove background color to avoid button-like appearance */
-  padding: 0; /* Remove padding to avoid button-like appearance */
-  border-radius: 0; /* Remove border radius to make it more like a title */
-  letter-spacing: 1px; /* Slight letter spacing for elegance */
-  text-transform: uppercase; /* Uppercase letters for a more formal look */
-  border-bottom: 2px solid #ffa500; /* Add a subtle underline for emphasis */
+  margin-bottom: 20px;
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6);
+  background-color: transparent;
+  padding: 0;
+  border-radius: 0;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border-bottom: 2px solid #ffa500;
 }
 
   .inventory-page {
@@ -60,16 +60,15 @@
     box-sizing: border-box;
   }
   
-  /* Top Section: Split Equipement (90%) and Selling (10%) */
   .top-section {
     display: flex;
     width: 100%;
-    height: 40%; /* Top section takes 40% of the page height */
+    height: 40%;
     margin-bottom: 10px;
   }
   
   .equipement-section {
-    width: 90%; /* Equipment takes 90% of the width */
+    width: 90%;
     border: 2px solid #444;
     border-radius: 10px;
     background-color: #f0f0f0;
@@ -82,7 +81,7 @@
   }
   
   .selling-section {
-    width: 10%; /* Selling takes 10% of the width */
+    width: 10%;
     border: 2px solid #444;
     border-radius: 10px;
     background-color: #f5c6cb;
@@ -93,22 +92,21 @@
     background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.5)) center center / cover, url('@/assets/inventory/sellingBG.png');
   }
   
-  /* Bottom Section: Full Width Scrollable Inventory */
   .inventory-section {
-    width: 100%; /* Full width */
-    height: 50%; /* Inventory section takes 60% of the page height */
+    width: 100%;
+    height: 50%;
     border: 2px solid #444;
     border-radius: 10px;
     background-color: #e0f7fa;
-    overflow-y: auto; /* Scrollable */
+    overflow-y: auto;
     display: flex;
-    align-items: flex-start; /* Align items to the top */
-    justify-content: flex-start; /* Align items to the left */
-    flex-wrap: wrap; /* Wrap items to the next line if necessary */
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-wrap: wrap;
     padding: 10px;
     box-sizing: border-box;
     background-size: cover;
     background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.5)) center center / cover, url('@/assets/inventory/inventoryBG.png');
   }
-  </style>
+</style>
   

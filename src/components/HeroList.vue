@@ -11,8 +11,6 @@
             :hero="hero"
             draggable="true"
           />
-            <!-- <img :src="getHeroPicture(hero.index)" :alt="hero.name" class="hero-image" />
-            <p class="hero-name">{{ hero.name }}</p> -->
           </div>
         <p v-else class="no-heroes">No heroes available</p>
       </div>
@@ -21,8 +19,8 @@
 </template>
 
 <script>
-import HeroManager from '@/services/HeroManager';
-import HeroThumb from './HeroThumb.vue';
+import HeroManager from '@/managers/HeroManager';
+import HeroThumb from '@/components/HeroThumb.vue';
 import eventBus from '@/eventBus';
 
 
@@ -42,33 +40,16 @@ export default {
     handleHeroDrop(event) {
       try {
         const heroData = event.dataTransfer.getData('heroData');
-        if (!heroData) return; // No valid data passed
-        console.log('heroDrop')
+        if (!heroData) return;
         const hero = JSON.parse(heroData);
-        this.$emit('remove-hero', hero); // Notify parent to remove hero from the area
+        this.$emit('remove-hero', hero);
         this.heroes = HeroManager.getAvailableHeroes();
       } catch (error) {
         console.error('Error parsing hero data on drop to hero list:', error);
       }
     },
-/*     removeHero(hero) {
-      const heroIndex = this.heroes.findIndex(h => h.name === hero.name);
-      if (heroIndex !== -1) {
-        const mineIndex = this.heroes[heroIndex].assignedArea;
-        this.heroes[heroIndex].assignedArea = null;
-
-        if (mineIndex !== null) {
-          // Calculate the updated number of assigned heroes after removal
-          const updatedHeroCount = this.getHeroesForArea(mineIndex).length;
-
-          // Emit the event with the updated hero count
-          eventBus.emit('trigger-start-auto-clicker', { mineIndex, heroCount: updatedHeroCount });
-        }
-      }
-    }, */
   },
   mounted() {
-    // Listen for the custom event from the global event bus
     eventBus.on('assign-hero', ({ hero, areaIndex }) => {
       console.log(`${hero.index} assigned to ${areaIndex}`);
       this.heroes = HeroManager.getAvailableHeroes();
@@ -82,25 +63,25 @@ export default {
 .hero-list-wrapper {
   position: relative;
   max-width: 300px;
-  margin: 0 auto; /* Center the hero list */
+  margin: 0 auto;
   scrollbar-width: none;
 }
 
 .hero-list-title {
   position: fixed;
-  font-size: 15px; /* Slightly larger font size for emphasis */
+  font-size: 15px;
   font-weight: bold;
-  color: #444; /* Keep the white color for contrast */
+  color: #444;
   text-align: center;
   top: 0;
-  margin-bottom: 20px; /* Increase the bottom margin for better spacing */
-  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6); /* Softer, larger shadow for depth */
-  background-color: transparent; /* Remove background color to avoid button-like appearance */
-  padding: 0; /* Remove padding to avoid button-like appearance */
-  border-radius: 0; /* Remove border radius to make it more like a title */
-  letter-spacing: 1px; /* Slight letter spacing for elegance */
-  text-transform: uppercase; /* Uppercase letters for a more formal look */
-  border-bottom: 2px solid #444; /* Add a subtle underline for emphasis */
+  margin-bottom: 20px;
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6);
+  background-color: transparent;
+  padding: 0;
+  border-radius: 0;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border-bottom: 2px solid #444;
 }
 
 
@@ -108,17 +89,17 @@ export default {
   text-align: center;
   padding: 20px;
   position: fixed;
-  background-image: url('@/assets/mines/workersMenuBG.png'); /* Background image */
+  background-image: url('@/assets/mines/workersMenuBG.png');
   background-size: cover;
   background-position: center;
   scrollbar-width: none;
   background-repeat: no-repeat;
-  border: 2px solid #444; /* Border around the hero list */
-  border-radius: 15px; /* Rounded corners */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
-  height: calc(80vh); /* Full height minus the space for the title */
-  overflow-y: auto; /* Scroll if the content exceeds the height */
-  margin-top: 50px; /* Add some margin to account for the title */
+  border: 2px solid #444;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  height: calc(80vh);
+  overflow-y: auto;
+  margin-top: 50px;
 }
 
 .hero-grid {

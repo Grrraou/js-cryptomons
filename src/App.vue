@@ -13,7 +13,7 @@
 import SideMenu from './components/SideMenu.vue';
 import './assets/styles/main.css';
 import 'vue3-select/dist/vue3-select.css';
-import BattleManager from '@/services/BattleManager.js';
+import BattleManager from '@/managers/BattleManager.js';
 
 export default {
   components: {
@@ -25,7 +25,6 @@ export default {
 };
 </script>
 
-
 <style scoped>
 body {
   margin: 0px !important;
@@ -33,11 +32,11 @@ body {
 
 .layout {
   display: flex;
-  height: 100vh; /* Full viewport height */
+  height: 100vh;
 }
 
 .page-content {
-  flex: 1; /* Fills the remaining space */
+  flex: 1;
   padding: 20px;
   background-color: #fff;
 }

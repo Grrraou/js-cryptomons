@@ -55,11 +55,11 @@
   
 <script>
   import eventBus from '@/eventBus.js';
-  import HeroManager from '@/services/HeroManager';
-  import TokenManager from '@/services/TokenManager';
-  import MineManager from '@/services/MineManager';
-  import StorageManager from '@/services/StorageManager';
-  import HeroThumb from './HeroThumb.vue';
+  import HeroManager from '@/managers/HeroManager';
+  import TokenManager from '@/managers/TokenManager';
+  import MineManager from '@/managers/MineManager';
+  import StorageManager from '@/managers/StorageManager';
+  import HeroThumb from '@/components/HeroThumb.vue';
 
   export default {
     components: {
@@ -88,18 +88,7 @@
       startAutoClicker(heroCount) {  
         MineManager.startAutoClicker(this.mine.index, () => {
           MineManager.mineTokens(null, this.mine.index, this);
-      }, heroCount);
-        /* if (this.autoClickerInterval) 
-          clearInterval(this.autoClickerInterval);
-        
-        if (heroCount > 0) {
-          this.autoClickerInterval = setInterval(() => {
-            MineManager.mineTokens(null, this.mine.index, this);
-          }, 1000);
-        } else {
-          clearInterval(this.autoClickerInterval);
-          this.autoClickerInterval = null; // Reset the interval variable
-        } */
+        }, heroCount);
       },
       handleHeroDrop(event) {
         try {
@@ -112,48 +101,42 @@
           console.error('Error during drop:', error);
         }
       },
-      updateTokenBalance() {
-        
-      },
     },
     mounted() {
       this.startAutoClicker(this.assignedHeroes.length);
-    // Listen for the custom event from the global event bus
-    eventBus.on('trigger-start-auto-clicker', ({ mineIndex, heroCount }) => {
-      if (mineIndex === this.mine.index) {
-        this.startAutoClicker(heroCount);
-      }
-    });
+      eventBus.on('trigger-start-auto-clicker', ({ mineIndex, heroCount }) => {
+        if (mineIndex === this.mine.index) {
+          this.startAutoClicker(heroCount);
+        }
+      });
 
-     // Listen for the potion effect to double mining power
-     eventBus.on('miningMultiplierBuff', ({ multiplier, duration }) => {
-      this.miningMultiplier = multiplier;
+      eventBus.on('miningMultiplierBuff', ({ multiplier, duration }) => {
+        this.miningMultiplier = multiplier;
 
-      // Reset the multiplier back to 1 after the duration expires
-      setTimeout(() => {
-        this.miningMultiplier = 1;
-      }, duration);
-    });
-  },
-  beforeUnmount() {
-    if (this.autoClickerInterval) {
-      clearInterval(this.autoClickerInterval);
-    }
-    eventBus.off('trigger-start-auto-clicker');
-    eventBus.off('miningMultiplierBuff');
-  },
-  computed: {
-    backgroundStyle() {
-      let backgroundUrl = MineManager.getBackgroundImage(this.mine.index);
-
-      return {
-        background: `linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), 
-            url(${backgroundUrl}) center/cover no-repeat`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-      };
+        setTimeout(() => {
+          this.miningMultiplier = 1;
+        }, duration);
+      });
     },
-  },
+    beforeUnmount() {
+      if (this.autoClickerInterval) {
+        clearInterval(this.autoClickerInterval);
+      }
+      eventBus.off('trigger-start-auto-clicker');
+      eventBus.off('miningMultiplierBuff');
+    },
+    computed: {
+      backgroundStyle() {
+        let backgroundUrl = MineManager.getBackgroundImage(this.mine.index);
+
+        return {
+          background: `linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), 
+              url(${backgroundUrl}) center/cover no-repeat`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        };
+      },
+    },
 };
 </script>
   
@@ -162,7 +145,7 @@
     color: #444;
     margin-right: 15px;
   }
-  /* Main area wrapper */
+
   .clicker-area {
     margin: 10px auto;
     padding: 20px;
@@ -178,25 +161,24 @@
     background-blend-mode: 'lighten';
     font-size: 1.3em;
     font-weight: bold;
-    color: #ffffff; /* White text color */
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7); /* Dark shadow for contrast */
+    color: #ffffff;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
   }
 
   .clicker-area:hover {
     border: 4px solid #5EC15E;
   }
 
-  /* Title and logo section */
   .title-section {
     display: flex;
-    align-items: center; /* Vertically align items */
-    justify-content: center; /* Horizontally center items */
+    align-items: center;
+    justify-content: center;
     text-align: center;
     margin-bottom: 15px;
   }
 
   .title-section h2 {
-    margin: 0 10px; /* Space between the title and the logo */
+    margin: 0 10px;
   }
 
   .title-section img {
@@ -227,7 +209,6 @@
     float: right;
   }
 
-  /* Statistics and actions section */
   .stats-actions-section {
     text-align: center;
     margin-bottom: 15px;
@@ -290,26 +271,25 @@
   }
 
   .mine-button:hover, .upgrade-button:hover {
-    background-color: #ff8c00; /* Darker orange on hover */
-    transform: translateY(-2px); /* Slight lift on hover */
+    background-color: #ff8c00;
+    transform: translateY(-2px);
   }
 
   .mine-button:active, .upgrade-button:active {
-    background-color: #e07a00; /* Even darker on click */
-    transform: translateY(0); /* Reset transform on click */
+    background-color: #e07a00;
+    transform: translateY(0);
   }
 
   .button-logo {
-    width: 50px; /* Adjust size as needed */
-    height: 50px; /* Adjust size as needed */
-    margin-right: 8px; /* Space between logo and text */
+    width: 50px;
+    height: 50px;
+    margin-right: 8px;
   }
 
   .mine-button img {
-    pointer-events: none; /* Ensure the image doesn't interfere with button click */
+    pointer-events: none;
   }
 
-  /* Workers section */
   .workers-section {
     width: 100%;
   }

@@ -3,13 +3,12 @@
       <h3>Drag Items to Sell</h3>
       <div class="sell-area">Drop here to sell</div>
     </div>
-  </template>
+</template>
   
-  <script>
-  // Import the eventBus to communicate between components
-  import eventBus from '@/eventBus';
-import ItemManager from '@/services/ItemManager';
-import TokenManager from '@/services/TokenManager';
+<script>
+import eventBus from '@/eventBus';
+import ItemManager from '@/managers/ItemManager';
+import TokenManager from '@/managers/TokenManager';
   
   export default {
     methods: {
@@ -18,31 +17,25 @@ import TokenManager from '@/services/TokenManager';
   
         const itemData = event.dataTransfer.getData('item');
         const inventoryIndex = event.dataTransfer.getData('inventoryIndex');
-        const slotType = event.dataTransfer.getData('slotType'); // Retrieve the equipment slot (if any)
+        const slotType = event.dataTransfer.getData('slotType');
         const item = JSON.parse(itemData);
   
         if (item && item.value) {
-          const currentCryptodollar = TokenManager.getBalance('cryptodollar') || 0;
-          const newCryptodollar = currentCryptodollar + item.value;
-          localStorage.setItem('token_cryptodollar', newCryptodollar.toFixed(2));
+          TokenManager.addToBalance(item.value);
   
-          // If the item came from equipment, notify the equipment to clear the slot
           if (slotType) {
-            eventBus.emit('inventory-item-sold', slotType); // Notify EquipementComponent to clear the slot
+            eventBus.emit('inventory-item-sold', slotType);
           }
-  
-          // Remove the item from the inventory if it's in there
           ItemManager.removeFromInventory(inventoryIndex);
-
         } else {
           console.error('Item data is invalid or has no value.');
         }
       },
     },
   };
-  </script>
+</script>
   
-  <style scoped>
+<style scoped>
   .selling-container {
     display: flex;
     flex-direction: column;
@@ -64,5 +57,5 @@ import TokenManager from '@/services/TokenManager';
     align-items: center;
     background-color: #fff;
   }
-  </style>
+</style>
   

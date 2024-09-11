@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import HeroManager from '@/services/HeroManager';
+import HeroManager from '@/managers/HeroManager';
 
 export default {
     props: {
@@ -37,23 +37,23 @@ export default {
   align-items: center;
   margin: 10px;
   padding: 10px;
-  background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+  background-color: rgba(255, 255, 255, 0.8);
   border-radius: 10px;
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .hero:hover {
-  transform: scale(1.05); /* Slight zoom on hover */
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Enhanced shadow on hover */
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
 }
 
 .hero-image {
   width: 80px;
   height: 80px;
-  border-radius: 50%; /* Circular hero image */
+  border-radius: 50%;
   margin-bottom: 10px;
-  border: 3px solid #ffa500; /* Border around hero image */
+  border: 3px solid #ffa500;
 }
 
 .hero-name {

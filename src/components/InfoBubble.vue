@@ -13,10 +13,10 @@
         </div>
       </div>
     </div>
-  </template>
+</template>
   
 
-  <script>
+<script>
   export default {
     name: 'InfoBubble',
     data() {
@@ -33,11 +33,10 @@
       },
     },
   };
-  </script>
+</script>
   
 
-  <style scoped>
-  /* Info Bubble */
+<style scoped>
   .info-bubble {
     position: relative;
     display: inline-block;
@@ -58,7 +57,6 @@
     color: white;
   }
   
-  /* Overlay */
   .overlay {
     display: flex;
     align-items: center;
@@ -95,5 +93,5 @@
   .close-btn:hover {
     color: red;
   }
-  </style>
+</style>
   

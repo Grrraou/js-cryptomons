@@ -34,9 +34,9 @@
   
 <script>
 import eventBus from '@/eventBus.js';
-import HeroThumb from './HeroThumb.vue';
-import ItemManager from '@/services/ItemManager';
-import BattleManager from '@/services/BattleManager';
+import HeroThumb from '@/components/HeroThumb.vue';
+import ItemManager from '@/managers/ItemManager';
+import BattleManager from '@/managers/BattleManager';
   
 export default {
     components: {
@@ -101,7 +101,7 @@ export default {
 };
 </script>
 
-  <style scoped>
+<style scoped>
     .battlefieldContainer {
         width: 100%;
     }
@@ -117,7 +117,7 @@ export default {
     text-align: center;
     color: #444;
     font-weight: bold;
-    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.7); /* Dark shadow for contrast */
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.7);
   }
   
   .monster-area {
@@ -133,7 +133,7 @@ export default {
   .monster-area p {
     color: #444;
     font-weight: bold;
-    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.7); /* Dark shadow for contrast */
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.7);
   }
   
   .monster-portrait {
@@ -151,7 +151,7 @@ export default {
     width: 100%;
     gap: 10px;
     color: #444;
-    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.7); /* Dark shadow for contrast */
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.7);
   }
   
   .heroes-grid {

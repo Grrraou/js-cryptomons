@@ -1,5 +1,5 @@
 import { useToast } from 'vue-toastification';
-import ItemManager from './ItemManager';
+import ItemManager from '@/managers/ItemManager';
 
 
 export const itemsEnum = [

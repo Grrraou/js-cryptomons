@@ -1,6 +1,6 @@
 
-import StorageManager from "./StorageManager";
-import { tokensEnum } from "./TokenEnum";
+import StorageManager from "@/managers/StorageManager";
+import { tokensEnum } from "@/enums/TokenEnum";
 
 class TokenManager {
     constructor() {

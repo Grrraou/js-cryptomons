@@ -2,9 +2,9 @@
     <div class="menu">
       <button @click="resetStats">Reset Stats</button>
     </div>
-  </template>
+</template>
   
-  <script>
+<script>
   export default {
     methods: {
       resetStats() {
@@ -12,9 +12,9 @@
       },
     },
   };
-  </script>
+</script>
   
-  <style scoped>
+<style scoped>
   .menu {
     text-align: center;
     margin-bottom: 20px;
@@ -32,5 +32,5 @@
   button:hover {
     background-color: #cc0000;
   }
-  </style>
+</style>
   

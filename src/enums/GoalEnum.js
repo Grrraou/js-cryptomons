@@ -1,10 +1,10 @@
-export const goals = [
+export const goalsEnum = [
   {
     index: 'grandma_bitcoin',
     name: 'Convince Grandma to Buy Bitcoin',
     description: 'Help your grandma set up a crypto wallet and buy her first bitcoin.',
     costs: [
-      { token: 'btc', value: 1 },
+      { token: 'btc', value: 0.5 },
     ],
     reward: 'Unlock the Vault and gain access to all your cryptos!'
   },
@@ -13,7 +13,7 @@ export const goals = [
     name: 'Halving Bitcoin',
     description: 'This won\'t really halve BTC mining... or maybe it will.. uhm',
     costs: [
-      { token: 'btc', value: 10 },
+      { token: 'btc', value: 1 },
     ],
     reward: 'Unlock Bitcomon !'
   },

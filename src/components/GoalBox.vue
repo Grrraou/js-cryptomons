@@ -7,25 +7,25 @@
           <p class="goal-reward">🏅 {{ goal.reward }}</p>
         </div>
         <div>
-          <img :src="getBackgroundImage()" class="goal-logo">
+          <img :src="GoalManager.getBackgroundImage(goal.index)" class="goal-logo">
         </div>
       </div>
   
       <!-- Costs section: Show only if the goal is not unlocked -->
-      <div v-if="!isGoalUnlocked" class="goal-costs">
+      <div v-if="!GoalManager.isGoalReached(goal.index)" class="goal-costs">
         <div v-for="(cost, index) in goal.costs" :key="index" class="cost">
-          <div v-if="hasPaidCost(cost.token, cost.value)">
+          <div v-if="GoalManager.isCostPaid(goal.index, cost.token)">
             <p class="paid-message">✅ Paid</p>
           </div>
           <button
             v-else
-            @click="payCost(cost.token, cost.value)"
-            :disabled="!canPayCost(cost.token, cost.value)"
+            @click="payCost(cost.token)"
+            :disabled="!GoalManager.canPayCost(goal.index, cost.token)"
             class="pay-button"
           >
           <div class="cost-details">
             
-            <p>{{ cost.value }} <img :src="getTokenIcon(cost.token)" class="token-icon" alt="Token Icon" /></p>
+            <p>{{ cost.value }} <img :src="TokenManager.getTokenIcon(cost.token)" class="token-icon" alt="Token Icon" /></p>
           </div>
           </button>
         </div>
@@ -36,89 +36,48 @@
         <p class="unlocked-text">🎉 This Goal is Unlocked! 🎉</p>
       </div>
     </div>
-  </template>
+</template>
   
-  <script>
-  import { useToast } from 'vue-toastification';
+<script>
+import GoalManager from '@/managers/GoalManager';
+import TokenManager from '@/managers/TokenManager';
 
-
-  export default {
+export default {
     props: {
       goal: Object,
     },
     data() {
       return {
-        paidCosts: {}, // Track the costs paid
+        paidCosts: {},
+      };
+    },
+    setup() {
+      return {
+        GoalManager,
+        TokenManager,
       };
     },
     computed: {
-      isGoalUnlocked() {
-        // Check if the goal is unlocked in localStorage or if all costs are paid
-        return (
-          localStorage.getItem(`goal_${this.goal.index}_unlocked`) === 'true' ||
-          this.goal.costs.every((cost) => this.getPaidCost(cost.token) >= cost.value)
-        );
-      },
       backgroundStyle() {
+        const backgroundImage = GoalManager.getBackgroundImage(this.goal.index);
         return {
-          backgroundImage: `linear-gradient(to bottom, rgba(255, 255, 255, 0.5), rgba(240, 240, 240, 0.5)), url('${this.getBackgroundImage()}')`,
+          backgroundImage: `linear-gradient(to bottom, rgba(255, 255, 255, 0.5), rgba(240, 240, 240, 0.5)), url('${backgroundImage}')`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
         };
       },
     },
     methods: {
-      getBackgroundImage() {
-        try {
-          return require(`@/assets/goals/${this.goal.index}.png`);
-        } catch (error) {
-          return require('@/assets/goals/defaultBG.png');
-        }
+      hasPaidCost(tokenIndex, value) {
+        return GoalManager.isCostPaid(this.goal.index, tokenIndex) >= value;
       },
-      hasPaidCost(token, value) {
-        return this.getPaidCost(token) >= value;
-      },
-      getPaidCost(token) {
-        return parseFloat(localStorage.getItem(`goal_${this.goal.index}_paid_${token}`)) || 0;
-      },
-      canPayCost(token, value) {
-        const storedAmount = parseFloat(localStorage.getItem(`token_${token}`)) || 0;
-        return storedAmount >= value;
-      },
-      payCost(token, value) {
-        const storedAmount = parseFloat(localStorage.getItem(`token_${token}`)) || 0;
-        const paidAmount = this.getPaidCost(token);
-
-        if (storedAmount >= value) {
-            // Deduct the token amount and mark the cost as paid
-            localStorage.setItem(`token_${token}`, (storedAmount - value).toFixed(6));
-            const newPaidAmount = paidAmount + value;
-            localStorage.setItem(`goal_${this.goal.index}_paid_${token}`, newPaidAmount.toFixed(6));
-
-            // Check if the goal is unlocked after paying
-            if (this.goal.costs.every((cost) => this.getPaidCost(cost.token) >= cost.value)) {
-            localStorage.setItem(`goal_${this.goal.index}_unlocked`, 'true');
-            
-            // Show toast notification for unlocking the goal
-            const toast = useToast();
-            toast.success(`🎉 Goal "${this.goal.name}" Unlocked! 🎉`);
-
-            }
-
-            this.$forceUpdate(); // Force UI update after paying
-        }
-      },
-      getTokenIcon(token) {
-        try {
-          return require(`@/assets/tokens/${token}.png`);
-        } catch (error) {
-          return require('@/assets/tokens/default.png');
-        }
+      payCost(tokenIndex) {
+        GoalManager.payCost(this.goal.index, tokenIndex);
+        this.$forceUpdate();
       },
       updateGoalState() {
-        // If goal unlock state changes, force reactivity
-        if (this.isGoalUnlocked) {
-          this.$forceUpdate(); // Reactively trigger update
+        if (GoalManager.isGoalReached(this.goal.index)) {
+          this.$forceUpdate();
         }
       },
     },
@@ -126,9 +85,9 @@
       // Continuously check if the goal is unlocked and update UI live
       this.intervalId = setInterval(() => {
         this.updateGoalState();
-      }, 1000); // Check every second
+      }, 1000);
   
-      // Listen to storage changes (this ensures that any change in localStorage is caught)
+      // Listen to storage changes (this ensures that any change is caught)
       window.addEventListener('storage', this.updateGoalState);
     },
     beforeUnmount() {
@@ -137,9 +96,9 @@
       window.removeEventListener('storage', this.updateGoalState);
     },
   };
-  </script>
+</script>
   
-  <style scoped>
+<style scoped>
   .goal-box {
     border-radius: 15px;
     border: 2px solid #ffa500;
@@ -153,7 +112,7 @@
   .goal-header {
     margin-bottom: 20px;
     display: flex;
-    justify-content: center;  /* Aligns content horizontally */
+    justify-content: center;
     align-items: center;
     color: #444;
   }
@@ -268,5 +227,5 @@
     color: #177EB2;
     font-weight: bold;
   }
-  </style>
+</style>
   

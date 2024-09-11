@@ -64,7 +64,8 @@
 </template>
 
 <script>
-import TokenManager from '@/services/TokenManager';
+import GoalManager from '@/managers/GoalManager';
+import TokenManager from '@/managers/TokenManager';
 
 export default {
   name: 'SideMenu',
@@ -76,82 +77,34 @@ export default {
       isVaultUnlocked: false,
       isBattleUnlocked: false,
       isInventoryUnlocked: false,
-      isSwapUnlocked: false, // Track the vault goal unlock status
-      intervalId: null, // Track the interval ID to clear it later
+      isSwapUnlocked: false,
+      intervalId: null,
     };
   },
   methods: {
-    updateTotalAssetsValue() {
-
-      this.totalAssetsValue = TokenManager.getToalAssetsValue().toFixed(2);
-    },
-    checkStakingUnlocked() {
-      // Check if the vault goal is unlocked in localStorage
-      this.isStakingUnlocked = localStorage.getItem('goal_discover_proof_of_stake_unlocked') === 'true';
-    },
-    checkVaultUnlocked() {
-      // Check if the vault goal is unlocked in localStorage
-      this.isVaultUnlocked = localStorage.getItem('goal_grandma_bitcoin_unlocked') === 'true';
-    },
-    checkBattleUnlocked() {
-      // Check if the vault goal is unlocked in localStorage
-      this.isBattleUnlocked = localStorage.getItem('goal_build_and_build_unlocked') === 'true';
-    },
-    checkInventoryUnlocked() {
-      // Check if the vault goal is unlocked in localStorage
-      this.isInventoryUnlocked = localStorage.getItem('goal_shopping_on_silk_road_unlocked') === 'true';
-    },
-    checkSwapUnlocked() {
-      // Check if the vault goal is unlocked in localStorage
-      this.isSwapUnlocked = localStorage.getItem('goal_centralize_decentralization_unlocked') === 'true';
-    },
-    handleStorageChange(event) {
-      if (event.key === 'goal_discover_proof_of_stake_unlocked') {
-        this.checkStakingUnlocked();
-      }
-      if (event.key === 'goal_grandma_bitcoin_unlocked') {
-        this.checkVaultUnlocked();
-      }
-      if (event.key === 'goal_build_and_build_unlocked') {
-        this.checkBattleUnlocked();
-      }
-      if (event.key === 'goal_shopping_on_silk_road_unlocked') {
-        this.checkInventoryUnlocked();
-      }
-      if (event.key === 'goal_centralize_decentralization_unlocked') {
-        this.checkSwapUnlocked();
-      }
-    },
     startPolling() {
-      // Poll for changes every second to capture changes made in the same tab
       this.intervalId = setInterval(() => {
-        this.updateTotalAssetsValue();
-        this.checkStakingUnlocked();
-        this.checkVaultUnlocked();
-        this.checkBattleUnlocked();
-        this.checkInventoryUnlocked();
-        this.checkSwapUnlocked();
-      }, 1000);
+        this.totalAssetsValue = TokenManager.getToalAssetsValue().toFixed(2);
+        this.isStakingUnlocked = GoalManager.isGoalReached('discover_proof_of_stake');
+        this.isVaultUnlocked = GoalManager.isGoalReached('grandma_bitcoin');
+        this.isBattleUnlocked = GoalManager.isGoalReached('build_and_build');
+        this.isInventoryUnlocked = GoalManager.isGoalReached('shopping_on_silk_road');
+        this.isSwapUnlocked = GoalManager.isGoalReached('centralize_decentralization');
+      }, 100);
     }
   },
   mounted() {
-    // Initial check when the component is mounted
-    this.checkStakingUnlocked();
-    this.checkVaultUnlocked();
-    this.checkBattleUnlocked();
-    this.checkInventoryUnlocked();
-    this.checkSwapUnlocked();
+    this.totalAssetsValue = TokenManager.getToalAssetsValue().toFixed(2);
+    this.isStakingUnlocked = GoalManager.isGoalReached('discover_proof_of_stake');
+    this.isVaultUnlocked = GoalManager.isGoalReached('grandma_bitcoin');
+    this.isBattleUnlocked = GoalManager.isGoalReached('build_and_build');
+    this.isInventoryUnlocked = GoalManager.isGoalReached('shopping_on_silk_road');
+    this.isSwapUnlocked = GoalManager.isGoalReached('centralize_decentralization');
 
-    // Listen for changes in localStorage from other tabs
-    window.addEventListener('storage', this.handleStorageChange);
-
-    // Start polling to capture changes made in the same tab
     this.startPolling();
   },
   beforeUnmount() {
-    // Clean up interval and event listener
     clearInterval(this.intervalId);
-    window.removeEventListener('storage', this.handleStorageChange);
   },
 };
 </script>

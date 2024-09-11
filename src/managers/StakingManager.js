@@ -1,6 +1,6 @@
-import { stakingsEnum } from './StakingEnum';
-import StorageManager from './StorageManager';
-import TokenManager from './TokenManager';
+import { stakingsEnum } from '@/enums/StakingEnum';
+import StorageManager from '@/managers/StorageManager';
+import TokenManager from '@/managers/TokenManager';
 
 class StakingManager {
     constructor() {

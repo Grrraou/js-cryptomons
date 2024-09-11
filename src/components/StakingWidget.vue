@@ -30,7 +30,7 @@ export default {
       stakedAmount: 0,
       storedAmount: 0,
       stakeInput: 0,
-      intervalId: null, // Store the interval ID for clearing
+      intervalId: null,
     };
   },
   computed: {
@@ -41,16 +41,14 @@ export default {
       return `token_${this.staking.token}`;
     },
     gainPerRound() {
-      return this.stakedAmount * parseFloat(this.staking.apr) / 3600; // Gain per 10-second interval
+      return this.stakedAmount * parseFloat(this.staking.apr) / 3600;
     },
     backgroundStyle() {
       let backgroundUrl;
 
       try {
-        // Try to load the background image based on the areaIndex
         backgroundUrl = require(`@/assets/staking/${this.staking.index}_bg.png`);
       } catch (error) {
-        // If the specific background image isn't found, use the default background image
         backgroundUrl = require('@/assets/staking/default_staking_bg.png');
       }
 
@@ -95,7 +93,7 @@ export default {
       this.stakeInput = (this.storedAmount * percentage) / 100;
     },
     updateDisplay() {
-      this.loadAmounts(); // Load updated amounts from localStorage
+      this.loadAmounts();
     },
     startEarnings() {
       this.intervalId = setInterval(() => {
@@ -105,59 +103,54 @@ export default {
           localStorage.setItem(this.storedKey, this.storedAmount.toFixed(6));
           this.showAreaLog(this.staking.token, increment);
         }
-        this.updateDisplay(); // Update display every 10 seconds (along with earnings)
-      }, 10000); // Update every 10 seconds
+        this.updateDisplay();
+      }, 10000);
     },
     showAreaLog(token, text) {
         if (this.$el) {
           const logsDiv = this.$el.querySelector('.logs');
           if (logsDiv) {
-            // Create a new text node
             const textNode = document.createTextNode(text);
 
             const imgElement = document.createElement('img');
-            imgElement.src = require(`@/assets/tokens/${token}.png`); // Replace with the actual image path
-            imgElement.style.width = '16px'; // Set the image size
+            imgElement.src = require(`@/assets/tokens/${token}.png`);
+            imgElement.style.width = '16px';
             imgElement.style.height = '16px'; 
             imgElement.style.marginLeft = '8px';
 
-            // Create a new paragraph element and append the text node to it
             const newParagraph = document.createElement('p');
             newParagraph.style.fontSize = '20px';
             newParagraph.style.margin = '0 20px 8px';
             newParagraph.style.fontWeight = 'bold';
             newParagraph.style.color = 'green';
-            newParagraph.style.opacity = '1'; // Start fully visible
-            newParagraph.style.pointerEvents = 'none'; // Ensure it doesn't interfere with user interactions
-            newParagraph.style.transition = 'transform 2s ease-out, opacity 2s ease-out'; // Smooth transition for both transform and opacity
-            newParagraph.style.zIndex = '9999'; // Ensure it appears on top of other elements
+            newParagraph.style.opacity = '1';
+            newParagraph.style.pointerEvents = 'none';
+            newParagraph.style.transition = 'transform 2s ease-out, opacity 2s ease-out';
+            newParagraph.style.zIndex = '9999';
 
-            
             newParagraph.appendChild(textNode);
             newParagraph.appendChild(imgElement);
 
-            // Append the new paragraph to the .logs div
             logsDiv.appendChild(newParagraph);
 
-            // Automatically remove the element after the animation ends
             setTimeout(() => {
               if (newParagraph && newParagraph.parentElement) {
                 newParagraph.parentElement.removeChild(newParagraph);
               }
-            }, 1400); // Match with the duration of the animation
+            }, 1400);
           }
         } else {
           console.error('Element is not available');
-          return { x: 0, y: 0 }; // Fallback values
+          return { x: 0, y: 0 };
         }
       },
   },
   mounted() {
     this.loadAmounts();
-    this.startEarnings(); // Start generating earnings
+    this.startEarnings();
   },
   beforeUnmount() {
-    clearInterval(this.intervalId); // Clear the earnings interval
+    clearInterval(this.intervalId);
   },
 };
 </script>
@@ -171,7 +164,7 @@ export default {
     font-size: 18px;
     font-weight: bold;
     color: #ffffff;
-    background-color: #ffa500; /* Orange background */
+    background-color: #ffa500;
     border: 2px solid #444;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -179,8 +172,8 @@ export default {
     transition: background-color 0.3s ease, transform 0.2s ease;
   }
   .staking-button:hover {
-    background-color: #ff8c00; /* Darker orange on hover */
-    transform: translateY(-2px); /* Slight lift on hover */
+    background-color: #ff8c00;
+    transform: translateY(-2px);
   }
 .token-icon {
     width: 16px;

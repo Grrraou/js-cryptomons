@@ -1,5 +1,5 @@
-import { heroesEnum } from "./HeroEnum";
-import StorageManager from "./StorageManager";
+import { heroesEnum } from "@/enums/HeroEnum";
+import StorageManager from "@/managers/StorageManager";
 class HeroManager {
     constructor() {
         this.assetPath = require.context('@/assets/heroes', false, /\.png$/);

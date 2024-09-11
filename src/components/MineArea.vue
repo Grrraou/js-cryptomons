@@ -262,7 +262,7 @@
     font-size: 18px;
     font-weight: bold;
     color: #ffffff;
-    background-color: #ffa500; /* Orange background */
+    background-color: #ffa500;
     border: 2px solid #444;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);

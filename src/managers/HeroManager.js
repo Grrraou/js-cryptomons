@@ -14,6 +14,7 @@ class HeroManager {
     }
 
     getHeroesByArea(areaIndex) {
+      console.log("areaIndex:" + areaIndex);
       return this.getHeroes().filter(hero => hero.assignedArea === areaIndex);
     }
 

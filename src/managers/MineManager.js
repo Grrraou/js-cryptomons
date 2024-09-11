@@ -131,7 +131,7 @@ class MineManager {
         const newBalance = currentAmount + minedAmount;
         TokenManager.addToBalance(mine.token, minedAmount);
         ref.tokenBalance = newBalance;
-      }
+    }
 }
 
 export default new MineManager();

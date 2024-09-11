@@ -28,8 +28,8 @@ class GoalManager {
 
     isCostPaid(goalIndex, tokenIndex) {
         const cost = this.getCost(goalIndex, tokenIndex);
-        const paidAmmount = StorageManager.getFloat(`goal_${goalIndex}_paid_${tokenIndex}`)
-        return paidAmmount >= cost.value;
+        const paidAmount = StorageManager.getFloat(`goal_${goalIndex}_paid_${tokenIndex}`)
+        return paidAmount >= cost.value;
     }
 
     canPayCost(goalIndex, tokenIndex) {

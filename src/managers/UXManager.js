@@ -51,7 +51,8 @@ class UXManager {
     }
 
     showAreaLog(ref, text, image = null) {
-      if (ref.$el) {
+      //console.log(ref)
+      if (ref && ref.$el) {
         const logsDiv = ref.$el.querySelector('.logs');
         if (logsDiv) {
           const textNode = document.createTextNode(text);
@@ -81,10 +82,9 @@ class UXManager {
             if (newParagraph && newParagraph.parentElement) {
               newParagraph.parentElement.removeChild(newParagraph);
             }
-          }, 800); // Match with the duration of the animation
+          }, 800);
         }
       } else {
-        console.error('Element is not available');
         return { x: 0, y: 0 }; // Fallback values
       }
     }

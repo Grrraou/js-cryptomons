@@ -1,10 +1,10 @@
 <template>
-  <div class="staking-widget" :style="backgroundStyle">
+  <div class="staking-widget" :id="stakingWidgetId" :style="backgroundStyle">
     <div style="display: flex;justify-content: center;"><h3>{{ staking.name }} Staking</h3><div class="logs"></div></div>
-    <p><strong>Staked Amount:</strong> {{ stakedAmount }} <img :src="getTokenIcon(staking.token)" class="token-icon" :title="staking.token"></p>
-    <p><strong>Stored Amount:</strong> {{ storedAmount }} <img :src="getTokenIcon(staking.token)" class="token-icon" :title="staking.token"></p>
+    <p><strong>Staked Amount:</strong> {{ stakedAmount }} <img :src="TokenManager.getTokenIcon(staking.token)" class="token-icon" :title="staking.token"></p>
+    <p><strong>Stored Amount:</strong> {{ storedAmount }} <img :src="TokenManager.getTokenIcon(staking.token)" class="token-icon" :title="staking.token"></p>
     <p><strong>APR:</strong> {{ staking.apr * 100 }}%</p>
-    <p><strong>Gain per Round:</strong> {{ gainPerRound.toFixed(6) }} <img :src="getTokenIcon(staking.token)" class="token-icon" :title="staking.token"></p>
+    <p><strong>Estimated gains:</strong> {{ StakingManager.getStakingRewards(staking.index) }} <img :src="TokenManager.getTokenIcon(staking.token)" class="token-icon" :title="staking.token"></p>
     <input type="number" v-model.number="stakeInput" placeholder="Enter amount to stake" />
     <div class="convenience-buttons">
       <button @click="setStakePercentage(25)">Stake 25%</button>
@@ -17,8 +17,8 @@
 </template>
 
 <script>
+import StakingManager from '@/managers/StakingManager';
 import TokenManager from '@/managers/TokenManager';
-import UXManager from '@/managers/UXManager';
 
 export default {
   name: 'StakingWidget',
@@ -27,6 +27,12 @@ export default {
       type: Object,
       required: true,
     },
+  },
+  setup() {
+    return {
+      StakingManager,
+      TokenManager,
+    }
   },
   data() {
     return {
@@ -37,23 +43,8 @@ export default {
     };
   },
   computed: {
-    stakedKey() {
-      return `staked_${this.staking.token}`;
-    },
-    storedKey() {
-      return `token_${this.staking.token}`;
-    },
-    gainPerRound() {
-      return this.stakedAmount * parseFloat(this.staking.apr) / 3600;
-    },
     backgroundStyle() {
-      let backgroundUrl;
-
-      try {
-        backgroundUrl = require(`@/assets/staking/${this.staking.index}_bg.png`);
-      } catch (error) {
-        backgroundUrl = require('@/assets/staking/default_staking_bg.png');
-      }
+      let backgroundUrl = StakingManager.getBackgroundImage(this.staking.index);
 
       return {
         background: `linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), 
@@ -62,31 +53,21 @@ export default {
         backgroundPosition: 'center',
       };
     },
+    stakingWidgetId() {
+      return `staking-widget-${this.staking.token}`;
+    }
   },
   methods: {
-    getTokenIcon(token) {
-      try {
-        return require(`@/assets/tokens/${token}.png`);
-      } catch (error) {
-        return require('@/assets/tokens/default.png');
-      }
-    },
     loadAmounts() {
-      this.stakedAmount = parseFloat(localStorage.getItem(this.stakedKey)) || 0;
-      this.storedAmount = parseFloat(localStorage.getItem(this.storedKey)) || 0;
+      this.stakedAmount = StakingManager.getStakedAmount(this.staking.token);
+      this.storedAmount = TokenManager.getBalance(this.staking.token);
     },
     stakeTokens() {
       if (this.stakeInput > 0) {
-        const currentStoredAmount = parseFloat(localStorage.getItem(this.storedKey)) || 0;
-
-        if (currentStoredAmount >= this.stakeInput) {
-          this.storedAmount = currentStoredAmount - this.stakeInput;
-          localStorage.setItem(this.storedKey, this.storedAmount.toFixed(6));
-
-          this.stakedAmount += this.stakeInput;
-          localStorage.setItem(this.stakedKey, this.stakedAmount.toFixed(6));
-
+        if (TokenManager.getBalance(this.staking.token) >= this.stakeInput) {
+          StakingManager.stakeTokens(this.staking.token, this.stakeInput);
           this.stakeInput = 0;
+          this.updateDisplay();
         } else {
           alert("Not enough tokens to stake");
         }
@@ -98,21 +79,10 @@ export default {
     updateDisplay() {
       this.loadAmounts();
     },
-    startEarnings() {
-      this.intervalId = setInterval(() => {
-        const increment = this.gainPerRound;
-        if (increment > 0) {
-          this.storedAmount += increment;
-          localStorage.setItem(this.storedKey, this.storedAmount.toFixed(6));
-          UXManager.showAreaLog(this, increment, TokenManager.getTokenIcon(this.staking.token))
-        }
-        this.updateDisplay();
-      }, 10000);
-    },
   },
   mounted() {
     this.loadAmounts();
-    this.startEarnings();
+    StakingManager.UIrefs[this.staking.token] = this;
   },
   beforeUnmount() {
     clearInterval(this.intervalId);

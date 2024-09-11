@@ -32,8 +32,8 @@ class TokenManager {
     }
 
     addToBalance(tokenIndex, amount) {
-        const storedAmmount = this.getBalance(tokenIndex);
-        const newAmount = parseFloat(storedAmmount + amount);
+        const storedAmount = this.getBalance(tokenIndex);
+        const newAmount = parseFloat(storedAmount + amount);
         StorageManager.update(`token_${tokenIndex}`, newAmount);
 
         const tokenIndexTotal = `total_token_${tokenIndex}`;
@@ -42,8 +42,8 @@ class TokenManager {
     }
 
     removeToBalance(tokenIndex, amount) {
-        const storedAmmount = this.getBalance(tokenIndex);
-        const newAmount = parseFloat(storedAmmount - amount);
+        const storedAmount = this.getBalance(tokenIndex);
+        const newAmount = parseFloat(storedAmount - amount);
         StorageManager.update(tokenIndex, newAmount);
     }
 

@@ -51,7 +51,6 @@ class UXManager {
     }
 
     showAreaLog(ref, text, image = null) {
-      //console.log(ref)
       if (ref && ref.$el) {
         const logsDiv = ref.$el.querySelector('.logs');
         if (logsDiv) {

@@ -49,7 +49,6 @@ class GoalManager {
             StorageManager.update(`goal_${goal.index}_paid_${tokenIndex}`, cost.value);
             const isReached = this.isGoalReached(goal.index);
             const isAllCostPaid = !goal.costs.find(cost => !this.isCostPaid(goal.index, cost.token));
-            console.log(goal.costs.find(cost => this.isCostPaid(goal.index, cost.token)))
             if (!isReached && isAllCostPaid) {
                 StorageManager.update(`goal_${goal.index}_unlocked`, true);
                 UXManager.showSuccess(`🎉 Goal "${goal.name}" Unlocked! 🎉`);

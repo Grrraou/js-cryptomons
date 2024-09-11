@@ -107,7 +107,7 @@ export const goalsEnum = [
       { token: 'cryptodollar', value: 35000 },
       { token: 'eth', value: 820 },
     ],
-    reward: 'Unlock Ethereum mine'
+    reward: 'Unlock Ethereum staking'
   },
   {
     index: 'rejected_by_bitcoin_community',

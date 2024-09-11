@@ -3,8 +3,8 @@ import { minesEnum, miningSoundsEnum } from "@/enums/MineEnum";
 import TokenManager from "@/managers/TokenManager";
 import UXManager from "@/managers/UXManager";
 import ItemManager from "@/managers/ItemManager";
-import GoalManager from "./GoalManager";
-import AudioManager from "./AudioManager";
+import GoalManager from "@/managers/GoalManager";
+import AudioManager from "@/managers/AudioManager";
 
 class MineManager {
     constructor() {

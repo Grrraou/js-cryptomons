@@ -2,6 +2,7 @@ import { stakingsEnum } from '@/enums/StakingEnum';
 import StorageManager from '@/managers/StorageManager';
 import TokenManager from '@/managers/TokenManager';
 import AudioManager from '@/managers/AudioManager';
+import GoalManager from '@/managers/GoalManager';
 
 class StakingManager {
     constructor() {
@@ -12,6 +13,15 @@ class StakingManager {
 
     getStakings() {
         return this.stakings;
+    }
+
+    getAvailableStakings() {
+        return this.getStakings().filter(staking => {
+            if (staking.requirement) {
+              return GoalManager.isGoalReached(staking.requirement);
+            }
+            return true;
+          });
     }
 
     getStakedAmmount(tokenIndex) {

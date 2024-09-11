@@ -2,7 +2,7 @@
     <div class="staking-page game-container">
       <h1 class="page-title">Crypto Staking</h1>
       <p>Stake your crypto assets here.</p>
-      <div class="staking-list" v-for="staking in filteredStaking" :key="staking.index">
+      <div class="staking-list" v-for="staking in StakingManager.getAvailableStakings()" :key="staking.index">
         <StakingWidget
           :key="staking.index"
           :staking="staking"
@@ -25,15 +25,12 @@ import StakingManager from '@/managers/StakingManager';
         stakings: StakingManager.getStakings(),
       };
     },
-    computed: {
-      filteredStaking() {
-      return this.stakings.filter(staking => {
-        if (staking.requirement) {
-          return localStorage.getItem(`goal_${staking.requirement}_unlocked`) === 'true';
-        }
-        return true;
-      });
+    setup() {
+      return {
+        StakingManager,
+      }
     },
+    computed: {
     }
   };
 </script>

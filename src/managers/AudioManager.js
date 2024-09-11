@@ -6,17 +6,21 @@ class AudioManager {
     }
 
     play(soundFileName, volume = 1) {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             const sound = new Audio(this.assetPath(`./${soundFileName}`));
             
             if (this.isSoundOn) {
                 sound.volume = volume;
-                sound.play().then(() => {
-                    resolve();  // Resolve when the audio successfully starts playing
-                }).catch(error => {
-                    console.error(`Audio playback failed for ${soundFileName}:`, error);
-                    reject(error);  // Reject the promise if playback fails
-                });
+    
+                try {
+                    sound.play().then(() => {
+                        resolve();  // Resolve when the audio successfully starts playing
+                    }).catch(error => {
+                        console.log(`Audio playback failed for ${soundFileName}:`, error);
+                    });
+                } catch (error) {
+                    console.log(`Audio playback was blocked for ${soundFileName}:`, error);
+                }
             } else {
                 resolve(); // If sound is off, resolve immediately (no playback)
             }

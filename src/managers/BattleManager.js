@@ -2,7 +2,8 @@ import eventBus from '@/eventBus.js';
 import HeroManager from '@/managers/HeroManager';
 import { useToast } from 'vue-toastification';
 import ItemManager from '@/managers/ItemManager';
-import { monstersEnum, battlefieldsEnum } from '@/enums/BattleEnum.js';
+import { battlefieldsEnum } from '@/enums/BattleEnum.js';
+import { monstersEnum } from '@/enums/MonsterEnum';
 import StorageManager from '@/managers/StorageManager';
 import AudioManager from './AudioManager';
 

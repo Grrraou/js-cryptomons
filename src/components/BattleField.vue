@@ -3,12 +3,12 @@
         <div class="battle-name">
             <h2>{{ battle.name }}</h2>
         </div>
-        <div class="battle-field">
+        <div class="battle-field" :id="battlefieldId">
         <MonsterThumb 
           class="monster-area" 
-          @click="creatureClicked"
           :localMonster="localMonster"
-          :monster="BattleManager.getMonster(localMonster.index)"
+          :battlefield="battle"
+          :monster="MonsterManager.getMonster(localMonster.index)"
         />
         <div class="heroes-area" @drop="handleHeroDrop" @dragover.prevent>
             <h3>Assigned Heroes</h3>
@@ -30,11 +30,10 @@
   </template>
   
 <script>
-import eventBus from '@/eventBus.js';
 import HeroThumb from '@/components/HeroThumb.vue';
 import MonsterThumb from './MonsterThumb.vue';
-import ItemManager from '@/managers/ItemManager';
 import BattleManager from '@/managers/BattleManager';
+import MonsterManager from '@/managers/MonsterManager';
   
 export default {
     components: {
@@ -54,53 +53,38 @@ export default {
         type: Array,
         required: true,
       },
-      battleIndex: { 
-        type: Number, 
-        required: true 
-      },
     },
     setup() {
       return {
         BattleManager,
+        MonsterManager,
       }
     },
     data() {
       return {
-        localMonster: { ...this.currentCreatures }
+        localMonster: MonsterManager.getCurrentMonster(this.battle.index)
       };
     },
+    computed: {
+      battlefieldId() {
+        return `battlefield-${this.battle.index}`;
+      }
+    },
     methods: {
-      creatureClicked() {
-        let manualDamageAmount = 1;
-        const weapon = ItemManager.getEquipedItem('Weapon');
-        if (weapon) {
-          manualDamageAmount += weapon.effect();
-        }
-
-        this.$emit('creature-click', this.battleIndex, manualDamageAmount);
-      },
       handleHeroDrop(event) {
         const heroData = event.dataTransfer.getData('heroData');
         if (!heroData) return;
         
         const hero = JSON.parse(heroData);
-        this.$emit('hero-dropped', hero, this.battleIndex);
+        this.$emit('hero-dropped', hero, this.battle.index);
       },
       removeHeroFromBattle(hero) {
         this.$emit('remove-hero', hero);
       },
-      updateCreature({ battleIndex, creature }) {
-        BattleManager.updateCurrentMonsters();
-        if (this.battleIndex === battleIndex) {
-          this.localMonster = { ...creature };
-        }
-      }
     },
     mounted() {
-      eventBus.on('monster-updated', this.updateCreature);
     },
     beforeUnmount() {
-      eventBus.off('monster-updated', this.updateCreature);
     }
 };
 </script>

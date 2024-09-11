@@ -60,10 +60,11 @@ class StorageManager {
         this.storage.setItem(key, value);
     }
 
-    clear(key = null) {
-        if (key) {
-            this.storage.removeItem(key);
-        }
+    removeItem(key) {
+        this.storage.removeItem(key);
+    }
+
+    clear() {
         this.storage.clear();
     }
 }

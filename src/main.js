@@ -8,6 +8,7 @@ import AchievementManager from '@/managers/AchievementManager';
 import ItemManager from '@/managers/ItemManager';
 import StakingManager from '@/managers/StakingManager';
 import TokenManager from '@/managers/TokenManager';
+import MonsterManager from '@/managers/MonsterManager';
 
 createApp(App).use(router).use(Toast, {
   position: POSITION.TOP_RIGHT,
@@ -18,3 +19,4 @@ AchievementManager.startAchievementTracking();
 TokenManager.initCryptodollarValues();
 ItemManager.initInventory();
 StakingManager.startStakingUpdates();
+MonsterManager.initCurrentMonsters();

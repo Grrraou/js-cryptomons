@@ -6,12 +6,10 @@
         <div v-for="(battle, index) in battleData" :key="battle.index" class="battlefield-block" :style="getBackgroundStyle(index)">
           <BattleField
             :battle="battle"
-            :currentCreatures="BattleManager.getCurrentMonsters()[index]"
-            :heroes="getHeroesForBattle(index)"
-            @creature-click="damageCreature"
+            :currentCreatures="MonsterManager.getCurrentMonster(battle.index)"
+            :heroes="getHeroesForBattle(battle.index)"
             @hero-dropped="assignHeroToBattle"
             @remove-hero="removeHeroFromBattle"
-            :battleIndex="index"
           />
         </div>
       </div>
@@ -30,6 +28,7 @@ import eventBus from '@/eventBus';
 import BattleManager from '@/managers/BattleManager.js';
 import GoalManager from '@/managers/GoalManager';
 import HeroManager from '@/managers/HeroManager';
+import MonsterManager from '@/managers/MonsterManager';
   
   export default {
     components: {
@@ -46,6 +45,7 @@ import HeroManager from '@/managers/HeroManager';
       return {
         BattleManager,
         HeroManager,
+        MonsterManager,
       };
     },
     computed: {
@@ -59,10 +59,6 @@ import HeroManager from '@/managers/HeroManager';
       });
     },
     methods: {
-      damageCreature(battleIndex, amount) {
-        // Can't replace for some reasons
-        BattleManager.damageCreature(battleIndex, amount);
-      },
       getHeroesForBattle(battleIndex) {
         return this.heroes.filter(hero => hero.assignedArea === battleIndex);
       },

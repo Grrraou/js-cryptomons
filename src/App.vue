@@ -13,14 +13,14 @@
 import SideMenu from './components/SideMenu.vue';
 import './assets/styles/main.css';
 import 'vue3-select/dist/vue3-select.css';
-import BattleManager from '@/managers/BattleManager.js';
+
 
 export default {
   components: {
     SideMenu,
   },
   created() {
-    BattleManager.initCurrentMonsters();
+    
   }
 };
 </script>

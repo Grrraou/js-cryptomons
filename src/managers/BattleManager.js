@@ -1,19 +1,14 @@
-import eventBus from '@/eventBus.js';
 import HeroManager from '@/managers/HeroManager';
 import { useToast } from 'vue-toastification';
 import ItemManager from '@/managers/ItemManager';
+import MonsterManager from '@/managers/MonsterManager';
 import { battlefieldsEnum } from '@/enums/BattleEnum.js';
-import { monstersEnum } from '@/enums/MonsterEnum';
-import StorageManager from '@/managers/StorageManager';
 import AudioManager from './AudioManager';
 
 class BattleManager {
   constructor() {
     this.battlefields = battlefieldsEnum;
-    this.monsters = monstersEnum;
-    this.monstersAssetPath = require.context('@/assets/monsters', false, /\.png$/);
     this.battlefieldsAssetPath = require.context('@/assets/battlefields', false, /\.png$/);
-    this.currentMonsters = [];
     this.heroAttackInterval = null;
     this.attackSounds = [
       'slash.ogg',
@@ -23,41 +18,12 @@ class BattleManager {
     ];
   }
 
-  getMonsters() {
-    return this.monsters;
-  }
-
-  getMonster(monsterIndex) {
-    return this.getMonsters().find(monster => monster.index === monsterIndex);
-  }
-
   getBattlefields() {
     return this.battlefields;
   }
 
-  initCurrentMonsters() {
-    this.currentMonsters = this.getCurrentMonsters() || this.battlefields.map((battlefield) => this.generateMonsters(battlefield.index));
-    this.updateCurrentMonsters();
-    this.startAutoBattle();
-  }
-
-  generateMonsters(battlefieldIndex) {
-    const randomIndex = Math.floor(Math.random() * this.getMonsters().length);
-    const selectedMonster = this.getMonsters()[randomIndex];
-
-    return {
-      index: selectedMonster.index,
-      health: selectedMonster.power * 100,
-      battlefieldIndex: battlefieldIndex,
-    };
-  }
-
-  getCurrentMonsters() {
-    return StorageManager.getArray("battlefield_current_monsters");
-  }
-
-  updateCurrentMonsters() {
-    StorageManager.update("battlefield_current_monsters", JSON.stringify(this.currentMonsters));
+  getBattlefield(battlefieldIndex) {
+    return this.getBattlefields().find(battlefield => battlefield.index === battlefieldIndex);
   }
 
   startAutoBattle() {
@@ -65,14 +31,12 @@ class BattleManager {
 
     this.heroAttackInterval = setInterval(() => {
       this.handleHeroAttacks();
-      this.checkAndRespawnMonsters();
-      this.updateCurrentMonsters();
     }, 1000);
   }
 
   handleHeroAttacks() {
-    this.battlefields.forEach((battle, battleFieldIndex) => {
-      const assignedHeroes = HeroManager.getHeroesByArea(battleFieldIndex);
+    this.battlefields.forEach((battle) => {
+      const assignedHeroes = HeroManager.getHeroesByArea(battle.index);
       let heroesDamage = 1;
       const chest = ItemManager.getEquipedItem('Chest');
       if (chest) {
@@ -80,21 +44,7 @@ class BattleManager {
       }
       if (assignedHeroes.length > 0) {
           const damage = assignedHeroes.length * heroesDamage;
-          this.damageCreature(battleFieldIndex, damage);
-      }
-    });
-  }
-
-  checkAndRespawnMonsters() {
-    if (!this.currentMonsters) {
-      console.error('currentMonsters is not initialized');
-      return;
-    }
-
-    this.currentMonsters.forEach((creature, index) => {
-      if (!creature || creature.health <= 0) {
-        this.currentMonsters[index] = this.generateMonsters();
-        eventBus.emit('monster-updated', { battleIndex: index, creature: this.currentMonsters[index] });
+          this.damageCreature(battle.index, damage);
       }
     });
   }
@@ -103,13 +53,15 @@ class BattleManager {
     if (window.location.pathname === '/battle') {
       AudioManager.playRandom(this.attackSounds, 0.5);
     }
-      
-    const creature = this.currentMonsters[index];
-    creature.health -= amount;
-    if (creature.health <= 0) {
+
+    const currentCreature = MonsterManager.getCurrentMonster(index);
+    const monster = MonsterManager.getMonster(currentCreature.index);
+    currentCreature.health -= amount;
+    MonsterManager.removeCurrentMonsterHealth(index, amount);
+    if (currentCreature.health <= 0) {
       // Loot a random item from the items array
-      const lootItem = ItemManager.getItem(creature.loot.index);
-      let ratio = creature.loot.ratio;
+      const lootItem = ItemManager.getItem(monster.loot.index);
+      let ratio = monster.loot.ratio;
       // get Head bonus
       const head = ItemManager.getEquipedItem('Head');
       if (head) {
@@ -121,11 +73,7 @@ class BattleManager {
         const toast = useToast();
         toast.success(`looted ${lootItem.name}!`);
       }
-      
-      this.currentMonsters[index] = this.generateMonsters();
     }
-    eventBus.emit('monster-updated', { battleIndex: index, creature: this.currentMonsters[index] });
-    this.updateCurrentMonsters();
   }
 
   getBackgroundImage(battlefieldIndex) {
@@ -138,24 +86,6 @@ class BattleManager {
 
   getHeroesForBattle(BattleFieldIndex) {
     return HeroManager.getHeroes().filter(hero => hero.assignedArea === BattleFieldIndex);
-  }
-
-  loadState() {
-    const storedCreatures = this.getCurrentMonsters();
-    if (storedCreatures && storedCreatures.length === this.battlefields.length) {
-      this.currentMonsters = storedCreatures;
-    } else {
-      this.currentMonsters = this.battlefields.map(() => this.generateMonsters());
-      this.updateCurrentMonsters();
-    }
-  }
-
-  getMonsterPortrait(monsterIndex) {
-    try {
-      return this.monstersAssetPath(`./${monsterIndex}.png`);
-    } catch (e) {
-      return this.monstersAssetPath('./default.png');
-    }
   }
 }
 

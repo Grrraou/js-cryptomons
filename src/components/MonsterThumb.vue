@@ -1,8 +1,9 @@
 <template>
     <div class="monsterThumb">
       <img v-if="localMonster"
-                :src="BattleManager.getMonsterPortrait(localMonster.index)"
+                :src="MonsterManager.getMonsterPortrait(localMonster.index)"
                 :alt="monster.name"
+                @click="attackMonster"
                 class="monster-portrait" />
       <p v-if="localMonster">{{ monster.name }} (HP: {{ localMonster.health }})</p>
       <p v-else>No monster</p>
@@ -11,23 +12,38 @@
 
 <script>
 import BattleManager from '@/managers/BattleManager';
+import MonsterManager from '@/managers/MonsterManager';
+import ItemManager from '@/managers/ItemManager';
 
 export default {
     props: {
-      localMonster: Object,
       monster: Object,
+      battlefield: Object,
     },
     data() {
       return {
-        
+        localMonster: MonsterManager.getCurrentMonster(this.battlefield.index),
       };
     },
     setup() {
       return {
         BattleManager,
+        MonsterManager,
       };
     },
+    mounted() {
+      MonsterManager.UIrefs[this.battlefield.index] = this;
+    },
     methods: {
+      attackMonster() {
+        let manualDamageAmount = 1;
+        const weapon = ItemManager.getEquipedItem('Weapon');
+        if (weapon) {
+          manualDamageAmount += weapon.effect();
+        }
+        BattleManager.damageCreature(this.localMonster.battlefieldIndex, manualDamageAmount);
+        this.localMonster = MonsterManager.getCurrentMonster(this.battlefield.index);
+      }
   },
 };
 </script>

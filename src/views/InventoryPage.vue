@@ -1,5 +1,5 @@
 <template>
-    <h1 class="page-title">Inventory</h1>
+    <h1 class="page-title">Inventory <InfoBubble page="inventory" /></h1>
     <div class="inventory-page">
       <!-- Top Section: Equipement and Selling -->
       <div class="top-section">
@@ -22,12 +22,14 @@
   import EquipementComponent from '@/components/EquipementComponent.vue';
   import SellingComponent from '@/components/SellingComponent.vue';
   import InventoryComponent from '@/components/InventoryComponent.vue';
+  import InfoBubble from '@/components/InfoBubble.vue';
   
   export default {
     components: {
       EquipementComponent,
       SellingComponent,
       InventoryComponent,
+      InfoBubble,
     },
   };
 </script>
@@ -49,6 +51,9 @@
   letter-spacing: 1px;
   text-transform: uppercase;
   border-bottom: 2px solid #ffa500;
+  display:flex;
+  justify-content: center;
+  align-items: center;
 }
 
   .inventory-page {

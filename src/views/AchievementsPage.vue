@@ -1,6 +1,6 @@
 <template>
   <div class="game-container">
-    <h1 class="page-title">Achievements</h1>
+    <h1 class="page-title">Achievements <InfoBubble page="achievements" /></h1>
     <AchievementBox
       v-for="achievement in achievements"
       :key="achievement.key"
@@ -14,11 +14,13 @@
 
 <script>
 import AchievementBox from '@/components/AchievementBox.vue';
+import InfoBubble from '@/components/InfoBubble.vue';
 import AchievementManager from '@/managers/AchievementManager';
 
 export default {
   components: {
     AchievementBox,
+    InfoBubble,
   },
   data() {
     return {
@@ -44,5 +46,8 @@ export default {
   letter-spacing: 1px;
   text-transform: uppercase;
   border-bottom: 2px solid #ffa500;
+  display:flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>

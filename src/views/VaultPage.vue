@@ -1,6 +1,6 @@
 <template>
   <div class="vault-page game-container">
-    <h1 class="page-title">Crypto Vault</h1>
+    <h1 class="page-title">Crypto Vault <InfoBubble page="vault" /></h1>
     <p>Total Value of Assets in Cryptocredits: {{ TokenManager.getToalAssetsValue().toFixed(2) }}</p>
 
     <!-- Filter and Sort UI -->
@@ -32,6 +32,7 @@
 </template>
 
 <script>
+import InfoBubble from '@/components/InfoBubble.vue';
 import TokenThumb from '@/components/TokenThumb.vue';
 import TokenManager from '@/managers/TokenManager';
 
@@ -44,6 +45,7 @@ export default {
   },
   components: {
     TokenThumb,
+    InfoBubble,
   },
   data() {
     return {
@@ -87,7 +89,7 @@ export default {
     },
   },
   mounted() {
-    this.intervalId = setInterval(this.updateData, 2000);
+    this.intervalId = setInterval(this.updateData, 200);
   },
   beforeUnmount() {
     clearInterval(this.intervalId);
@@ -132,6 +134,9 @@ export default {
   letter-spacing: 1px;
   text-transform: uppercase;
   border-bottom: 2px solid #ffa500;
+  display:flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .vault-page {

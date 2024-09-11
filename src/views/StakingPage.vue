@@ -1,6 +1,6 @@
 <template>
     <div class="staking-page game-container">
-      <h1 class="page-title">Crypto Staking</h1>
+      <h1 class="page-title">Crypto Staking <InfoBubble page="staking" /></h1>
       <p>Stake your crypto assets here.</p>
       <div class="staking-list" v-for="staking in StakingManager.getAvailableStakings()" :key="staking.index">
         <StakingWidget
@@ -12,6 +12,7 @@
 </template>
   
 <script>
+import InfoBubble from '@/components/InfoBubble.vue';
 import StakingWidget from '@/components/StakingWidget.vue';
 import StakingManager from '@/managers/StakingManager';
   
@@ -19,6 +20,7 @@ import StakingManager from '@/managers/StakingManager';
     name: 'StakingPage',
     components: {
       StakingWidget,
+      InfoBubble,
     },
     data() {
       return {
@@ -51,6 +53,9 @@ import StakingManager from '@/managers/StakingManager';
     letter-spacing: 1px;
     text-transform: uppercase;
     border-bottom: 2px solid #ffa500;
+    display:flex;
+    justify-content: center;
+    align-items: center;
   }
 
   .staking-page {

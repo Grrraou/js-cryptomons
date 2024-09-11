@@ -1,5 +1,5 @@
 <template>
-    <h1 class="page-title">BattleFields</h1>
+    <h1 class="page-title">BattleFields <InfoBubble page="battle" /></h1>
     <div class="battle-page game-container">
         
       <div class="battlefields-container">
@@ -24,6 +24,7 @@
 <script>
 import BattleField from '@/components/BattleField.vue';
 import HeroList from '@/components/HeroList.vue';
+import InfoBubble from '@/components/InfoBubble.vue';
 import eventBus from '@/eventBus';
 import BattleManager from '@/managers/BattleManager.js';
 import GoalManager from '@/managers/GoalManager';
@@ -34,6 +35,7 @@ import MonsterManager from '@/managers/MonsterManager';
     components: {
       BattleField,
       HeroList,
+      InfoBubble
     },
     data() {
       return {
@@ -110,6 +112,9 @@ import MonsterManager from '@/managers/MonsterManager';
   letter-spacing: 1px;
   text-transform: uppercase;
   border-bottom: 2px solid #ffa500;
+  display:flex;
+  justify-content: center;
+  align-items: center;
 }
 
   .battle-page {

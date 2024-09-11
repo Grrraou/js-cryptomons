@@ -1,6 +1,6 @@
 <template>
   <div class="stats-page game-container">
-    <h1 class="page-title">Stats Page</h1>
+    <h1 class="page-title">Stats Page <InfoBubble page="stats" /></h1>
     <p>See your game stats here.</p>
     <MenuWindow @reset-stats="resetStoredStats" />
   
@@ -14,12 +14,14 @@
 </template>
 
 <script>
+import InfoBubble from '@/components/InfoBubble.vue';
 import MenuWindow from '@/components/MenuWindow.vue';
 
 export default {
   name: 'StatsPage',
   components: {
     MenuWindow,
+    InfoBubble,
   },
   data() {
     return {
@@ -69,6 +71,9 @@ export default {
   letter-spacing: 1px;
   text-transform: uppercase;
   border-bottom: 2px solid #ffa500;
+  display:flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .stats-page {

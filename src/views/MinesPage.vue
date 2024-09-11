@@ -3,7 +3,7 @@
     <div class="game-container">
       <!-- Left side: Clicker Areas -->
       <div class="areas-container">
-        <h1 class="page-title">Mines <InfoBubble /></h1>
+        <h1 class="page-title">Mines <InfoBubble page="mines" /></h1>
 
         <div class="areas-grid">
           <div class="area-wrapper" v-for="mine in mines" :key="mine.index">

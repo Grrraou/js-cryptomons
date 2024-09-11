@@ -1,39 +1,96 @@
 <template>
-    <div>
-      <!-- Info Bubble -->
-      <div class="info-bubble" @click="toggleOverlay">
-        <span class="info-icon">?</span>
-      </div>
-  
-      <!-- Overlay -->
-      <div v-if="isOverlayVisible" class="overlay">
-        <div class="overlay-content">
-          <span class="close-btn" @click="hideOverlay">&times;</span>
-          <p>This is the detailed information inside the overlay. You can put as much text as needed here.</p>
+  <div>
+    <!-- Info Bubble -->
+    <div class="info-bubble" @click="toggleOverlay">
+      <span class="info-icon">?</span>
+    </div>
+
+    <!-- Overlay -->
+    <div v-if="isOverlayVisible" class="overlay">
+      <div class="overlay-content">
+        <span class="close-btn" @click="hideOverlay">&times;</span>
+        
+        <!-- Conditionally render content based on prop page -->
+        <div v-if="page === 'mines'">
+          <h3>Mines Information</h3>
+          <p>Mines allow users to stake assets in return for rewards over time. The longer you leave your assets in the mine, the more rewards you can accumulate. Different mines may have varying reward rates and durations.</p>
         </div>
+
+        <div v-if="page === 'staking'">
+          <h3>Staking Information</h3>
+          <p>Staking is a way to earn rewards by locking your assets into a staking pool. Different pools offer different rewards based on the assets staked and the lock-up period. Ensure you choose a pool that matches your investment strategy.</p>
+        </div>
+
+        <div v-if="page === 'vault'">
+          <h3>Vault Information</h3>
+          <p>The vault is a secure storage for your assets, where they earn interest passively. Vaults are typically low-risk and are a good choice for long-term holding of assets with stable returns.</p>
+        </div>
+
+        <div v-if="page === 'battle'">
+          <h3>battle Information</h3>
+          <p>The vault is a secure storage for your assets, where they earn interest passively. Vaults are typically low-risk and are a good choice for long-term holding of assets with stable returns.</p>
+        </div>
+
+        <div v-if="page === 'inventory'">
+          <h3>Inventory Information</h3>
+          <p>The inves is a secure storage for your assets, where they earn interest passively. Vaults are typically low-risk and are a good choice for long-term holding of assets with stable returns.</p>
+        </div>
+
+        <div v-if="page === 'swap'">
+          <h3>Inventory Information</h3>
+          <p>The inves is a secure storage for your assets, where they earn interest passively. Vaults are typically low-risk and are a good choice for long-term holding of assets with stable returns.</p>
+        </div>
+
+        <div v-if="page === 'goals'">
+          <h3>Inventory Information</h3>
+          <p>The inves is a secure storage for your assets, where they earn interest passively. Vaults are typically low-risk and are a good choice for long-term holding of assets with stable returns.</p>
+        </div>
+
+        <div v-if="page === 'achievements'">
+          <h3>Inventory Information</h3>
+          <p>The inves is a secure storage for your assets, where they earn interest passively. Vaults are typically low-risk and are a good choice for long-term holding of assets with stable returns.</p>
+        </div>
+
+        <div v-if="page === 'stats'">
+          <h3>Inventory Information</h3>
+          <p>The inves is a secure storage for your assets, where they earn interest passively. Vaults are typically low-risk and are a good choice for long-term holding of assets with stable returns.</p>
+        </div>
+
+        <div v-if="page === 'settings'">
+          <h3>Inventory Information</h3>
+          <p>The inves is a secure storage for your assets, where they earn interest passively. Vaults are typically low-risk and are a good choice for long-term holding of assets with stable returns.</p>
+        </div>
+
+        <!-- Add more sections if needed -->
       </div>
     </div>
+  </div>
 </template>
-  
 
 <script>
-  export default {
-    name: 'InfoBubble',
-    data() {
-      return {
-        isOverlayVisible: false, // Controls overlay visibility
-      };
+export default {
+  props: {
+    page: {
+      type: String,
+      required: true,
     },
-    methods: {
-      toggleOverlay() {
-        this.isOverlayVisible = !this.isOverlayVisible; // Toggle overlay visibility on click
-      },
-      hideOverlay() {
-        this.isOverlayVisible = false; // Hide overlay when close button is clicked
-      },
+  },
+  data() {
+    return {
+      isOverlayVisible: false,
+    };
+  },
+  methods: {
+    toggleOverlay() {
+      this.isOverlayVisible = !this.isOverlayVisible;
     },
-  };
+    hideOverlay() {
+      this.isOverlayVisible = false;
+    },
+  },
+};
 </script>
+
   
 
 <style scoped>

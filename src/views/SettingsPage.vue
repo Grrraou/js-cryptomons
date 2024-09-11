@@ -1,6 +1,6 @@
 <template>
     <div class="settings-page game-container">
-      <h1 class="page-title">Settings</h1>
+      <h1 class="page-title">Settings <InfoBubble page="settings" /></h1>
       <ExportComponent />
       <ImportComponent />
     </div>
@@ -9,12 +9,14 @@
 <script>
 import ExportComponent from '@/components/ExportComponent.vue';
 import ImportComponent from '@/components/ImportComponent.vue';
+import InfoBubble from '@/components/InfoBubble.vue';
   
   export default {
     name: 'SettingsPage',
     components: {
       ExportComponent,
       ImportComponent,
+      InfoBubble,
     },
   };
 </script>
@@ -35,6 +37,9 @@ import ImportComponent from '@/components/ImportComponent.vue';
     letter-spacing: 1px;
     text-transform: uppercase;
     border-bottom: 2px solid #ffa500;
+    display:flex;
+  justify-content: center;
+  align-items: center;
   }
 
   .settings-page {

@@ -1,16 +1,18 @@
 <template>
     <div class="swap-page game-container">
-        <h1 class="page-title">SWAP</h1>
+        <h1 class="page-title">SWAP <InfoBubble page="swap" /></h1>
       <SwapBox />
     </div>
 </template>
   
 <script>
-  import SwapBox from '@/components/SwapBox.vue';
+  import InfoBubble from '@/components/InfoBubble.vue';
+import SwapBox from '@/components/SwapBox.vue';
   
   export default {
     components: {
       SwapBox,
+      InfoBubble,
     },
   };
   </script>
@@ -31,6 +33,9 @@
   letter-spacing: 1px;
   text-transform: uppercase;
   border-bottom: 2px solid #ffa500;
+  display:flex;
+  justify-content: center;
+  align-items: center;
 }
 
   .swap-page {

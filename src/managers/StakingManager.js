@@ -1,6 +1,7 @@
 import { stakingsEnum } from '@/enums/StakingEnum';
 import StorageManager from '@/managers/StorageManager';
 import TokenManager from '@/managers/TokenManager';
+import AudioManager from '@/managers/AudioManager';
 
 class StakingManager {
     constructor() {
@@ -28,9 +29,7 @@ class StakingManager {
                     TokenManager.addToBalance(staking.token, increment);
                 }
                 if (window.location.pathname === '/staking') {
-                    const stakingSound = new Audio(require('@/assets/sounds/staking.wav'));
-                    stakingSound.volume = 0.2;
-                    stakingSound.play();
+                    AudioManager.play('staking.wav', 0.2);
                 }
             };
       

@@ -39,16 +39,15 @@ class ItemManager {
         if (inventoryIndex !== -1) {
             inventory.splice(inventoryIndex, 1);
             StorageManager.update('playerInventory', JSON.stringify(inventory))
-            eventBus.emit('inventory-updated'); // Notify the InventoryComponent to update
+            eventBus.emit('inventory-updated');
         }
     }
 
     getEquipement(raw = false) {
         const equipement = JSON.parse(localStorage.getItem('playerEquipement')) || {};
         return raw ? equipement : Object.keys(equipement).reduce((acc, key) => {
-            const index = equipement[key]; // Get the current value (which could be null or a valid index)
+            const index = equipement[key];
             
-            // If there's a valid index, use this.getItem() to replace it
             acc[key] = index !== null ? this.getItem(index) : null;
             
             return acc;

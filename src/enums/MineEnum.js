@@ -13,8 +13,8 @@ export const minesEnum = [
 ];
 
 export const miningSoundsEnum = [
-  new Audio(require('@/assets/sounds/mining.mp3')),
-  new Audio(require('@/assets/sounds/mining2.wav')),
-  new Audio(require('@/assets/sounds/mining3.wav')),
-  new Audio(require('@/assets/sounds/mining4.wav')),
+  'mining.mp3',
+  'mining2.wav',
+  'mining3.wav',
+  'mining4.wav',
 ];

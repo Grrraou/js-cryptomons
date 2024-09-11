@@ -4,6 +4,7 @@ import TokenManager from "@/managers/TokenManager";
 import UXManager from "@/managers/UXManager";
 import ItemManager from "@/managers/ItemManager";
 import GoalManager from "./GoalManager";
+import AudioManager from "./AudioManager";
 
 class MineManager {
     constructor() {
@@ -100,18 +101,11 @@ class MineManager {
         }
     }
 
-    playMiningSound(miningSoundIndex = null) {
-        miningSoundIndex = miningSoundIndex !== null ? miningSoundIndex : Math.floor(Math.random() * this.miningSounds.length);
-        const miningSound = this.miningSounds[miningSoundIndex];
-        miningSound.volume = 0.5;
-        miningSound.play();
-    }
-
     mineTokens(event, mineIndex, ref) {
         const mine = this.getItem(mineIndex);
 
         if (window.location.pathname === '/mines') {
-          this.playMiningSound();
+            AudioManager.playRandom(this.miningSounds, 0.5);
         }
         
         const currentAmount = TokenManager.getBalance(mine.token);

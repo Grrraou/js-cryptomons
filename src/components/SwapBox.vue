@@ -93,6 +93,7 @@
 <script>
 import vSelect from 'vue3-select';
 import TokenManager from '@/managers/TokenManager';
+import AudioManager from '@/managers/AudioManager';
 
 export default {
   components: {
@@ -190,13 +191,11 @@ export default {
         return;
       }
       if (this.fromTokenBalance < this.amount) {
-        alert(`Insufficient ${this.fromToken.index.toUpperCase()} balance.`);
+        alert(`Insufficient ${this.fromToken.index.toUpperCase()} balance.swap.wav`);
         return;
       }
 
-      const swapSound = new Audio(require('@/assets/sounds/swap.wav'));
-      swapSound.volume = 1;
-      swapSound.play().then(() => {
+      AudioManager.play('swap.wav', 1).then(() => {
         alert(`Swapped ${this.amount} ${this.fromToken.index.toUpperCase()} to ${this.swapResult} ${this.toToken.index.toUpperCase()}`);
 
         TokenManager.removeToBalance(this.fromToken.index, this.amount);

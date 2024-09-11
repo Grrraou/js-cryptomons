@@ -4,6 +4,7 @@ import { useToast } from 'vue-toastification';
 import ItemManager from '@/managers/ItemManager';
 import { monstersEnum, battlefieldsEnum } from '@/enums/BattleEnum.js';
 import StorageManager from '@/managers/StorageManager';
+import AudioManager from './AudioManager';
 
 class BattleManager {
   constructor() {
@@ -14,10 +15,10 @@ class BattleManager {
     this.currentMonsters = [];
     this.heroAttackInterval = null;
     this.attackSounds = [
-      new Audio(require('@/assets/sounds/slash.ogg')),
-      new Audio(require('@/assets/sounds/slash2.wav')),
-      new Audio(require('@/assets/sounds/slash3.wav')),
-      new Audio(require('@/assets/sounds/slash4.wav')),
+      'slash.ogg',
+      'slash2.wav',
+      'slash3.wav',
+      'slash4.wav',
     ];
   }
 
@@ -96,10 +97,7 @@ class BattleManager {
 
   damageCreature(index, amount) {
     if (window.location.pathname === '/battle') {
-      const randomIndex = Math.floor(Math.random() * this.attackSounds.length);
-      const slashSound = this.attackSounds[randomIndex];
-      slashSound.volume = 0.5;
-      slashSound.play();
+      AudioManager.playRandom(this.attackSounds, 0.5);
     }
       
     const creature = this.currentMonsters[index];

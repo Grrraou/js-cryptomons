@@ -2,14 +2,13 @@ import { achievementsEnum } from "@/enums/AchievementEnum";
 import ItemManager from "@/managers/ItemManager";
 import StorageManager from "@/managers/StorageManager";
 import UXManager from "@/managers/UXManager";
+import AudioManager from "@/managers/AudioManager";
 
 class AchievementManager {
     constructor() {
         this.assetPath = require.context('@/assets/achievements', false, /\.png$/);
         this.checkInterval = null;
         this.achievements = achievementsEnum;
-        this.achievementSound = new Audio(require('@/assets/sounds/achievement.wav'));
-        this.achievementSound.volume = 0.5;
     }
 
     getAchievements() {
@@ -34,9 +33,7 @@ class AchievementManager {
     unlockAchievement(achievementIndex) {
         const achievement = this.getAchievement(achievementIndex);
         let successText = `${achievement.title} unlocked!`;
-        this.achievementSound.play().catch(error => {
-            console.error('Audio playback failed:', error);
-        });
+        AudioManager.play('achievement.wav', 0.5);
         if (achievement.loot) {
             ItemManager.addToInventory(achievement.loot)
         }

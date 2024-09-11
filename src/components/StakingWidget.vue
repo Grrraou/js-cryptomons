@@ -17,6 +17,9 @@
 </template>
 
 <script>
+import TokenManager from '@/managers/TokenManager';
+import UXManager from '@/managers/UXManager';
+
 export default {
   name: 'StakingWidget',
   props: {
@@ -101,49 +104,11 @@ export default {
         if (increment > 0) {
           this.storedAmount += increment;
           localStorage.setItem(this.storedKey, this.storedAmount.toFixed(6));
-          this.showAreaLog(this.staking.token, increment);
+          UXManager.showAreaLog(this, increment, TokenManager.getTokenIcon(this.staking.token))
         }
         this.updateDisplay();
       }, 10000);
     },
-    showAreaLog(token, text) {
-        if (this.$el) {
-          const logsDiv = this.$el.querySelector('.logs');
-          if (logsDiv) {
-            const textNode = document.createTextNode(text);
-
-            const imgElement = document.createElement('img');
-            imgElement.src = require(`@/assets/tokens/${token}.png`);
-            imgElement.style.width = '16px';
-            imgElement.style.height = '16px'; 
-            imgElement.style.marginLeft = '8px';
-
-            const newParagraph = document.createElement('p');
-            newParagraph.style.fontSize = '20px';
-            newParagraph.style.margin = '0 20px 8px';
-            newParagraph.style.fontWeight = 'bold';
-            newParagraph.style.color = 'green';
-            newParagraph.style.opacity = '1';
-            newParagraph.style.pointerEvents = 'none';
-            newParagraph.style.transition = 'transform 2s ease-out, opacity 2s ease-out';
-            newParagraph.style.zIndex = '9999';
-
-            newParagraph.appendChild(textNode);
-            newParagraph.appendChild(imgElement);
-
-            logsDiv.appendChild(newParagraph);
-
-            setTimeout(() => {
-              if (newParagraph && newParagraph.parentElement) {
-                newParagraph.parentElement.removeChild(newParagraph);
-              }
-            }, 1400);
-          }
-        } else {
-          console.error('Element is not available');
-          return { x: 0, y: 0 };
-        }
-      },
   },
   mounted() {
     this.loadAmounts();

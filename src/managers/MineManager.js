@@ -88,7 +88,7 @@ class MineManager {
     upgrade(mineIndex, ref = null) {
         const mineItem = this.getItem(mineIndex);
         const cost = this.getUpgradeCost(this.areaIndex);
-        console.log(mineIndex);
+        //console.log(mineIndex);
 
         if (this.canUpgrade(mineIndex)) {
             const mineLevelIndex = `level_area_${mineIndex}`;

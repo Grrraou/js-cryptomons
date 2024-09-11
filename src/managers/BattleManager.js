@@ -26,25 +26,28 @@ class BattleManager {
     return this.monsters;
   }
 
+  getMonster(monsterIndex) {
+    return this.getMonsters().find(monster => monster.index === monsterIndex);
+  }
+
   getBattlefields() {
     return this.battlefields;
   }
 
   initCurrentMonsters() {
-    this.currentMonsters = this.getCurrentMonsters() || this.battlefields.map(() => this.generateMonsters());
+    this.currentMonsters = this.getCurrentMonsters() || this.battlefields.map((battlefield) => this.generateMonsters(battlefield.index));
     this.updateCurrentMonsters();
     this.startAutoBattle();
   }
 
-  generateMonsters() {
+  generateMonsters(battlefieldIndex) {
     const randomIndex = Math.floor(Math.random() * this.getMonsters().length);
     const selectedMonster = this.getMonsters()[randomIndex];
-    const portrait = this.getMonsterPortrait(selectedMonster.index);
 
     return {
-      ...selectedMonster,
+      index: selectedMonster.index,
       health: selectedMonster.power * 100,
-      portrait: portrait,
+      battlefieldIndex: battlefieldIndex,
     };
   }
 
@@ -145,7 +148,6 @@ class BattleManager {
       this.updateCurrentMonsters();
     }
   }
-
 
   getMonsterPortrait(monsterIndex) {
     try {

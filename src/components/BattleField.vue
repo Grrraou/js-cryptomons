@@ -4,15 +4,12 @@
             <h2>{{ battle.name }}</h2>
         </div>
         <div class="battle-field">
-        <div class="monster-area" @click="creatureClicked">
-            <img v-if="localCreature"
-                :src="localCreature.portrait"
-                :alt="localCreature.name"
-                class="monster-portrait" />
-            <p v-if="localCreature">{{ localCreature.name }} (HP: {{ localCreature.health }})</p>
-            <p v-else>No monster</p>
-        </div>
-    
+        <MonsterThumb 
+          class="monster-area" 
+          @click="creatureClicked"
+          :localMonster="localMonster"
+          :monster="BattleManager.getMonster(localMonster.index)"
+        />
         <div class="heroes-area" @drop="handleHeroDrop" @dragover.prevent>
             <h3>Assigned Heroes</h3>
             <div class="heroes-grid">
@@ -35,12 +32,14 @@
 <script>
 import eventBus from '@/eventBus.js';
 import HeroThumb from '@/components/HeroThumb.vue';
+import MonsterThumb from './MonsterThumb.vue';
 import ItemManager from '@/managers/ItemManager';
 import BattleManager from '@/managers/BattleManager';
   
 export default {
     components: {
       HeroThumb,
+      MonsterThumb,
     },
     props: {
       battle: {
@@ -60,9 +59,14 @@ export default {
         required: true 
       },
     },
+    setup() {
+      return {
+        BattleManager,
+      }
+    },
     data() {
       return {
-        localCreature: { ...this.currentCreatures }
+        localMonster: { ...this.currentCreatures }
       };
     },
     methods: {
@@ -88,7 +92,7 @@ export default {
       updateCreature({ battleIndex, creature }) {
         BattleManager.updateCurrentMonsters();
         if (this.battleIndex === battleIndex) {
-          this.localCreature = { ...creature };
+          this.localMonster = { ...creature };
         }
       }
     },
@@ -128,21 +132,6 @@ export default {
     text-align: center;
     background: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.6)), 
               url('@/assets/battlefields/mobsWidgetBG.png') center/cover no-repeat;
-  }
-
-  .monster-area p {
-    color: #444;
-    font-weight: bold;
-    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.7);
-  }
-  
-  .monster-portrait {
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-    border-radius: 33%;
-    margin-bottom: 10px;
-    border: 3px solid #ffa500;
   }
   
   .heroes-area {

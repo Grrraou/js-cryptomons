@@ -49,11 +49,9 @@ class StorageManager {
         return JSON.parse(storedValue) || defaultValue;
     }
 
-    getBool(key, defaultValue = false) {
+    getBool(key) {
         const storedValue = this.storage.getItem(key);
-        return Boolean(storedValue) &&  storedValue !== '0' 
-            ? Boolean(storedValue) 
-            : defaultValue;
+        return storedValue === 'false' ? false : Boolean(storedValue);
     }
 
     update(key, value) {

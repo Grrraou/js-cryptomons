@@ -23,7 +23,7 @@
         <p :class="{'highlight-total-value': sortOption === 'totalValue'}">
           <span class='label'>Total Value in Cryptocredits:</span>
           <br>
-          <span class="tokenSum">{{  }} <img class="token-icon" src="@/assets/tokens/cryptodollar.png"></span>
+          <span class="tokenSum">{{ balanceInCryptodollar }} <img class="token-icon" src="@/assets/tokens/cryptodollar.png"></span>
         </p>
     </div>
 </template>

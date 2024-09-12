@@ -23,6 +23,17 @@ class HeroManager {
       });
     }
 
+    getXP(heroIndex) {
+      return StorageManager.getFloat(`heroxp_${heroIndex}`);
+    }
+
+    gainXP(heroIndex, amount) {
+      let xp = this.getXP(heroIndex);
+      xp += amount;
+      StorageManager.update(`heroxp_${heroIndex}`, xp);
+      return xp;
+    }
+
     isHeroUnlocked(heroIndex) {
       const hero = this.getHero(heroIndex);
       if (hero.requirement) {

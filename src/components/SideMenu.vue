@@ -83,7 +83,7 @@ export default {
       isInventoryUnlocked: false,
       isSwapUnlocked: false,
       intervalId: null,
-      soundOn: true,
+      soundOn: AudioManager.isSoundOn(),
     };
   },
   setup() {

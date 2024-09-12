@@ -1,8 +1,8 @@
-//import StorageManager from "@/managers/StorageManager";
+import StorageManager from "@/managers/StorageManager";
 class AudioManager {
     constructor() {
         this.assetPath = require.context('@/assets/sounds', false, /\.(mp3|wav|ogg)$/);
-        this.sound = true;
+        this.sound = StorageManager.getBool('setting_is_sound_on');
     }
 
     isSoundOn() {
@@ -11,7 +11,7 @@ class AudioManager {
 
     toggleSound() {
         this.sound = !this.isSoundOn();
-        //StorageManager.update('setting_is_sound_on', this.sound);
+        StorageManager.update('setting_is_sound_on', this.sound);
     }
 
     play(soundFileName, volume = 1) {

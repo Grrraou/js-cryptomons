@@ -9,21 +9,21 @@
         <p :class="{'highlight-amount': sortOption === 'amount'}">
           <span class='label'>Current Amount:</span> 
           <br>
-          <span class="tokenSum">{{ TokenManager.getBalance(token.index) }} <img class="token-icon" :src="TokenManager.getTokenIcon(token.index)"></span>
+          <span class="tokenSum">{{ tokenBalance }} <img class="token-icon" :src="TokenManager.getTokenIcon(token.index)"></span>
         </p>
 
         <!-- Price per token with dynamic class binding for highlighting -->
         <p :class="{'highlight-price': sortOption === 'price'}">
           <span class='label'>Price per {{ token.name }}:</span>
           <br>
-          <span class="tokenSum">{{ TokenManager.getTokenPrice(token.index) }} <img class="token-icon" src="@/assets/tokens/cryptodollar.png"></span>
+          <span class="tokenSum">{{ tokenPrice }} <img class="token-icon" src="@/assets/tokens/cryptodollar.png"></span>
         </p>
         
         <!-- Total Value in Cryptocredits with dynamic class binding for highlighting -->
         <p :class="{'highlight-total-value': sortOption === 'totalValue'}">
           <span class='label'>Total Value in Cryptocredits:</span>
           <br>
-          <span class="tokenSum">{{ TokenManager.getBalanceInCryptodollar(token.index) }} <img class="token-icon" src="@/assets/tokens/cryptodollar.png"></span>
+          <span class="tokenSum">{{  }} <img class="token-icon" src="@/assets/tokens/cryptodollar.png"></span>
         </p>
     </div>
 </template>
@@ -38,7 +38,10 @@ export default {
     },
     data() {
       return {
-        
+        intervalId: null,
+        tokenBalance: TokenManager.getBalance(this.token.index),
+        tokenPrice: TokenManager.getTokenPrice(this.token.index),
+        balanceInCryptodollar: TokenManager.getBalanceInCryptodollar(this.token.index),
       };
     },
     setup() {
@@ -47,7 +50,17 @@ export default {
       };
     },
     methods: {
+      startPolling() {
+      this.intervalId = setInterval(() => {
+        this.tokenBalance = TokenManager.getBalance(this.token.index);
+        this.tokenPrice = TokenManager.getTokenPrice(this.token.index);
+        this.balanceInCryptodollar = TokenManager.getBalanceInCryptodollar(this.token.index)
+      }, 200);
+    }
     },
+    mounted() {
+      this.startPolling();
+  },
 };
 </script>
 

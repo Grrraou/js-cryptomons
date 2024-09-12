@@ -1,5 +1,8 @@
 <template>
   <div class="side-menu">
+    <div class="sound-toggle">
+        <button @click="toggleSound()">{{ soundIcon }}</button>
+      </div>
     <div class="side-menu-container">
       <div class="logo-container">
         <img src="@/assets/mainLogo.png" alt="Cryptomons Logo" class="logo" />
@@ -66,6 +69,7 @@
 <script>
 import GoalManager from '@/managers/GoalManager';
 import TokenManager from '@/managers/TokenManager';
+import AudioManager from '@/managers/AudioManager';
 
 export default {
   name: 'SideMenu',
@@ -79,7 +83,18 @@ export default {
       isInventoryUnlocked: false,
       isSwapUnlocked: false,
       intervalId: null,
+      soundOn: true,
     };
+  },
+  setup() {
+    return {
+      AudioManager,
+    }
+  },
+  computed: {
+    soundIcon() {
+      return this.soundOn ? '🔊' : '🔇';
+    }
   },
   methods: {
     startPolling() {
@@ -90,7 +105,12 @@ export default {
         this.isBattleUnlocked = GoalManager.isGoalReached('build_and_build');
         this.isInventoryUnlocked = GoalManager.isGoalReached('shopping_on_silk_road');
         this.isSwapUnlocked = GoalManager.isGoalReached('centralize_decentralization');
+        this.soundOn = AudioManager.isSoundOn();
       }, 100);
+    },
+    toggleSound() {
+      this.soundOn = !this.soundOn;
+      AudioManager.toggleSound();
     }
   },
   mounted() {
@@ -184,5 +204,20 @@ nav ul li a.router-link-active {
   color: red;
   font-weight: bold;
   cursor: not-allowed;
+}
+
+/** SOUND */
+.sound-toggle {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 100;
+}
+
+.sound-toggle button {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
 }
 </style>

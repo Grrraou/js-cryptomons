@@ -41,27 +41,36 @@ class BattleManager {
       const assignedHeroes = HeroManager.getHeroesByArea(battle.index);
 
       assignedHeroes.forEach(() => {
-        this.damageCreature(battle.index, MonsterManager.UIrefs[battle.index]);
+        let heroDamage = 1;
+        const chest = ItemManager.getEquipedItem('Chest');
+        if (chest) {
+          heroDamage += chest.effect();
+        }
+        this.damageCreature(battle.index, heroDamage, MonsterManager.UIrefs[battle.index]);
       });
     });
   }
 
-  damageCreature(index, ref = null) {
+  damageCreature(index, amount, ref = null, event = null) {
     if (window.location.pathname === '/battle') {
       AudioManager.playRandom(this.attackSounds, 0.5);
     }
-    let heroDamage = 1;
-    const chest = ItemManager.getEquipedItem('Chest');
-    if (chest) {
-      heroDamage += chest.effect();
-    }
+    
 
     const currentCreature = MonsterManager.getCurrentMonster(index);
     const monster = MonsterManager.getMonster(currentCreature.index);
-    currentCreature.health -= heroDamage;
-    MonsterManager.removeCurrentMonsterHealth(index, heroDamage);
-    const rect = ref.$el.getBoundingClientRect();
-    UXManager.showFlyingText('⚔️ ' + heroDamage, null, rect.left, rect.top)
+    currentCreature.health -= amount;
+    MonsterManager.removeCurrentMonsterHealth(index, amount);
+    if (ref) {
+      const rect = ref.$el.getBoundingClientRect();
+      UXManager.showFlyingText('⚔️ ' + amount, null, rect.left, rect.top)
+    }
+    if (event) {
+      const x = event.clientX;
+      const y = event.clientY;
+      UXManager.showFlyingText('⚔️ ' + amount, null, x, y);
+    }
+    
     if (currentCreature.health <= 0) {
       // Loot a random item from the items array
       const lootItem = ItemManager.getItem(monster.loot.index);

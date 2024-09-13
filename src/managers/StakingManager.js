@@ -72,7 +72,10 @@ class StakingManager {
                 if (stakedAmount > 0) {
                     const increment = (stakedAmount * parseFloat(staking.apr)) / 360;
                     TokenManager.addToBalance(staking.token, increment);
-                    UXManager.showAreaLog(this.UIrefs[staking.token], increment, TokenManager.getTokenIcon(staking.token))
+                    if (this.UIrefs[staking.index] && this.UIrefs[staking.index].$el) {
+                        const rect = this.UIrefs[staking.index].$el.getBoundingClientRect();
+                        UXManager.showFlyingText(increment, TokenManager.getTokenIcon(staking.token), rect.left, rect.top);
+                    }
                 }
                 if (window.location.pathname === '/staking') {
                     AudioManager.play('staking.wav', 0.2);

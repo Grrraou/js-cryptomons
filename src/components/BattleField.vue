@@ -6,6 +6,7 @@
         <div class="battle-field" :id="battlefieldId">
         <MonsterThumb 
           class="monster-area" 
+          @click="attackMonster"
           :localMonster="localMonster"
           :battlefield="battlefield"
           :monster="MonsterManager.getMonster(localMonster.index)"
@@ -35,6 +36,7 @@ import BattleManager from '@/managers/BattleManager';
 import MonsterManager from '@/managers/MonsterManager';
 import HeroManager from '@/managers/HeroManager';
 import eventBus from '@/eventBus';
+import ItemManager from '@/managers/ItemManager';
   
 export default {
     components: {
@@ -75,6 +77,15 @@ export default {
         const hero = JSON.parse(heroData);
         HeroManager.moveHero(hero.index, this.battlefield.index);
       },
+      attackMonster(event) {
+        let manualDamageAmount = 1;
+        const weapon = ItemManager.getEquipedItem('Weapon');
+        if (weapon) {
+          manualDamageAmount += weapon.effect();
+        }
+        BattleManager.damageCreature(this.localMonster.battlefieldIndex, manualDamageAmount, null, event);
+        this.localMonster = MonsterManager.getCurrentMonster(this.battlefield.index);
+      }
     },
     mounted() {
       eventBus.on('hero-moved', () => {

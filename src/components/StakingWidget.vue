@@ -82,7 +82,7 @@ export default {
   },
   mounted() {
     this.loadAmounts();
-    StakingManager.UIrefs[this.staking.token] = this;
+    StakingManager.UIrefs[this.staking.index] = this;
   },
   beforeUnmount() {
     clearInterval(this.intervalId);

@@ -40,8 +40,10 @@ class BattleManager {
     this.battlefields.forEach((battle) => {
       const assignedHeroes = HeroManager.getHeroesByArea(battle.index);
 
-      assignedHeroes.forEach(() => {
-        let heroDamage = 1;
+      assignedHeroes.forEach(hero => {
+        const battlePower = HeroManager.getBattlePower(hero.index);
+        let heroDamage = Math.round((Math.random() * (battlePower - battlePower / 2) + battlePower / 2).toFixed(0));
+        
         const chest = ItemManager.getEquipedItem('Chest');
         if (chest) {
           heroDamage += chest.effect();

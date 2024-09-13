@@ -4,7 +4,24 @@ import eventBus from "@/eventBus";
 class HeroManager {
     constructor() {
         this.assetPath = require.context('@/assets/heroes', false, /\.png$/);
+        this.XPperLvl = 100;
         this.UIrefs = [];
+    }
+
+    getHeroLevel(heroIndex) {
+      const heroXP = this.getXP(heroIndex);
+      return Math.round(1 + heroXP / this.XPperLvl);
+    }
+
+    getMiningPower(heroIndex) {
+      const hero = this.getHero(heroIndex);
+      console.log(hero)
+      return hero.miningPower * this.getHeroLevel(heroIndex);
+    }
+
+    getBattlePower(heroIndex) {
+      const hero = this.getHero(heroIndex);
+      return hero.battlePower * this.getHeroLevel(heroIndex);
     }
 
     getHeroes() {
@@ -40,10 +57,17 @@ class HeroManager {
       return StorageManager.getFloat(`heroxp_${heroIndex}`);
     }
 
-    gainXP(heroIndex, amount) {
+    gainXP(heroIndex, amount = null) {
+      amount = amount ? amount : parseInt((Math.random() * (5 - 1) + 1).toFixed(0));
+      
       let xp = this.getXP(heroIndex);
-      xp += amount;
+      xp = parseInt(xp + amount);
       StorageManager.update(`heroxp_${heroIndex}`, xp);
+      let component = this.UIrefs[heroIndex];
+      if (component) {
+        component.$data.xp += amount;
+        component.$data.level = this.getHeroLevel(heroIndex);
+      }
       return xp;
     }
 

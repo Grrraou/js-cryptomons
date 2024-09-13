@@ -16,6 +16,10 @@ class MineManager {
         this.UIrefs = [];
     }
 
+    getDefaultMiningAmount(mineIndex) {
+        return (Math.random() * (this.getUpgradeLevel(mineIndex) + 1) * (0.0009 - 0.000001) + 0.000001);
+    }
+
     startAutoMining() {
         if (this.autoClickerIntervals) clearInterval(this.autoClickerIntervals);
     
@@ -29,8 +33,10 @@ class MineManager {
             const assignedHeroes = HeroManager.getHeroesByArea(mine.index);
 
             assignedHeroes.forEach(hero => {
-                console.log(hero.name + ' is mining')
-                this.mineTokens(null, mine.index, HeroManager.UIrefs[hero.index]);
+                HeroManager.gainXP(hero.index, null);
+
+                let amount = HeroManager.getMiningPower(hero.index) * this.getDefaultMiningAmount(mine.index);
+                this.mineTokens(mine.index, amount, null, HeroManager.UIrefs[hero.index]);
             });
         });
     }
@@ -112,7 +118,7 @@ class MineManager {
         }
     }
 
-    mineTokens(event, mineIndex, ref) {
+    mineTokens(mineIndex, amount = null, event = null, ref = null) {
         const mine = this.getItem(mineIndex);
 
         if (window.location.pathname === '/mines') {
@@ -120,29 +126,29 @@ class MineManager {
         }
         
         const currentAmount = TokenManager.getBalance(mine.token);
-        let minedAmount = (Math.random() * (this.getUpgradeLevel(mine.index) + 1) * (0.0009 - 0.000001) + 0.000001);
         const tokenIcon = TokenManager.getTokenIcon(mine.token);
         
         // Use event coordinates if available
+        console.log(event)
         if (event && event.clientX) {
             const x = event.clientX;
             const y = event.clientY;
             const manualMiningBuff = ItemManager.currentBuff.find(buff => buff.buffType === 'miningMultiplier' && Date.now() < buff.expiration);
             const manualMutliplier = manualMiningBuff?.multiplier || 1;
-            minedAmount = minedAmount * manualMutliplier;
+            amount = amount * manualMutliplier;
 
-            UXManager.showFlyingText(minedAmount.toFixed(6), tokenIcon, x, y);
+            UXManager.showFlyingText(amount.toFixed(6), tokenIcon, x, y);
             ref.clicks += 1;
             StorageManager.update(`clicks_area_${mineIndex}`, ref.clicks);
         } else {
             const rect = ref.$el.getBoundingClientRect();
             const x = rect.left;
             const y = rect.top;
-            UXManager.showFlyingText(minedAmount.toFixed(6), tokenIcon, x, y);
+            UXManager.showFlyingText(amount.toFixed(6), tokenIcon, x, y);
         }
 
-        const newBalance = currentAmount + minedAmount;
-        TokenManager.addToBalance(mine.token, minedAmount);
+        const newBalance = currentAmount + amount;
+        TokenManager.addToBalance(mine.token, amount);
         if (ref) {
             ref.tokenBalance = newBalance;
         }

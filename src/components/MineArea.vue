@@ -26,7 +26,7 @@
       </div>
       
       <div class="action-container">
-        <button class="mine-button" @click="MineManager.mineTokens($event, mine.index, this)">
+        <button class="mine-button" @click="MineManager.mineTokens(mine.index, MineManager.getDefaultMiningAmount(mine.index), $event, this)">
           <img src="@/assets/mines/miningButton.png" alt="Mine Logo" class="button-logo" />
           Mine!
         </button>

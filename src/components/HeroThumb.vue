@@ -16,7 +16,10 @@
               <span class="xp-text">{{ HeroManager.getXP(hero.index) }}% XP</span>
             </div>
           </div>
-          <button @click="increaseXp">Gain XP</button>
+          <div class="level-icon">
+            <span>Lvl.{{ level }}</span>
+          </div>
+          <!-- <button @click="increaseXp">Gain XP</button> -->
         </div>
     </div>
 </template>
@@ -31,8 +34,9 @@ export default {
     data() {
       return {
         xp: HeroManager.getXP(this.hero.index),
-        miningPower: 2, // Assuming these methods exist
-        combatPower: 4, // Adjust as necessary
+        miningPower: HeroManager.getMiningPower(this.hero.index), // Assuming these methods exist
+        combatPower: HeroManager.getBattlePower(this.hero.index), // Adjust as necessary
+        level: HeroManager.getHeroLevel(this.hero.index),
       };
     },
     setup() {

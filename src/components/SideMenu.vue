@@ -1,67 +1,69 @@
 <template>
-  <div class="side-menu">
-    <div class="sound-toggle">
-        <button @click="toggleSound()">{{ soundIcon }}</button>
+  <div class="side-menu-container">
+    <div class="side-menu">
+      <div class="sound-toggle">
+          <button @click="toggleSound()">{{ soundIcon }}</button>
+        </div>
+      <div class="side-menu-container">
+        <div class="logo-container">
+          <img src="@/assets/mainLogo.png" alt="Cryptomons Logo" class="logo" />
+        </div>
+        <div class="totalAssets">
+          {{ totalAssetsValue }} <img class="token-icon" src="@/assets/tokens/cryptodollar.png">
+        </div>
+        <nav class="main-menu-nav">
+          <ul>
+            <li>
+              <router-link to="/">🏠 Home</router-link>
+            </li>
+            <li>
+              <router-link to="/mines">⛏️ Mines</router-link>
+            </li>
+            <li v-if="isStakingUnlocked">
+              <router-link to="/staking">🔒 Staking</router-link>
+            </li>
+            <li v-else>
+              <router-link to="/staking" class="forbidden-link">🚫 Staking</router-link>
+            </li>
+            <li v-if="isVaultUnlocked">
+              <router-link to="/vault">🏛️ Vault</router-link>
+            </li>
+            <li v-else>
+              <router-link to="/vault" class="forbidden-link">🚫 Vault</router-link>
+            </li>
+            <li v-if="isBattleUnlocked">
+              <router-link to="/battle">⚔️ Battle</router-link>
+            </li>
+            <li v-else>
+              <router-link to="/battle" class="forbidden-link">🚫 Battle</router-link>
+            </li>
+            <li v-if="isInventoryUnlocked">
+              <router-link to="/inventory">📦 Inventory</router-link>
+            </li>
+            <li v-else>
+              <router-link to="/inventory" class="forbidden-link">🚫 Inventory</router-link>
+            </li>
+            <li v-if="isSwapUnlocked">
+              <router-link to="/swap">🔄 Swap</router-link>
+            </li>
+            <li v-else>
+              <router-link to="/swap" class="forbidden-link">🚫 Swap</router-link>
+            </li>
+            <li>
+              <router-link to="/goals">🎯 Goals</router-link>
+            </li>
+            <li>
+              <router-link to="/achievements">🏆 Achievements</router-link>
+            </li>
+            <li>
+              <router-link to="/stats">📊 Stats</router-link>
+            </li>
+            <li>
+              <router-link to="/settings">⚙️ Settings</router-link>
+            </li>
+          </ul>
+        </nav>
       </div>
-    <div class="side-menu-container">
-      <div class="logo-container">
-        <img src="@/assets/mainLogo.png" alt="Cryptomons Logo" class="logo" />
-      </div>
-      <div class="totalAssets">
-        {{ totalAssetsValue }} <img class="token-icon" src="@/assets/tokens/cryptodollar.png">
-      </div>
-      <nav class="main-menu-nav">
-        <ul>
-          <li>
-            <router-link to="/">🏠 Home</router-link>
-          </li>
-          <li>
-            <router-link to="/mines">⛏️ Mines</router-link>
-          </li>
-          <li v-if="isStakingUnlocked">
-            <router-link to="/staking">🔒 Staking</router-link>
-          </li>
-          <li v-else>
-            <router-link to="/staking" class="forbidden-link">🚫 Staking</router-link>
-          </li>
-          <li v-if="isVaultUnlocked">
-            <router-link to="/vault">🏛️ Vault</router-link>
-          </li>
-          <li v-else>
-            <router-link to="/vault" class="forbidden-link">🚫 Vault</router-link>
-          </li>
-          <li v-if="isBattleUnlocked">
-            <router-link to="/battle">⚔️ Battle</router-link>
-          </li>
-          <li v-else>
-            <router-link to="/battle" class="forbidden-link">🚫 Battle</router-link>
-          </li>
-          <li v-if="isInventoryUnlocked">
-            <router-link to="/inventory">📦 Inventory</router-link>
-          </li>
-          <li v-else>
-            <router-link to="/inventory" class="forbidden-link">🚫 Inventory</router-link>
-          </li>
-          <li v-if="isSwapUnlocked">
-            <router-link to="/swap">🔄 Swap</router-link>
-          </li>
-          <li v-else>
-            <router-link to="/swap" class="forbidden-link">🚫 Swap</router-link>
-          </li>
-          <li>
-            <router-link to="/goals">🎯 Goals</router-link>
-          </li>
-          <li>
-            <router-link to="/achievements">🏆 Achievements</router-link>
-          </li>
-          <li>
-            <router-link to="/stats">📊 Stats</router-link>
-          </li>
-          <li>
-            <router-link to="/settings">⚙️ Settings</router-link>
-          </li>
-        </ul>
-      </nav>
     </div>
   </div>
 </template>
@@ -167,12 +169,14 @@ export default {
   transform: scale(1.1);
 }
 
+.side-menu-container {
+  width: 200px;
+}
+
 .side-menu {
   width: 160px;
   padding: 20px;
-}
-
-.side-menu-container {
+  background-image: url('@/assets/menuBG.png');
   position: fixed;
   height: 100vh;
 }

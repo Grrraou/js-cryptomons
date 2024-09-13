@@ -1,6 +1,5 @@
 body {
     margin: 0;
-    background-image: url('@/assets/menuBG.png');
     background-size: cover;
     user-select: none;
 }

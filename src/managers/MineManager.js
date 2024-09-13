@@ -136,7 +136,9 @@ class MineManager {
             StorageManager.update(`clicks_area_${mineIndex}`, ref.clicks);
         } else {
             const rect = ref.$el.getBoundingClientRect();
-            UXManager.showFlyingText(minedAmount.toFixed(6), tokenIcon, rect.left, rect.top);
+            const x = rect.left;
+            const y = rect.top;
+            UXManager.showFlyingText(minedAmount.toFixed(6), tokenIcon, x, y);
         }
 
         const newBalance = currentAmount + minedAmount;

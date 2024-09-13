@@ -63,7 +63,9 @@ class BattleManager {
     MonsterManager.removeCurrentMonsterHealth(index, amount);
     if (ref) {
       const rect = ref.$el.getBoundingClientRect();
-      UXManager.showFlyingText('⚔️ ' + amount, null, rect.left, rect.top)
+      const x = rect.left + Math.floor(Math.random() * 50);
+      const y = rect.top + Math.floor(Math.random() * 50);
+      UXManager.showFlyingText('⚔️ ' + amount, null, x, y);
     }
     if (event) {
       const x = event.clientX;

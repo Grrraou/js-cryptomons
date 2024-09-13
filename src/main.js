@@ -22,3 +22,8 @@ ItemManager.initInventory();
 StakingManager.startStakingUpdates();
 MonsterManager.initCurrentMonsters();
 MineManager.startAutoMining();
+
+// prevent right click
+/* document.addEventListener('contextmenu', function (event) {
+  event.preventDefault();
+}); */

@@ -40,9 +40,9 @@
     <!-- Workers Area Section -->
     <div class="workers-section">
       <p class="workers-heading">Workers in this Area:</p>
-      <p v-if="assignedHeroes.length === 0" class="no-heroes">No workers assigned</p>
-      <div v-if="assignedHeroes.length > 0" class="heroes-in-area">
-        <HeroThumb v-for="(hero, index) in assignedHeroes" 
+      <p v-if="heroes.length === 0" class="no-heroes">No workers assigned</p>
+      <div v-if="heroes.length > 0" class="heroes-in-area">
+        <HeroThumb v-for="(hero, index) in heroes" 
           :key="index" 
           :hero="hero"
           class="hero-container"/>
@@ -67,13 +67,13 @@
     },
     props: {
       mine: Object,
-      assignedHeroes: Array,
     },
     data() {
       return {
         tokenBalance: TokenManager.getBalance(this.mine.token), 
         clicks: MineManager.getClicks(this.mine.index),
         level: MineManager.getUpgradeLevel(this.mine.index),
+        heroes: HeroManager.getHeroesByArea(this.mine.index),
       };
     },
     setup() {
@@ -85,29 +85,35 @@
       };
     },
     methods: {
-      startAutoClicker(heroCount) {  
+   /*    startAutoClicker(heroCount) {  
         MineManager.startAutoClicker(this.mine.index, () => {
           MineManager.mineTokens(null, this.mine.index, this);
         }, heroCount);
-      },
+      }, */
       handleHeroDrop(event) {
         try {
           const heroData = event.dataTransfer.getData('heroData');
           if (!heroData) return;
-  
           const hero = JSON.parse(heroData);
-          this.$emit('assign-hero', hero, this.mine.index);
+          HeroManager.moveHero(hero.index, this.mine.index);
+          this.heroes = HeroManager.getAvailableHeroes();
+          eventBus.emit('hero-moved');
         } catch (error) {
-          console.error('Error during drop:', error);
+          console.error('Error parsing hero data on drop to hero list:', error);
         }
       },
     },
     mounted() {
-      this.startAutoClicker(this.assignedHeroes.length);
+      //this.startAutoClicker(this.heroes.length);
+      MineManager.UIrefs[this.mine.index] = this;
       eventBus.on('trigger-start-auto-clicker', ({ mineIndex, heroCount }) => {
         if (mineIndex === this.mine.index) {
           this.startAutoClicker(heroCount);
         }
+      });
+
+      eventBus.on('hero-moved', () => {
+        this.heroes = HeroManager.getHeroesByArea(this.mine.index);
       });
 
       eventBus.on('miningMultiplierBuff', ({ multiplier, duration }) => {

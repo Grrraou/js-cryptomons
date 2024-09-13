@@ -9,6 +9,7 @@ import ItemManager from '@/managers/ItemManager';
 import StakingManager from '@/managers/StakingManager';
 import TokenManager from '@/managers/TokenManager';
 import MonsterManager from '@/managers/MonsterManager';
+import MineManager from './managers/MineManager';
 
 createApp(App).use(router).use(Toast, {
   position: POSITION.TOP_RIGHT,
@@ -20,3 +21,4 @@ TokenManager.initCryptodollarValues();
 ItemManager.initInventory();
 StakingManager.startStakingUpdates();
 MonsterManager.initCurrentMonsters();
+MineManager.startAutoMining();

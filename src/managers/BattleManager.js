@@ -4,12 +4,14 @@ import ItemManager from '@/managers/ItemManager';
 import MonsterManager from '@/managers/MonsterManager';
 import { battlefieldsEnum } from '@/enums/BattleEnum.js';
 import AudioManager from './AudioManager';
+import UXManager from './UXManager';
 
 class BattleManager {
   constructor() {
     this.battlefields = battlefieldsEnum;
     this.battlefieldsAssetPath = require.context('@/assets/battlefields', false, /\.png$/);
     this.heroAttackInterval = null;
+    this.UIrefs = [];
     this.attackSounds = [
       'slash.ogg',
       'slash2.wav',
@@ -37,27 +39,29 @@ class BattleManager {
   handleHeroAttacks() {
     this.battlefields.forEach((battle) => {
       const assignedHeroes = HeroManager.getHeroesByArea(battle.index);
-      let heroesDamage = 1;
-      const chest = ItemManager.getEquipedItem('Chest');
-      if (chest) {
-          heroesDamage += chest.effect();
-      }
-      if (assignedHeroes.length > 0) {
-          const damage = assignedHeroes.length * heroesDamage;
-          this.damageCreature(battle.index, damage);
-      }
+
+      assignedHeroes.forEach(() => {
+        this.damageCreature(battle.index, MonsterManager.UIrefs[battle.index]);
+      });
     });
   }
 
-  damageCreature(index, amount) {
+  damageCreature(index, ref = null) {
     if (window.location.pathname === '/battle') {
       AudioManager.playRandom(this.attackSounds, 0.5);
+    }
+    let heroDamage = 1;
+    const chest = ItemManager.getEquipedItem('Chest');
+    if (chest) {
+      heroDamage += chest.effect();
     }
 
     const currentCreature = MonsterManager.getCurrentMonster(index);
     const monster = MonsterManager.getMonster(currentCreature.index);
-    currentCreature.health -= amount;
-    MonsterManager.removeCurrentMonsterHealth(index, amount);
+    currentCreature.health -= heroDamage;
+    MonsterManager.removeCurrentMonsterHealth(index, heroDamage);
+    const rect = ref.$el.getBoundingClientRect();
+    UXManager.showFlyingText('⚔️ ' + heroDamage, null, rect.left, rect.top)
     if (currentCreature.health <= 0) {
       // Loot a random item from the items array
       const lootItem = ItemManager.getItem(monster.loot.index);
@@ -85,7 +89,7 @@ class BattleManager {
   }
 
   getHeroesForBattle(BattleFieldIndex) {
-    return HeroManager.getHeroes().filter(hero => hero.assignedArea === BattleFieldIndex);
+    return HeroManager.getHeroes().filter(hero => HeroManager.getHeroPosition(hero.index) === BattleFieldIndex);
   }
 }
 

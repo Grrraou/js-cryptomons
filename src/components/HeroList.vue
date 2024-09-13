@@ -42,18 +42,18 @@ export default {
         const heroData = event.dataTransfer.getData('heroData');
         if (!heroData) return;
         const hero = JSON.parse(heroData);
-        this.$emit('remove-hero', hero);
+        HeroManager.moveHero(hero.index, 'free');
         this.heroes = HeroManager.getAvailableHeroes();
+        eventBus.emit('hero-moved');
       } catch (error) {
         console.error('Error parsing hero data on drop to hero list:', error);
       }
     },
   },
   mounted() {
-    eventBus.on('assign-hero', ({ hero, areaIndex }) => {
-      console.log(`${hero.index} assigned to ${areaIndex}`);
+    eventBus.on('hero-moved', () => {
       this.heroes = HeroManager.getAvailableHeroes();
-    })
+    });
   },
 };
 </script>

@@ -44,7 +44,9 @@ class MonsterManager {
     } else {
       this.updateCurrentMonsters(updatedCurrentMonsters);
     }
-    this.UIrefs[battlefieldIndex].localMonster  = this.getCurrentMonster(battlefieldIndex);
+    if (this.UIrefs[battlefieldIndex]) {
+      this.UIrefs[battlefieldIndex].localMonster  = this.getCurrentMonster(battlefieldIndex);
+    }
   }
 
   generateMonsters(battlefieldIndex) {

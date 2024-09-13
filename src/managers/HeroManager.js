@@ -1,8 +1,10 @@
 import { heroesEnum } from "@/enums/HeroEnum";
 import StorageManager from "@/managers/StorageManager";
+import eventBus from "@/eventBus";
 class HeroManager {
     constructor() {
         this.assetPath = require.context('@/assets/heroes', false, /\.png$/);
+        this.UIrefs = [];
     }
 
     getHeroes() {
@@ -14,13 +16,24 @@ class HeroManager {
     }
 
     getHeroesByArea(areaIndex) {
-      return this.getHeroes().filter(hero => hero.assignedArea === areaIndex);
+      return this.getHeroes().filter(hero => this.getHeroPosition(hero.index) === areaIndex);
     }
 
     getAvailableHeroes() {
       return this.getHeroes().filter(hero => {
         return this.isHeroUnlocked(hero.index) && !this.isHeroAssigned(hero.index);
       });
+    }
+
+    getHeroPosition(heroIndex) {
+      let position = StorageManager.getString(`hero_position_${heroIndex}`);
+      return position === '' ? 'free' : position;
+    }
+
+    moveHero(heroIndex, areaIndex = null) {
+      areaIndex = areaIndex ? areaIndex : 'free';
+      StorageManager.update(`hero_position_${heroIndex}`, areaIndex)
+      eventBus.emit('hero-moved');
     }
 
     getXP(heroIndex) {
@@ -44,8 +57,7 @@ class HeroManager {
     }
 
     isHeroAssigned(heroIndex) {
-      const hero = this.getHero(heroIndex);
-      return hero.assignedArea !== null;
+      return this.getHeroPosition(heroIndex) !== 'free';
     }
 
     getHeroPicture(heroIndex) { 

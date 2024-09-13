@@ -13,7 +13,7 @@
         <div class="xp-container">
           <div class="xp-bar">
             <div class="xp-bar-fill" :style="{ width: xp + '%' }">
-              <span class="xp-text">{{ xp }}% XP</span>
+              <span class="xp-text">{{ HeroManager.getXP(hero.index) }}% XP</span>
             </div>
           </div>
           <button @click="increaseXp">Gain XP</button>
@@ -41,17 +41,20 @@ export default {
       };
     },
     methods: {
-    dragStart(event, hero) {
-      event.dataTransfer.setData('heroData', JSON.stringify(hero));
+      dragStart(event, hero) {
+        event.dataTransfer.setData('heroData', JSON.stringify(hero));
+      },
+      increaseXp() {
+        if (this.xp < 100) {
+          const xpGain = 1;
+          HeroManager.gainXP(this.hero.index, xpGain);
+          return this.xp += xpGain; // Adjust XP increment as desired
+        }
+      },
     },
-    increaseXp() {
-      if (this.xp < 100) {
-        const xpGain = 1;
-        HeroManager.gainXP(this.hero.index, xpGain);
-        return this.xp += xpGain; // Adjust XP increment as desired
-      }
+    mounted() {
+      HeroManager.UIrefs[this.hero.index] = this;
     },
-  },
 };
 </script>
 

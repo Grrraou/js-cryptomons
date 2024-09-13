@@ -10,16 +10,14 @@
             <MineArea
               ref="mineArea"
               :mine="mine"
-              :assignedHeroes="getHeroesForArea(mine.index)"
               @assign-hero="assignHero"
-              @remove-hero="removeHero"
             />
           </div>
         </div>
       </div>
 
       <!-- Right side: Hero List -->
-      <HeroList class="hero-list" :heroes="heroes" @remove-hero="removeHero" />
+      <HeroList class="hero-list" :heroes="heroes" />
     </div>
   </div>
 </template>
@@ -48,13 +46,13 @@ export default {
   },
   methods: {
     getHeroesForArea(areaIndex) {
-      return this.heroes.filter(hero => hero.assignedArea === areaIndex);
+      return this.heroes.filter(hero => HeroManager.getHeroPosition(hero.index) === areaIndex);
     },
     assignHero(hero, mineIndex) {
-      this.removeHero(hero);
       const heroIndex = this.heroes.findIndex(h => h.name === hero.name);
       if (heroIndex !== -1) {
-        this.heroes[heroIndex].assignedArea = mineIndex;
+        HeroManager.moveHero(heroIndex, mineIndex)
+        //this.heroes[heroIndex].assignedArea = mineIndex;
 
         // Calculate the updated number of assigned heroes
         const updatedHeroCount = this.getHeroesForArea(mineIndex).length;
@@ -64,18 +62,6 @@ export default {
         eventBus.emit('trigger-start-auto-clicker', { mineIndex, heroCount: updatedHeroCount });
         const areaIndex = mineIndex;
         eventBus.emit('assign-hero', ({ hero, areaIndex }));
-      }
-    },
-    removeHero(hero) {
-      const heroIndex = this.heroes.findIndex(h => h.name === hero.name);
-      if (heroIndex !== -1) {
-        const mineIndex = this.heroes[heroIndex].assignedArea;
-        this.heroes[heroIndex].assignedArea = null;
-
-        if (mineIndex !== null) {
-          const updatedHeroCount = this.getHeroesForArea(mineIndex).length;
-          eventBus.emit('trigger-start-auto-clicker', { mineIndex, heroCount: updatedHeroCount });
-        }
       }
     },
   },

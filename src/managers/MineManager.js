@@ -5,6 +5,7 @@ import UXManager from "@/managers/UXManager";
 import ItemManager from "@/managers/ItemManager";
 import GoalManager from "@/managers/GoalManager";
 import AudioManager from "@/managers/AudioManager";
+import HeroManager from "@/managers/HeroManager";
 
 class MineManager {
     constructor() {
@@ -12,24 +13,34 @@ class MineManager {
         this.miningSounds = miningSoundsEnum;
         this.assetPath = require.context('@/assets/mines', false, /\.png$/);
         this.autoClickerIntervals = {};
+        this.UIrefs = [];
     }
 
-    startAutoClicker(mineIndex, callback, heroCount) {
-        if (this.autoClickerIntervals[mineIndex]) clearInterval(this.autoClickerIntervals[mineIndex]);
-      
-        if (heroCount > 0) {
-            this.autoClickerIntervals[mineIndex] = setInterval(() => {
-            callback();
-          }, 1000);
-        }
-      }
+    startAutoMining() {
+        if (this.autoClickerIntervals) clearInterval(this.autoClickerIntervals);
+    
+        this.autoClickerIntervals = setInterval(() => {
+          this.handleHeroMining();
+        }, 1000);
+    }
 
-      stopAutoClicker(mineIndex) {
+    handleHeroMining() {
+        this.mines.forEach((mine) => {
+            const assignedHeroes = HeroManager.getHeroesByArea(mine.index);
+
+            assignedHeroes.forEach(hero => {
+                console.log(hero.name + ' is mining')
+                this.mineTokens(null, mine.index, HeroManager.UIrefs[hero.index]);
+            });
+        });
+    }
+
+    stopAutoClicker(mineIndex) {
         if (this.autoClickerIntervals[mineIndex]) {
           clearInterval(this.autoClickerIntervals[mineIndex]);
           delete this.autoClickerIntervals[mineIndex];
         }
-      }
+    }
 
     getList() {
         return this.mines;
@@ -94,6 +105,7 @@ class MineManager {
             TokenManager.removeToBalance(mineItem.token, cost);
             let newLevel = parseInt(this.getUpgradeLevel(mineIndex) + 1, 10);
             StorageManager.update(mineLevelIndex, newLevel);
+            console.log(ref)
             if (ref) {
                 ref.level += 1;
             }
@@ -123,13 +135,15 @@ class MineManager {
             ref.clicks += 1;
             StorageManager.update(`clicks_area_${mineIndex}`, ref.clicks);
         } else {
-            // @todo amount should be updated via heros count
-            UXManager.showAreaLog(ref, minedAmount.toFixed(6), tokenIcon);
+            const rect = ref.$el.getBoundingClientRect();
+            UXManager.showFlyingText(minedAmount.toFixed(6), tokenIcon, rect.left, rect.top);
         }
 
         const newBalance = currentAmount + minedAmount;
         TokenManager.addToBalance(mine.token, minedAmount);
-        ref.tokenBalance = newBalance;
+        if (ref) {
+            ref.tokenBalance = newBalance;
+        }
     }
 }
 

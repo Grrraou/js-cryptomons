@@ -1,13 +1,13 @@
 <template>
     <div class="battlefieldContainer">
         <div class="battle-name">
-            <h2>{{ battle.name }}</h2>
+            <h2>{{ battlefield.name }}</h2>
         </div>
         <div class="battle-field" :id="battlefieldId">
         <MonsterThumb 
           class="monster-area" 
           :localMonster="localMonster"
-          :battlefield="battle"
+          :battlefield="battlefield"
           :monster="MonsterManager.getMonster(localMonster.index)"
         />
         <div class="heroes-area" @drop="handleHeroDrop" @dragover.prevent>
@@ -18,7 +18,6 @@
                 :key="hero.name"
                 :hero="hero"
                 class="hero"
-                
             />
             </div>
             <div class="drop-area">
@@ -34,6 +33,8 @@ import HeroThumb from '@/components/HeroThumb.vue';
 import MonsterThumb from './MonsterThumb.vue';
 import BattleManager from '@/managers/BattleManager';
 import MonsterManager from '@/managers/MonsterManager';
+import HeroManager from '@/managers/HeroManager';
+import eventBus from '@/eventBus';
   
 export default {
     components: {
@@ -41,17 +42,13 @@ export default {
       MonsterThumb,
     },
     props: {
-      battle: {
+      battlefield: {
         type: Object,
         required: true,
       },
       currentCreatures: {
         type: Object,
         required: false,
-      },
-      heroes: {
-        type: Array,
-        required: true,
       },
     },
     setup() {
@@ -62,27 +59,27 @@ export default {
     },
     data() {
       return {
-        localMonster: MonsterManager.getCurrentMonster(this.battle.index)
+        localMonster: MonsterManager.getCurrentMonster(this.battlefield.index),
+        heroes: HeroManager.getHeroesByArea(this.battlefield.index),
       };
     },
     computed: {
       battlefieldId() {
-        return `battlefield-${this.battle.index}`;
+        return `battlefield-${this.battlefield.index}`;
       }
     },
     methods: {
       handleHeroDrop(event) {
         const heroData = event.dataTransfer.getData('heroData');
         if (!heroData) return;
-        
         const hero = JSON.parse(heroData);
-        this.$emit('hero-dropped', hero, this.battle.index);
-      },
-      removeHeroFromBattle(hero) {
-        this.$emit('remove-hero', hero);
+        HeroManager.moveHero(hero.index, this.battlefield.index);
       },
     },
     mounted() {
+      eventBus.on('hero-moved', () => {
+        this.heroes = HeroManager.getHeroesByArea(this.battlefield.index);
+      });
     },
     beforeUnmount() {
     }

@@ -3,21 +3,14 @@
     <div class="battle-page game-container">
         
       <div class="battlefields-container">
-        <div v-for="(battle, index) in battleData" :key="battle.index" class="battlefield-block" :style="getBackgroundStyle(index)">
+        <div v-for="(battlefield, index) in battleData" :key="battlefield.index" class="battlefield-block" :style="getBackgroundStyle(index)">
           <BattleField
-            :battle="battle"
-            :currentCreatures="MonsterManager.getCurrentMonster(battle.index)"
-            :heroes="getHeroesForBattle(battle.index)"
-            @hero-dropped="assignHeroToBattle"
-            @remove-hero="removeHeroFromBattle"
+            :battlefield="battlefield"
+            :currentCreatures="MonsterManager.getCurrentMonster(battlefield.index)"
           />
         </div>
       </div>
-      <HeroList
-        class="hero-list"
-        :heroes="HeroManager.getAvailableHeroes()"
-        @remove-hero="removeHero"
-      />
+      <HeroList class="hero-list" />
     </div>
 </template>
   
@@ -25,7 +18,6 @@
 import BattleField from '@/components/BattleField.vue';
 import HeroList from '@/components/HeroList.vue';
 import InfoBubble from '@/components/InfoBubble.vue';
-import eventBus from '@/eventBus';
 import BattleManager from '@/managers/BattleManager.js';
 import GoalManager from '@/managers/GoalManager';
 import HeroManager from '@/managers/HeroManager';
@@ -40,7 +32,6 @@ import MonsterManager from '@/managers/MonsterManager';
     data() {
       return {
         battleData: [],
-        heroes: HeroManager.getAvailableHeroes(),
       };
     },
     setup() {
@@ -55,34 +46,12 @@ import MonsterManager from '@/managers/MonsterManager';
     created() {
       this.battleData = BattleManager.getBattlefields().filter(battlefield => {
         if (battlefield.requirement) {
-          return GoalManager.isGoalReached(`goal_${battlefield.requirement}_unlocked`);
+          return GoalManager.isGoalReached(`${battlefield.requirement}`);
         }
         return true;
       });
     },
     methods: {
-      getHeroesForBattle(battleIndex) {
-        return this.heroes.filter(hero => hero.assignedArea === battleIndex);
-      },
-      removeHero(hero) {
-        const heroIndex = this.heroes.findIndex(h => h.name === hero.name);
-
-        if (heroIndex !== -1) {
-          this.heroes[heroIndex].assignedArea = null;
-        }
-      },
-      assignHeroToBattle(hero, battleIndex) {
-        this.removeHero(hero);
-        const heroIndex = this.heroes.findIndex(h => h.name === hero.name);
-        if (heroIndex !== -1) {
-          this.heroes[heroIndex].assignedArea = battleIndex;
-          const areaIndex = battleIndex;
-          eventBus.emit('assign-hero', ({ hero, areaIndex }));
-        }
-      },
-      removeHeroFromBattle(hero) {
-        this.removeHero(hero);
-      },
       getBackgroundStyle(battlefieldIndex) {
         let backgroundUrl = BattleManager.getBackgroundImage(battlefieldIndex);
         return {
@@ -92,6 +61,8 @@ import MonsterManager from '@/managers/MonsterManager';
             backgroundPosition: 'center',
         };
       },
+    },
+    mounted() {
     },
   };
 </script>
